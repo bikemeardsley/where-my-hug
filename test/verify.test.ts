@@ -74,6 +74,7 @@ test("keeps the agent's order, drops what isn't there and flags what bites", asy
   assert.match(markdown, /\*\*Data: \[acme\/pages\]\(https:\/\/huggingface\.co\/datasets\/acme\/pages\)\*\*/);
   assert.match(markdown, /7 named, 1 not there and dropped, 1 the Hub didn't answer for/);
   assert.match(markdown, /No model: write this one/);
+  assert.match(markdown, /776\.0M parameters \(~1\.9 GB to run\)/); // what it needs, whatever the compute turns out to be
 
   // The token goes to the Hub, and nowhere else: not into the report or the JSON.
   assert.ok(asked.every((call) => call.authorization === 'Bearer hf_secret_test_token'));

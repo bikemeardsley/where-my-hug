@@ -12,7 +12,16 @@ test('serves both tools over stdio, as Claude Code starts it', async () => {
     assert.deepEqual(tools.map((tool) => tool.name).sort(), ['wheres_my_hug', 'wheres_my_hug_verify']);
 
     const text = (result: Awaited<ReturnType<typeof client.callTool>>) => (result.content as { text: string }[])[0].text;
-    assert.match(text(await client.callTool({ name: 'wheres_my_hug', arguments: { need: 'sort socks by color' } })), /Need: sort socks by color/);
+    // Details that change the answer come first: only the missing ones are asked, and no method until they're in.
+    const asked = text(await client.callTool({ name: 'wheres_my_hug', arguments: { need: 'sort socks by color', stack: 'Python' } }));
+    assert.match(asked, /Need: sort socks by color/);
+    assert.deepEqual([...asked.matchAll(/^- (\w+):/gm)].map((match) => match[1]), ['compute', 'license', 'data']);
+    assert.doesNotMatch(asked, /Split the need/);
+    const method = text(await client.callTool({
+      name: 'wheres_my_hug', arguments: { need: 'sort socks by color', compute: 'unknown', license: 'personal', stack: 'Python', data: 'none' },
+    }));
+    assert.match(method, /Compute: unknown\n/);
+    assert.match(method, /Split the need/);
 
     // A slate with nothing to look up never reaches the network.
     const verified = text(await client.callTool({

@@ -97,7 +97,7 @@ const age = (iso: string) => {
 function pick(label: string, entry: Checked): string[] {
   const facts = [
     entry.task, entry.library, entry.license && `license ${entry.license}`,
-    entry.params && `${count(entry.params)} parameters`,
+    entry.params && `${count(entry.params)} parameters (~${(entry.params * BYTES_PER_PARAM / 1e9).toFixed(1)} GB to run)`,
     entry.downloads !== undefined && `${count(entry.downloads)} downloads a month`,
     entry.likes !== undefined && `${count(entry.likes)} likes`,
     entry.updated && `updated ${age(entry.updated)}`,

@@ -13,12 +13,13 @@ const compute = z.string().optional().describe('The hardware it has to run or tr
 
 server.registerTool('wheres_my_hug', {
   title: "Where's my hug at?",
-  description: 'Step 1 of 2, before recommending any Hugging Face model or dataset: returns the method for splitting an ML need into parts and deciding which parts the Hub covers (use a model as is, fine-tune one, train one) and which are plain code. Follow it, then call wheres_my_hug_verify.',
+  description: 'Step 1 of 2, before recommending any Hugging Face model or dataset. If compute, license, stack or data is missing, returns the questions to ask the user first: call again with the answers ("unknown" is fine). Then returns the method for splitting an ML need into parts and deciding which parts the Hub covers (use a model as is, fine-tune one, train one) and which are plain code. Follow it, then call wheres_my_hug_verify.',
   inputSchema: {
     need,
-    stack: z.string().optional().describe('Where it will run: language, runtime, framework'),
-    license: z.string().optional().describe('What the result may be used for, such as "commercial, closed source" or "research only"'),
     compute,
+    license: z.string().optional().describe('What the result may be used for, such as "commercial, closed source" or "research only"'),
+    stack: z.string().optional().describe('What will call the model: language, runtime, framework'),
+    data: z.string().optional().describe('Training data there is or could be, such as "none" or "about 300 labeled photos"'),
   },
 }, async (args) => ({ content: [{ type: 'text', text: rubric(args) }] }));
 

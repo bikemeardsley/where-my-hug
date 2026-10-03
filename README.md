@@ -9,10 +9,15 @@ memory.
 
 Two tools, called in order:
 
-1. **`wheres_my_hug`**: the agent sends the need, plus optionally the stack,
-   the license the result must allow, and the compute. It gets back a method:
-   split the need into parts, decide what each part takes, and name exact Hub
-   ids for the parts a model can do, with the traps in mind.
+1. **`wheres_my_hug`**: the agent sends the need and four details that
+   change the answer: compute (where it runs and trains), license (what the
+   result may be used for), stack (what calls the model), and data (what
+   there is to train on). If any is missing, it gets back questions to ask
+   you first, after filling in what the conversation or codebase already
+   says. "Not sure yet" is a fine answer: the picks then cover the range.
+   With all four, it gets back a method: split the need into parts, decide
+   what each part takes, and name exact Hub ids for the parts a model can
+   do, with the traps in mind.
 2. **`wheres_my_hug_verify`**: the agent sends its slate. Every id is looked up
    on the Hub API. Ids that aren't there are dropped, and a part left with
    nothing goes back to the agent for new candidates. The rest are flagged,
@@ -20,6 +25,8 @@ Two tools, called in order:
 
 The agent decides what fits and in what order, since fit comes first. Every
 fact in the report (license, size, downloads, freshness) comes from the Hub.
+Each model shows the memory it needs to run, so a report is still useful
+before the hardware is decided.
 
 ### Verdicts
 
@@ -56,14 +63,14 @@ photo, and read its title_ (abridged):
 ```
 ## TUNE  ·  Find the faces
 **Model: microsoft/Florence-2-large**
-image-text-to-text · transformers · license mit · 776.7M parameters · 412.2k downloads a month
+image-text-to-text · transformers · license mit · 776.7M parameters (~1.9 GB to run) · 404.2k downloads a month
 **Data: HuggingFaceM4/DocumentVQA**
 Watch out: no license on its card; not updated in two years.
 Dropped, not on the Hub (or private): acme/book-corners-v2
 
 ## USE  ·  Read the title
 **Model: Qwen/Qwen2.5-VL-3B-Instruct**
-license other (qwen-research) · 3.8B parameters · 2.4M downloads a month
+license other (qwen-research) · 3.8B parameters (~9.0 GB to run) · 2.4M downloads a month
 Watch out: non-commercial or research-only terms.
 
 ## WRITE  ·  Straighten

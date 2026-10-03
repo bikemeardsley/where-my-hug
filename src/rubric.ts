@@ -1,20 +1,44 @@
 // The first step: the method the agent follows before it names anything. Agents know the Hub well but misremember
 // ids and licenses, so the agent proposes and wheres_my_hug_verify checks; this text only has to make the proposals
-// good ones: split the need, decide what each part takes, and name exact ids with the traps in mind.
+// good ones. Four details change the answer, so they come first: a call missing any gets questions back, not the
+// method, and "unknown" is a fine answer.
 
-export function rubric({ need, stack, license, compute }: { need: string; stack?: string; license?: string; compute?: string }): string {
+export interface Details { need: string; compute?: string; license?: string; stack?: string; data?: string }
+
+const QUESTIONS = {
+  compute: 'Where will it run, and train if it needs training? This decides model size, and whether fine-tuning is possible at all. ("one 24 GB GPU", "CPU only", "a phone", "rented GPUs")',
+  license: 'What may the result be used for? This decides which licenses are allowed. ("commercial, closed source", "open source", "personal or research")',
+  stack: 'What will call the model? This decides which weight formats work. ("a Python service", "Node", "the browser", "a mobile app")',
+  data: 'What training data is there, or could be collected? This decides whether fine-tuning or training is realistic. ("none", "about 300 labeled photos", "can collect more")',
+};
+
+export function rubric(details: Details): string {
+  const missing = (Object.keys(QUESTIONS) as (keyof typeof QUESTIONS)[]).filter((key) => !details[key]?.trim());
+  if (missing.length) {
+    return `Where's my hug at? Before any searching, ${missing.length === 1 ? 'one detail changes' : 'these details change'} the answer.
+
+Need: ${details.need}
+
+Fill in what the conversation or the codebase already says. Ask the user for the rest, all at once (with your question tool, if you have one):
+${missing.map((key) => `- ${key}: ${QUESTIONS[key]}`).join('\n')}
+
+"Not sure yet" is a fine answer: pass "unknown", and the picks will cover the range. Then call wheres_my_hug again with all four filled in.`;
+  }
+  const { need, compute, license, stack, data } = details;
   return `Where's my hug at? Work out what the Hugging Face Hub already has for this need.
 
 Need: ${need}
-Stack: ${stack ?? 'not given'}
-License: ${license ?? "not given, so say what each pick's terms allow"}
-Compute: ${compute ?? 'not given, so prefer models that run on one consumer GPU'}
+Compute: ${compute}
+License: ${license}
+Stack: ${stack}
+Data: ${data}
+Where a detail is "unknown", cover the range (a small pick and a big one, say) and say what each needs.
 
 1. Split the need into its parts: 2 to 6 jobs, each with an input and an output ("photo -> the object's corners"). Name the job, not a model.
 
 2. Give each part a verdict:
    USE    a model on the Hub does this job well enough as it is.
-   TUNE   a model on the Hub comes close: fine-tune it. Name the base, and a dataset if one fits.
+   TUNE   a model on the Hub comes close: fine-tune it on the data. Name the base, and a Hub dataset if one fits.
    TRAIN  nothing on the Hub comes close: it needs its own model. Name datasets that could start it.
    WRITE  not a job for a model: rules, geometry, parsing, lookups, arithmetic. Code is cheaper and exact.
    Most needs have a WRITE part somewhere. A model doing deterministic work is a cost, not a feature.
