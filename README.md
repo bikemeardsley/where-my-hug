@@ -39,7 +39,7 @@ fact in the report (license, size, downloads, freshness) comes from the Hub.
 | NO_LICENSE | No license on its card. |
 | NON_COMMERCIAL | Non-commercial or research-only terms (`cc-by-nc-*`, `*-research`, …). |
 | OWN_TERMS | Custom, use-restricted or no-derivatives terms (`other`, Llama, Gemma, RAIL, `-nd-`). |
-| TOO_BIG | At 2 bytes per parameter, more than the memory in the compute you gave. |
+| TOO_BIG | Needs more memory to run (2.4 bytes per parameter: half precision plus room for activations) than the first "N GB" in the compute you gave. |
 | LARGE | No compute given, and over 15B parameters. |
 | STALE | Not updated in two years. |
 | LITTLE_USED | Under 100 downloads in the last month. |

@@ -9,7 +9,7 @@ import { verify } from './verify.ts';
 
 const server = new McpServer({ name: 'wheres-my-hug', version: '0.1.0' });
 const need = z.string().min(1).describe('The ML need in plain words: what goes in, what should come out, and what it is for');
-const compute = z.string().optional().describe('The hardware it has to run or train on, such as "one 24 GB GPU" or "CPU only"');
+const compute = z.string().optional().describe('The hardware it has to run or train on, such as "one 24 GB GPU" or "CPU only". Size flags take the first "N GB" in it as the memory a model must fit in');
 
 server.registerTool('wheres_my_hug', {
   title: "Where's my hug at?",

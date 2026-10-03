@@ -11,7 +11,7 @@ const HUB: Record<string, object> = {
   },
   'models/acme/giant': {
     id: 'acme/giant', downloads: 9_000, lastModified: now, gated: 'manual',
-    cardData: { license: ['apache-2.0', 'other'], base_model: ['acme/base'] }, safetensors: { total: 13e9 }, // 26 GB to run: more than 24
+    cardData: { license: ['apache-2.0', 'other'], base_model: ['acme/base'] }, safetensors: { total: 13e9 }, // over 24 GB to run, though not its parameter count
   },
   'models/acme/old-research': {
     id: 'acme/old-research', downloads: 12, lastModified: '2020-01-01T00:00:00.000Z',

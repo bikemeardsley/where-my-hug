@@ -19,7 +19,7 @@ interface Part extends Component {
 const STALE_DAYS = 730;
 const LITTLE_USED = 100; // downloads in the last 30 days
 const LARGE_PARAMS = 15e9; // with no memory budget given, more than this needs a big GPU
-const BYTES_PER_PARAM = 2; // half precision: enough to run it; fine-tuning needs more again
+const BYTES_PER_PARAM = 2.4; // half precision plus a fifth for activations and cache: enough to run it; fine-tuning needs more again
 const NON_COMMERCIAL = /(^|[-_ ])nc([-_ ]|$)|non-?commercial|research|amlr|deepfloyd/;
 const OWN_TERMS = /\bother\b|llama|gemma|rail|grok|community|(^|-)nd(-|$)/; // custom, use-restricted or no-derivatives
 

@@ -61,7 +61,7 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
     const tags: string[] = Array.isArray(json.tags) ? json.tags : [];
     const tagged = (prefix: string) => tags.find((tag) => tag.startsWith(prefix))?.slice(prefix.length);
     // Custom terms are "other", named in license_name; some cards give only the name. Either way: "other (qwen-research)".
-    const license = [card.license ?? tagged('license:')].flat().filter(Boolean).join(', ');
+    const license = [card.license || tagged('license:')].flat().filter(Boolean).join(', ');
     const base: string[] = [card.base_model ?? []].flat();
     return {
       id: json.id ?? id,
