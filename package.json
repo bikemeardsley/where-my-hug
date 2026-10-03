@@ -1,0 +1,25 @@
+{
+  "name": "wheres-my-hug",
+  "version": "0.1.0",
+  "description": "Where's my hug at? Tells your AI agent which parts of an ML need the Hugging Face Hub already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "wheres-my-hug": "src/server.ts"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "check": "tsc",
+    "test": "node --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "7.0.2"
+  }
+}
