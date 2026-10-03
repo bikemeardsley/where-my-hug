@@ -43,7 +43,7 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
    WRITE  not a job for a model: rules, geometry, parsing, lookups, arithmetic. Code is cheaper and exact.
    Most needs have a WRITE part somewhere. A model doing deterministic work is a cost, not a feature.
 
-3. Name candidates: for USE and TUNE, 1 to 3 models, best fit first; for TUNE and TRAIN, datasets too (kind "dataset"). Exact Hub ids (owner/name) you are confident exist. The smallest model that does the job beats the biggest. A Space is a demo: name the model behind it. Fit the stack: a model the stack can't load means running a server, so say so. Never guess an owner: an id that isn't there is dropped, and a part left with nothing comes back to you.
+3. Name candidates. For USE and TUNE, 1 to 4 models, best fit first: at least one that runs on the compute; then, where a bigger model would clearly do better, one a little over it (it may fit quantized) and one far over it that could run in the cloud. Say in the rationale what the bigger ones would buy. For TUNE and TRAIN, datasets too (kind "dataset"). Exact Hub ids (owner/name) you are confident exist. A Space is a demo: name the model behind it. Fit the stack: a model the stack can't load means running a server, so say so. Never guess an owner: an id that isn't there is dropped, and a part left with nothing comes back to you.
 
 4. Before ranking, check each candidate against what bites later:
    - its terms: non-commercial, research-only and custom licenses may rule it out, and a fine-tune carries its base's terms too;

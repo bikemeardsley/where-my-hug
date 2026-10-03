@@ -11,7 +11,11 @@ const HUB: Record<string, object> = {
   },
   'models/acme/giant': {
     id: 'acme/giant', downloads: 9_000, lastModified: now, gated: 'manual',
-    cardData: { license: ['apache-2.0', 'other'], base_model: ['acme/base'] }, safetensors: { total: 13e9 }, // over 24 GB to run, though not its parameter count
+    cardData: { license: ['apache-2.0', 'other'], base_model: ['acme/base'] }, safetensors: { total: 13e9 }, // 31.2 GB to run; 7.8 at 4 bits
+  },
+  'models/acme/colossal': {
+    id: 'acme/colossal', downloads: 20_000, lastModified: now, cardData: { license: 'apache-2.0' }, safetensors: { total: 70e9 }, // 42 GB even at 4 bits
+    inferenceProviderMapping: { together: { status: 'live' }, slowco: { status: 'staging' } },
   },
   'models/acme/old-research': {
     id: 'acme/old-research', downloads: 12, lastModified: '2020-01-01T00:00:00.000Z',
@@ -43,21 +47,25 @@ test("keeps the agent's order, drops what isn't there and flags what bites", asy
     need: 'read book pages',
     compute: 'one 24 GB GPU',
     components: [
-      part('reader', 'USE', [{ id: 'acme/made-up' }, { id: 'acme/reader' }, { id: 'acme/giant' }]),
+      part('reader', 'USE', [{ id: 'acme/made-up' }, { id: 'acme/giant' }, { id: 'acme/reader' }, { id: 'acme/colossal' }]),
       part('tuner', 'TUNE', [{ id: 'acme/old-research' }, { id: 'acme/pages', kind: 'dataset' }, { id: 'acme/named-only' }]),
       part('flaky', 'USE', [{ id: 'acme/flaky' }]),
       part('rules', 'WRITE', []),
+      part('bigjob', 'USE', [{ id: 'acme/colossal' }]),
     ],
   });
   delete process.env.HF_TOKEN;
-  const [reader, tuner, flaky, rules] = result.components;
+  const [reader, tuner, flaky, rules, bigjob] = result.components;
 
-  assert.equal(reader.model?.id, 'acme/reader');
-  assert.deepEqual(reader.model?.flags, []);
+  // What runs on the compute heads the part, though named after a bigger one; the bigger follow, in order.
+  assert.deepEqual([reader.model?.id, reader.model?.tier, reader.model?.flags], ['acme/reader', 'fits', []]);
   assert.deepEqual(reader.dropped, ['acme/made-up']);
-  assert.deepEqual(reader.alternates.map((entry) => [entry.id, entry.flags]), [['acme/giant', ['GATED', 'OWN_TERMS', 'TOO_BIG']]]);
-  assert.deepEqual(reader.alternates[0].baseModels, ['acme/base']);
-  assert.equal(reader.alternates[0].license, 'apache-2.0, other');
+  assert.deepEqual(reader.bigger.map((entry) => [entry.id, entry.tier, entry.flags]), [['acme/giant', 'stretch', ['GATED', 'OWN_TERMS']], ['acme/colossal', 'cloud', []]]);
+  assert.deepEqual([reader.bigger[0].baseModels, reader.bigger[0].license], [['acme/base'], 'apache-2.0, other']);
+  assert.deepEqual(reader.bigger[1].hostedBy, ['together']); // live only, not staging
+  assert.deepEqual(reader.alternates, []);
+  // Nothing that fits isn't nothing at all: the big option stands, and the agent isn't sent back.
+  assert.deepEqual([bigjob.model, bigjob.bigger.map((entry) => entry.id)], [undefined, ['acme/colossal']]);
 
   assert.equal(tuner.model?.license, 'other (acme-research)');
   assert.deepEqual(tuner.model?.flags, ['NON_COMMERCIAL', 'STALE', 'LITTLE_USED']);
@@ -67,12 +75,14 @@ test("keeps the agent's order, drops what isn't there and flags what bites", asy
   assert.equal(tuner.alternates[0].baseModels, undefined); // base_model: [] is no base
 
   assert.deepEqual(flaky.model?.flags, ['UNCHECKED']); // kept: the Hub didn't say it's missing
-  assert.deepEqual([reader, tuner, flaky, rules].map((p) => p.missing), [[], [], [], []]);
+  assert.deepEqual([reader, tuner, flaky, rules, bigjob].map((p) => p.missing), [[], [], [], [], []]);
   assert.equal(result.nextAction, 'DONE');
 
   assert.match(markdown, /\*\*Model: \[acme\/reader\]\(https:\/\/huggingface\.co\/acme\/reader\)\*\*/);
   assert.match(markdown, /\*\*Data: \[acme\/pages\]\(https:\/\/huggingface\.co\/datasets\/acme\/pages\)\*\*/);
-  assert.match(markdown, /7 named, 1 not there and dropped, 1 the Hub didn't answer for/);
+  assert.match(markdown, /9 named, 1 not there and dropped, 1 the Hub didn't answer for/);
+  assert.match(markdown, /If you can make it work, bigger than one 24 GB GPU:\n- \[acme\/giant\]\(https:\/\/huggingface\.co\/acme\/giant\): a stretch: ~31\.2 GB to run, ~7\.8 GB quantized to 4 bits \(gated, own terms\)\n- \[acme\/colossal\]\(https:\/\/huggingface\.co\/acme\/colossal\): cloud: ~168\.0 GB to run, hosted by together\n/);
+  assert.match(markdown, /Nothing named runs on one 24 GB GPU: the options below need more/);
   assert.match(markdown, /No model: write this one/);
   assert.match(markdown, /776\.0M parameters \(~1\.9 GB to run\)/); // what it needs, whatever the compute turns out to be
 

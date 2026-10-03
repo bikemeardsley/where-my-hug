@@ -25,7 +25,7 @@ server.registerTool('wheres_my_hug', {
 
 server.registerTool('wheres_my_hug_verify', {
   title: "Where's my hug at? (checked on the Hub)",
-  description: 'Step 2 of 2: checks every model and dataset id against the live Hugging Face Hub, drops the ones that are not there, flags licenses, gating, size, staleness and low use, and returns the report to show the user. If nextAction is RECALL_REPLACEMENTS, propose new ids for the parts it names and call again.',
+  description: 'Step 2 of 2: checks every model and dataset id against the live Hugging Face Hub, drops the ones that are not there, flags licenses, gating, staleness and low use, sizes each model against the compute (fits, a stretch that fits only quantized, or cloud, with who hosts it), and returns the report to show the user. If nextAction is RECALL_REPLACEMENTS, propose new ids for the parts it names and call again.',
   inputSchema: {
     need,
     compute,

@@ -20,10 +20,11 @@ export interface Entry {
   likes?: number;
   updated?: string;
   gated?: boolean | string; // false, or how access is granted ("auto", "manual")
+  hostedBy?: string[]; // inference providers serving it live, so it can be called without running it
 }
 
 const EXPAND: Record<Kind, string[]> = {
-  model: ['pipeline_tag', 'library_name', 'downloads', 'likes', 'lastModified', 'gated', 'cardData', 'safetensors', 'tags'],
+  model: ['pipeline_tag', 'library_name', 'downloads', 'likes', 'lastModified', 'gated', 'cardData', 'safetensors', 'tags', 'inferenceProviderMapping'],
   dataset: ['downloads', 'likes', 'lastModified', 'gated', 'cardData', 'tags'],
 };
 const ID = /^\w[\w.-]*(\/\w[\w.-]*)?$/; // owner/name, or an old canonical name like "gpt2"; never "." or "..", so the path stays put
@@ -63,6 +64,8 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
     // Custom terms are "other", named in license_name; some cards give only the name. Either way: "other (qwen-research)".
     const license = [card.license || tagged('license:')].flat().filter(Boolean).join(', ');
     const base: string[] = [card.base_model ?? []].flat();
+    // { provider: { status: "live" | "staging", ... } }
+    const hosted = Object.entries(json.inferenceProviderMapping ?? {}).filter(([, p]) => (p as { status?: string })?.status === 'live').map(([name]) => name);
     return {
       id: json.id ?? id,
       kind,
@@ -77,6 +80,7 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
       likes: json.likes,
       updated: json.lastModified,
       gated: json.gated,
+      hostedBy: hosted.length ? hosted : undefined,
     };
   } catch {
     return { id, kind, exists: undefined, status: 'unreachable' };

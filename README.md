@@ -20,8 +20,9 @@ Two tools, called in order:
    do, with the traps in mind.
 2. **`wheres_my_hug_verify`**: the agent sends its slate. Every id is looked up
    on the Hub API. Ids that aren't there are dropped, and a part left with
-   nothing goes back to the agent for new candidates. The rest are flagged,
-   and the tool returns the report the user sees.
+   nothing goes back to the agent for new candidates. The rest are flagged
+   and sized against your compute, and the tool returns the report the user
+   sees.
 
 The agent decides what fits and in what order, since fit comes first. Every
 fact in the report (license, size, downloads, freshness) comes from the Hub.
@@ -46,10 +47,25 @@ before the hardware is decided.
 | NO_LICENSE | No license on its card. |
 | NON_COMMERCIAL | Non-commercial or research-only terms (`cc-by-nc-*`, `*-research`, …). |
 | OWN_TERMS | Custom, use-restricted or no-derivatives terms (`other`, Llama, Gemma, RAIL, `-nd-`). |
-| TOO_BIG | Needs more memory to run (2.4 bytes per parameter: half precision plus room for activations) than the first "N GB" in the compute you gave. |
-| LARGE | No compute given, and over 15B parameters. |
 | STALE | Not updated in two years. |
 | LITTLE_USED | Under 100 downloads in the last month. |
+
+### Sizes: what runs here, and what might do better
+
+Every model shows the memory it needs to run: 2.4 bytes per parameter, half
+precision plus room for activations. Against the compute you gave (its first
+"N GB"):
+
+- The first model that **fits** heads its part.
+- Bigger ones follow under "If you can make it work", in the agent's order.
+  **A stretch** fits only quantized to 4 bits (0.6 bytes per parameter), or
+  on a bigger GPU. **Cloud** needs more than that: the report names the
+  providers serving it on the Hub, or says rented GPUs.
+- A part where nothing fits still shows its bigger options. It isn't sent
+  back for replacements, since the hardware might be found.
+
+With the compute unknown, the agent covers the range and each model's memory
+is shown, so the report helps pick the hardware.
 
 A model named as a dataset (or the other way round) is found under the right
 kind. Licenses come from the card's metadata: `license`, `license_name` for
@@ -58,7 +74,7 @@ custom terms (reported as `other (qwen-research)`), or a `license:` tag.
 ## Example
 
 From a live run, need: _find a book's cover, spine and page edges in a phone
-photo, and read its title_ (abridged):
+photo, and read its title_, on one 24 GB GPU (abridged):
 
 ```
 ## TUNE  ·  Find the faces
@@ -69,9 +85,11 @@ Watch out: no license on its card; not updated in two years.
 Dropped, not on the Hub (or private): acme/book-corners-v2
 
 ## USE  ·  Read the title
-**Model: Qwen/Qwen2.5-VL-3B-Instruct**
-license other (qwen-research) · 3.8B parameters (~9.0 GB to run) · 2.4M downloads a month
-Watch out: non-commercial or research-only terms.
+**Model: Qwen/Qwen2.5-VL-7B-Instruct**
+license apache-2.0 · 8.3B parameters (~19.9 GB to run) · 5.8M downloads a month
+If you can make it work, bigger than one 24 GB GPU:
+- Qwen/Qwen2.5-VL-32B-Instruct: a stretch: ~80.3 GB to run, ~20.1 GB quantized to 4 bits, hosted by featherless-ai
+- Qwen/Qwen2.5-VL-72B-Instruct: cloud: ~176.2 GB to run, hosted by featherless-ai, ovhcloud (own terms)
 
 ## WRITE  ·  Straighten
 No model: write this one.
@@ -104,7 +122,8 @@ method and the report stay between you and your agent.
 ## Limits
 
 - Sizes come from `safetensors` metadata. Repos with only GGUF or `.bin`
-  weights show no parameter count, and so no size flag.
+  weights show no parameter count, so they can't be sized against the
+  compute.
 - License flags read the card's metadata, not the license text.
 
 ## Development
