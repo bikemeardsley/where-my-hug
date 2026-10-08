@@ -46,15 +46,16 @@ before the hardware is decided.
 | GATED | You must accept its terms on the Hub before downloading. |
 | NO_LICENSE | No license on its card. |
 | NON_COMMERCIAL | Non-commercial or research-only terms (`cc-by-nc-*`, `*-research`, …). |
-| OWN_TERMS | Custom, use-restricted or no-derivatives terms (`other`, Llama, Gemma, RAIL, `-nd-`). |
+| OWN_TERMS | Custom, use-restricted or no-derivatives terms (`other`, Llama, Gemma, RAIL, `-nd-`). Can come with NON_COMMERCIAL: `cc-by-nc-nd` is both. |
 | STALE | Not updated in two years. |
 | LITTLE_USED | Under 100 downloads in the last month. |
 
 ### Sizes: what runs here, and what might do better
 
 Every model shows the memory it needs to run: 2.4 bytes per parameter, half
-precision plus room for activations. Against the compute you gave (its first
-"N GB"):
+precision plus room for activations. A model to fine-tune also shows what that
+takes: about 1 byte per parameter with QLoRA, 16 in full. Against the compute
+you gave (its first "N GB"):
 
 - The first model that **fits** heads its part.
 - Bigger ones follow under "If you can make it work", in the agent's order.
@@ -73,25 +74,26 @@ custom terms (reported as `other (qwen-research)`), or a `license:` tag.
 
 ## Example
 
-From a live run, need: _find a book's cover, spine and page edges in a phone
-photo, and read its title_, on one 24 GB GPU (abridged):
+From a live run, need: _transcribe handwritten recipe cards into recipes:
+title, ingredients with amounts, steps_, on one 24 GB GPU (abridged):
 
 ```
-## TUNE  ·  Find the faces
-**Model: microsoft/Florence-2-large**
-image-text-to-text · transformers · license mit · 776.7M parameters (~1.9 GB to run) · 404.2k downloads a month
-**Data: HuggingFaceM4/DocumentVQA**
-Watch out: no license on its card; not updated in two years.
-Dropped, not on the Hub (or private): acme/book-corners-v2
-
-## USE  ·  Read the title
+## USE  ·  Read the card
 **Model: Qwen/Qwen2.5-VL-7B-Instruct**
-license apache-2.0 · 8.3B parameters (~19.9 GB to run) · 5.8M downloads a month
+license apache-2.0 · 8.3B parameters (~19.9 GB to run) · 5.4M downloads a month
 If you can make it work, bigger than one 24 GB GPU:
 - Qwen/Qwen2.5-VL-32B-Instruct: a stretch: ~80.3 GB to run, ~20.1 GB quantized to 4 bits, hosted by featherless-ai
 - Qwen/Qwen2.5-VL-72B-Instruct: cloud: ~176.2 GB to run, hosted by featherless-ai, ovhcloud (own terms)
 
-## WRITE  ·  Straighten
+## TUNE  ·  Read the hard hands
+**Model: Qwen/Qwen2.5-VL-3B-Instruct**
+license other (qwen-research) · 3.8B parameters (~9.0 GB to run; to fine-tune, ~3.8 GB with QLoRA, ~60.1 GB in full)
+Watch out: non-commercial or research-only terms; its own terms (custom, use-restricted or no-derivatives): read them.
+**Data: Teklia/IAM-line**
+license mit · 3.9k downloads a month · updated 3 years ago
+Also: microsoft/trocr-large-handwritten (no license, stale)
+
+## WRITE  ·  Parse the amounts
 No model: write this one.
 ```
 

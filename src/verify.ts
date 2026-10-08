@@ -24,6 +24,8 @@ const STALE_DAYS = 730;
 const LITTLE_USED = 100; // downloads in the last 30 days
 const BYTES_PER_PARAM = 2.4; // half precision plus a fifth for activations and cache: enough to run it; fine-tuning needs more again
 const QUANTIZED_BYTES_PER_PARAM = 0.6; // 4 bits, plus the same fifth
+const FULL_TUNE_BYTES_PER_PARAM = 16; // weights and gradients in half precision, Adam's state and a master copy in full
+const QLORA_BYTES_PER_PARAM = 1; // 4-bit weights, small adapters, room for activations
 const NON_COMMERCIAL = /(^|[-_ ])nc([-_ ]|$)|non-?commercial|research|amlr|deepfloyd/;
 const OWN_TERMS = /\bother\b|llama|gemma|rail|grok|community|(^|-)nd(-|$)/; // custom, use-restricted or no-derivatives
 
@@ -38,6 +40,7 @@ export async function verify({ need, components, compute }: { need: string; comp
       const entry = await lookUp(kind, id);
       if (entry.exists !== false) return entry;
       const other = await lookUp(kind === 'model' ? 'dataset' : 'model', id);
+      if (other.exists === undefined) return { ...entry, exists: undefined, status: other.status }; // not ruled out: unchecked, not dropped
       return other.exists ? other : entry;
     }));
     const found: Checked[] = entries.filter((entry) => entry.exists !== false).map((entry) => ({ ...entry, flags: flagsOf(entry), tier: tierOf(entry) }));
@@ -62,7 +65,7 @@ export async function verify({ need, components, compute }: { need: string; comp
     components: parts,
     nextAction: recall.length ? 'RECALL_REPLACEMENTS' : 'DONE',
     instructions: recall.length
-      ? `These parts have nothing on the Hub yet: ${recall.join(', ')}. Propose ids for exactly those (not the dropped ones again), then call wheres_my_hug_verify again with the whole slate.`
+      ? `These parts need new candidates: ${recall.join(', ')}. Propose ids for exactly those (not the dropped ones again), then call wheres_my_hug_verify again with the whole slate.`
       : "Show the user the markdown report as it is. Its facts came from the Hub just now; don't restate them from memory.",
   };
   return { markdown: report(need, parts, compute), result };
@@ -76,7 +79,7 @@ function flagsOf(entry: Entry): string[] {
   if (entry.gated) flags.push('GATED');
   if (entry.exists && (!license || license === 'unknown')) flags.push('NO_LICENSE');
   else if (license && NON_COMMERCIAL.test(license)) flags.push('NON_COMMERCIAL');
-  else if (license && OWN_TERMS.test(license)) flags.push('OWN_TERMS');
+  if (license && OWN_TERMS.test(license)) flags.push('OWN_TERMS'); // with NON_COMMERCIAL too: cc-by-nc-nd is both
   if (entry.updated && Date.now() - Date.parse(entry.updated) > STALE_DAYS * 864e5) flags.push('STALE');
   if (entry.downloads !== undefined && entry.downloads < LITTLE_USED) flags.push('LITTLE_USED');
   return flags;
@@ -102,10 +105,11 @@ const age = (iso: string) => {
 };
 
 /** A pick in full: its link, then the Hub's facts about it, then what to watch. */
-function pick(label: string, entry: Checked): string[] {
+function pick(label: string, entry: Checked, tune = false): string[] {
   const facts = [
     entry.task, entry.library, entry.license && `license ${entry.license}`,
-    entry.params && `${count(entry.params)} parameters (${gb(entry.params, BYTES_PER_PARAM)} to run)`,
+    entry.params && `${count(entry.params)} parameters (${gb(entry.params, BYTES_PER_PARAM)} to run${tune
+      ? `; to fine-tune, ${gb(entry.params, QLORA_BYTES_PER_PARAM)} with QLoRA, ${gb(entry.params, FULL_TUNE_BYTES_PER_PARAM)} in full` : ''})`,
     entry.downloads !== undefined && `${count(entry.downloads)} downloads a month`,
     entry.likes !== undefined && `${count(entry.likes)} likes`,
     entry.updated && `updated ${age(entry.updated)}`,
@@ -142,10 +146,10 @@ function report(need: string, parts: Part[], compute?: string): string {
   ];
   for (const part of parts) {
     lines.push('', '---', '', `## ${part.verdict}  ·  ${part.name}`, '', `_${part.role}_`, '');
-    if (part.model) lines.push(...pick('Model', part.model));
+    if (part.model) lines.push(...pick('Model', part.model, part.verdict === 'TUNE'));
     else if (part.bigger.length) lines.push(`**Nothing named runs on ${compute}: the options below need more.**`, '');
     if (part.dataset) lines.push(...pick('Data', part.dataset));
-    if (part.missing.length) lines.push(`**Nothing on the Hub for this yet (no ${part.missing.join(' or ')}): it needs new candidates.**`, '');
+    if (part.missing.length) lines.push(`**No ${part.missing.join(' or ')} on the Hub for this yet: it needs new candidates.**`, '');
     else if (part.verdict === 'WRITE' && !part.model) lines.push('**No model: write this one.**', '');
     else if (part.verdict === 'TRAIN' && !part.dataset) lines.push('**No dataset on the Hub for this: collect the data.**', '');
     lines.push(part.rationale);

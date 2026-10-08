@@ -48,7 +48,7 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
 4. Before ranking, check each candidate against what bites later:
    - its terms: non-commercial, research-only and custom licenses may rule it out, and a fine-tune carries its base's terms too;
    - gated access that needs approval;
-   - its size against the compute: fine-tuning needs several times the memory that running does;
+   - its size against the compute: fine-tuning in full needs several times the memory that running does, QLoRA less than running;
    - its task: a model that captions images doesn't find things in them, however close the names sound.
 
 5. Call wheres_my_hug_verify with:

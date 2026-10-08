@@ -35,6 +35,7 @@ globalThis.fetch = async (input, init) => {
   const path = new URL(String(input)).pathname.replace('/api/', '');
   asked.push({ path, authorization: new Headers(init?.headers).get('authorization') });
   if (path === 'models/acme/flaky' && !flaky++) throw new TypeError('fetch failed');
+  if (path === 'datasets/acme/maybe') throw new TypeError('fetch failed'); // not a model, and the dataset can't be asked
   return HUB[path] ? Response.json(HUB[path]) : new Response('Unauthorized', { status: 401 });
 };
 
@@ -44,7 +45,7 @@ const part = (id: string, verdict: 'USE' | 'TUNE' | 'TRAIN' | 'WRITE', candidate
 test("keeps the agent's order, drops what isn't there and flags what bites", async () => {
   process.env.HF_TOKEN = 'hf_secret_test_token';
   const { markdown, result } = await verify({
-    need: 'read book pages',
+    need: 'read street signs',
     compute: 'one 24 GB GPU',
     components: [
       part('reader', 'USE', [{ id: 'acme/made-up' }, { id: 'acme/giant' }, { id: 'acme/reader' }, { id: 'acme/colossal' }]),
@@ -68,7 +69,7 @@ test("keeps the agent's order, drops what isn't there and flags what bites", asy
   assert.deepEqual([bigjob.model, bigjob.bigger.map((entry) => entry.id)], [undefined, ['acme/colossal']]);
 
   assert.equal(tuner.model?.license, 'other (acme-research)');
-  assert.deepEqual(tuner.model?.flags, ['NON_COMMERCIAL', 'STALE', 'LITTLE_USED']);
+  assert.deepEqual(tuner.model?.flags, ['NON_COMMERCIAL', 'OWN_TERMS', 'STALE', 'LITTLE_USED']); // research-only, and custom
   assert.equal(tuner.dataset?.license, 'cc-by-4.0');
   assert.equal(tuner.dataset?.task, 'image-to-text');
   assert.deepEqual(tuner.alternates.map((entry) => [entry.license, entry.flags]), [['other (acme-community)', ['OWN_TERMS']]]);
@@ -103,10 +104,13 @@ test('sends the agent back for parts left with nothing', async () => {
       part('forgot', 'USE', []),
       part('mislabeled', 'TRAIN', [{ id: 'acme/pages' }]), // a dataset, named as a model
       part('again', 'USE', [{ id: 'acme/flaky' }]),
+      part('unsure', 'USE', [{ id: 'acme/maybe' }]),
     ],
   });
   assert.equal(result.nextAction, 'RECALL_REPLACEMENTS');
-  assert.deepEqual(result.components.map((p) => p.missing), [['model'], ['dataset'], ['dataset'], [], ['model'], [], []]);
+  assert.deepEqual(result.components.map((p) => p.missing), [['model'], ['dataset'], ['dataset'], [], ['model'], [], [], []]);
+  // Not a model, but whether it's a dataset couldn't be asked: kept unchecked, not dropped as missing.
+  assert.deepEqual([result.components[7].model?.flags, result.components[7].dropped], [['UNCHECKED'], []]);
   assert.match(result.instructions, /matcher \(a model\), trainer \(a dataset\), tuned \(a dataset\), forgot \(a model\)\./);
   assert.deepEqual(result.components[0].dropped, ['../../evil', 'acme/gone']);
   assert.ok(!asked.slice(before).some((call) => call.path.includes('evil'))); // a bad id is never sent
@@ -115,6 +119,7 @@ test('sends the agent back for parts left with nothing', async () => {
   // The Hub didn't answer the first time; that isn't remembered, so it's asked again and answers.
   assert.deepEqual(result.components[6].model?.flags, []);
   assert.equal(asked.filter((call) => call.path === 'models/acme/flaky').length, 2);
-  assert.match(markdown, /Nothing on the Hub for this yet \(no dataset\): it needs new candidates/);
+  assert.match(markdown, /No dataset on the Hub for this yet: it needs new candidates/);
+  assert.match(markdown, /\(~1\.9 GB to run; to fine-tune, ~0\.8 GB with QLoRA, ~12\.4 GB in full\)/); // the TUNE part's model
   assert.match(markdown, /No dataset on the Hub for this: collect the data/);
 });
