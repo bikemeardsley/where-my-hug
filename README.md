@@ -122,11 +122,6 @@ Zed, …): a stdio server, in the client's JSON config. VS Code calls the key
 
 **Gemini CLI**, as an extension: `gemini extensions install https://github.com/bikemeardsley/wheres-my-hug`
 
-**Open WebUI** speaks MCP over HTTP, not stdio, so bridge it with
-[mcpo](https://github.com/open-webui/mcpo):
-`uvx mcpo --port 8000 -- npx -y github:bikemeardsley/wheres-my-hug`, then add
-`http://localhost:8000` as a tool server.
-
 **As an Agent Skill**, for agents that read `SKILL.md` (Claude, Cline, Codex,
 Cursor, Copilot, Gemini CLI and more): `npx skills add bikemeardsley/wheres-my-hug`.
 The skill uses the MCP tools when they're connected, and otherwise runs the
