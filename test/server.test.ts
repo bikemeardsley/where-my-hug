@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -36,4 +37,14 @@ test('serves both tools over stdio, as Claude Code starts it', async () => {
   } finally {
     await client.close();
   }
+});
+
+test('runs the same two steps from a shell, for an agent without MCP', () => {
+  const run = (command: string, input: object) =>
+    execFileSync(process.execPath, [fileURLToPath(new URL('../src/server.ts', import.meta.url)), command], { input: JSON.stringify(input), encoding: 'utf8', stdio: 'pipe' });
+  assert.match(run('rubric', { need: 'sort socks by color', stack: 'Python' }), /^- compute:/m);
+  const report = run('verify', { need: 'sort socks', components: [{ id: 'sort', name: 'Sort', role: 'socks -> piles', verdict: 'WRITE', rationale: 'a hue threshold', candidates: [] }] });
+  assert.match(report, /^# Where's my hug at\?/);
+  assert.match(report, /"nextAction":"DONE"/);
+  assert.throws(() => run('verify', { need: 'x', components: [] })); // the same checks as the tool
 });
