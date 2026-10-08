@@ -99,21 +99,52 @@ No model: write this one.
 
 ## Install
 
-Needs Node 22.18 or later (it runs its TypeScript directly).
+Needs Node 22.18 or later. Nothing to clone: `npx` fetches and builds it the
+first time. Pick what your agent uses.
+
+**Claude Code**, as a plugin: the tools, plus a skill that knows when to reach
+for them.
+
+```
+/plugin marketplace add bikemeardsley/wheres-my-hug
+/plugin install wheres-my-hug@wheres-my-hug
+```
+
+Or the tools alone: `claude mcp add --scope user wheres-my-hug -- npx -y github:bikemeardsley/wheres-my-hug`
+
+**Any other MCP client** (Claude Desktop, Cursor, Windsurf, Cline, Codex,
+Zed, …): a stdio server, in the client's JSON config. VS Code calls the key
+`servers`.
+
+```json
+{ "mcpServers": { "wheres-my-hug": { "command": "npx", "args": ["-y", "github:bikemeardsley/wheres-my-hug"] } } }
+```
+
+**Gemini CLI**, as an extension: `gemini extensions install https://github.com/bikemeardsley/wheres-my-hug`
+
+**Open WebUI** speaks MCP over HTTP, not stdio, so bridge it with
+[mcpo](https://github.com/open-webui/mcpo):
+`uvx mcpo --port 8000 -- npx -y github:bikemeardsley/wheres-my-hug`, then add
+`http://localhost:8000` as a tool server.
+
+**As an Agent Skill**, for agents that read `SKILL.md` (Claude, Cline, Codex,
+Cursor, Copilot, Gemini CLI and more): `npx skills add bikemeardsley/wheres-my-hug`.
+The skill uses the MCP tools when they're connected, and otherwise runs the
+same two steps from a shell:
 
 ```sh
-git clone https://github.com/bikemeardsley/wheres-my-hug.git
-cd wheres-my-hug && npm install
-claude mcp add --scope user wheres-my-hug -- node /absolute/path/to/wheres-my-hug/src/server.ts
+npx -y github:bikemeardsley/wheres-my-hug rubric < details.json
+npx -y github:bikemeardsley/wheres-my-hug verify < slate.json
 ```
 
 Then ask your agent something like _"Where's my hug at for transcribing
 handwritten recipe cards?"_
 
 **`HF_TOKEN` (optional).** Everything public works without one. To include
-private repos your account can see, add `-e HF_TOKEN=hf_…` to the
-`claude mcp add` line. Claude Code keeps it in its config. Without a token, a
-private repo looks missing, because the Hub answers 401 for both.
+private repos your account can see, set `HF_TOKEN` in the environment the
+agent starts from, or add `-e HF_TOKEN=hf_…` to the `claude mcp add` line.
+Without a token, a private repo looks missing, because the Hub answers 401 for
+both.
 
 ## What leaves your machine
 
@@ -131,9 +162,13 @@ method and the report stay between you and your agent.
 ## Development
 
 ```sh
-npm test        # offline: the Hub is mocked, and the server is driven over stdio
-npm run check   # types
+node src/server.ts   # the server, straight from source
+npm test             # offline: the Hub is mocked, and the server is driven over stdio
+npm run check        # types
 ```
+
+`npm install` also builds JavaScript into `build/`, which is what `npx` runs:
+Node won't strip types from a package inside `node_modules`.
 
 ## Credits
 
