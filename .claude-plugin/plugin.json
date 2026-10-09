@@ -6,6 +6,6 @@
   "license": "MIT",
   "keywords": ["hugging-face", "machine-learning", "models", "datasets", "mcp"],
   "mcpServers": {
-    "wheres-my-hug": { "command": "npx", "args": ["-y", "github:bikemeardsley/wheres-my-hug"] }
+    "wheres-my-hug": { "command": "npx", "args": ["-y", "github:bikemeardsley/wheres-my-hug"], "startup_timeout_sec": 120 }
   }
 }

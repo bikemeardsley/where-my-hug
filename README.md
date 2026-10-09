@@ -99,26 +99,40 @@ No model: write this one.
 
 ## Install
 
-Needs Node 22.18 or later. Nothing to clone: `npx` fetches and builds it the
-first time. Pick what your agent uses.
+Needs Node 22.18 or later. Nothing to clone: `npx` fetches and builds it.
+Pick what your agent uses.
 
-**Claude Code**, as a plugin: the tools, plus a skill that knows when to reach
-for them.
+**Claude Code, Codex, Copilot CLI**, as a plugin: the tools, plus a skill that
+knows when to reach for them. One marketplace serves all three.
 
-```
-/plugin marketplace add bikemeardsley/wheres-my-hug
+```sh
+/plugin marketplace add bikemeardsley/wheres-my-hug          # Claude Code
 /plugin install wheres-my-hug@wheres-my-hug
+
+codex plugin marketplace add bikemeardsley/wheres-my-hug      # Codex
+codex plugin add wheres-my-hug@wheres-my-hug
+
+copilot plugin marketplace add bikemeardsley/wheres-my-hug    # Copilot CLI
+copilot plugin install wheres-my-hug@wheres-my-hug
 ```
 
-Or the tools alone: `claude mcp add --scope user wheres-my-hug -- npx -y github:bikemeardsley/wheres-my-hug`
+Devin's CLI reads the same plugin: `devin plugins install bikemeardsley/wheres-my-hug`.
+For the tools alone in Claude Code: `claude mcp add --scope user wheres-my-hug -- npx -y github:bikemeardsley/wheres-my-hug`
 
-**Any other MCP client** (Claude Desktop, Cursor, Windsurf, Cline, Codex,
-Zed, …): a stdio server, in the client's JSON config. VS Code calls the key
-`servers`.
+**Any other MCP client** (Claude Desktop, Cursor, Windsurf, Cline, Goose,
+Kiro, Junie, LM Studio, Warp, …): a stdio server, in the client's config.
+Most call the key `mcpServers`; VS Code calls it `servers`, Zed
+`context_servers`, OpenCode `mcp`.
 
 ```json
 { "mcpServers": { "wheres-my-hug": { "command": "npx", "args": ["-y", "github:bikemeardsley/wheres-my-hug"] } } }
 ```
+
+**The first start is slow.** `npx` fetches and builds it from GitHub, which
+takes a minute the first time and about half that after. A client that gives
+up on a server sooner needs more time: Claude Code reads `MCP_TIMEOUT=120000`
+from the environment, and Codex `startup_timeout_sec = 120` (the plugin sets
+it).
 
 **Gemini CLI**, as an extension: `gemini extensions install https://github.com/bikemeardsley/wheres-my-hug`
 
@@ -134,8 +148,9 @@ Without a host it listens on 127.0.0.1 only. Anyone who can reach the port can
 use it, including, with `HF_TOKEN` set, looking up private repos the token can
 see: keep it on a network you trust.
 
-**As an Agent Skill**, for agents that read `SKILL.md` (Claude, Cline, Codex,
-Cursor, Copilot, Gemini CLI and more): `npx skills add bikemeardsley/wheres-my-hug`.
+**As an Agent Skill**, for agents that read `SKILL.md` (Cline, Cursor,
+Copilot, Goose, OpenCode, Amp, Zed, Junie, Hermes, Mistral Vibe and more):
+`npx skills add bikemeardsley/wheres-my-hug`.
 The skill uses the MCP tools when they're connected, and otherwise runs the
 same two steps from a shell:
 
