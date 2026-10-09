@@ -1,0 +1,14 @@
+{
+  "name": "wheres-my-hug",
+  "displayName": "Where's My Hug?",
+  "description": "Which parts of an ML need the Hugging Face Hub already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
+  "author": { "name": "Mike Beardsley" },
+  "homepage": "https://github.com/bikemeardsley/wheres-my-hug",
+  "repository": "https://github.com/bikemeardsley/wheres-my-hug",
+  "license": "MIT",
+  "keywords": ["hugging-face", "machine-learning", "models", "datasets", "mcp"],
+  "category": "developer-tools",
+  "tags": ["hugging-face", "machine-learning", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json"
+}

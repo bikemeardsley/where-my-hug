@@ -14,8 +14,10 @@ every model and dataset checked against the live Hub. Start with
   development. `tsc` builds `build/` only on install (`prepare`), because Node
   won't strip types inside `node_modules`, which is where `npx` puts it.
 - **One entry point, every client.** `npx -y github:bikemeardsley/wheres-my-hug`
-  is what the Claude Code plugin, the Gemini extension, other MCP clients and
-  the skill's shell fallback all run. Change it in one place, change it in all. Dependencies pinned to exact versions; never auto-upgrade.
+  is what the Claude Code plugin, the Cursor plugin, the Gemini extension,
+  other MCP clients and the skill's shell fallback all run. It's written in
+  `.claude-plugin/plugin.json`, `mcp.json` (Cursor's), `gemini-extension.json`,
+  `skills/wheres-my-hug/SKILL.md` and the README: change one, change them all. Dependencies pinned to exact versions; never auto-upgrade.
 - **American English** in code, docs and commits.
 - **General, not tied to any one project.** It came out of Thicken's vision
   work, but nothing here should know about books, slabs or Thicken.
