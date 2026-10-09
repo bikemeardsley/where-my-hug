@@ -2,9 +2,12 @@
 // Where's My Hug? as an MCP server on stdio. Two tools, called in order: the rubric the agent follows to propose
 // models and datasets, then the check against the live Hub that writes the report the user sees. For an agent
 // without MCP, the same two run from a shell: `wheres-my-hug rubric` and `wheres-my-hug verify`, JSON on stdin.
+// For a client that speaks MCP over HTTP only, `wheres-my-hug --http` serves them at /mcp.
+import { createServer } from 'node:http';
 import { text } from 'node:stream/consumers';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { z } from 'zod';
 import { rubric } from './rubric.ts';
 import { verify } from './verify.ts';
@@ -35,13 +38,7 @@ const verified = async (args: z.infer<z.ZodObject<typeof slate>>) => {
   return `${markdown}\n\n<wheres_my_hug_json>\n${JSON.stringify(result)}\n</wheres_my_hug_json>`;
 };
 
-const command = process.argv[2];
-if (command === 'rubric') console.log(rubric(z.object(details).parse(JSON.parse(await text(process.stdin)))));
-else if (command === 'verify') console.log(await verified(z.object(slate).parse(JSON.parse(await text(process.stdin)))));
-else if (command) {
-  console.error('Usage: wheres-my-hug                  serve the MCP tools on stdio\n       wheres-my-hug rubric < details.json\n       wheres-my-hug verify < slate.json');
-  process.exit(2);
-} else {
+function serve() {
   const server = new McpServer({ name: 'wheres-my-hug', version: '0.1.0' });
   server.registerTool('wheres_my_hug', {
     title: "Where's my hug at?",
@@ -53,5 +50,28 @@ else if (command) {
     description: 'Step 2 of 2: checks every model and dataset id against the live Hugging Face Hub, drops the ones that are not there, flags licenses, gating, staleness and low use, sizes each model against the compute (fits, a stretch that fits only quantized, or cloud, with who hosts it), and returns the report to show the user. If nextAction is RECALL_REPLACEMENTS, propose new ids for the parts it names and call again.',
     inputSchema: slate,
   }, async (args) => ({ content: [{ type: 'text', text: await verified(args) }] }));
-  await server.connect(new StdioServerTransport());
+  return server;
 }
+
+const [command, address = '8000'] = process.argv.slice(2);
+const [, host = '127.0.0.1', port] = /^(?:(.+):)?(\d+)$/.exec(address) ?? [];
+if (command === 'rubric') console.log(rubric(z.object(details).parse(JSON.parse(await text(process.stdin)))));
+else if (command === 'verify') console.log(await verified(z.object(slate).parse(JSON.parse(await text(process.stdin)))));
+else if (command === '--http' && port) {
+  // For clients that speak MCP over HTTP only, such as Open WebUI. Stateless: a fresh server for each request.
+  createServer(async (req, res) => {
+    if (new URL(req.url ?? '/', 'http://localhost').pathname !== '/mcp') return void res.writeHead(404).end();
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    res.on('close', () => transport.close());
+    await serve().connect(transport);
+    await transport.handleRequest(req, res);
+  }).listen(Number(port), host, () => console.error(`Where's My Hug? at http://${host}:${port}/mcp`));
+} else if (command) {
+  console.error([
+    'Usage: wheres-my-hug                          serve the MCP tools on stdio',
+    '       wheres-my-hug --http [[host:]port]     serve them over HTTP at /mcp (default 127.0.0.1:8000)',
+    '       wheres-my-hug rubric < details.json',
+    '       wheres-my-hug verify < slate.json',
+  ].join('\n'));
+  process.exit(2);
+} else await serve().connect(new StdioServerTransport());

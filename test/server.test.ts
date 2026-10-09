@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 
 test('serves both tools over stdio, as Claude Code starts it', async () => {
   const client = new Client({ name: 'test', version: '0' });
@@ -36,6 +37,22 @@ test('serves both tools over stdio, as Claude Code starts it', async () => {
     assert.equal(refused.isError, true);
   } finally {
     await client.close();
+  }
+});
+
+test('serves the same tools over HTTP, for clients that speak only that', async () => {
+  const server = spawn(process.execPath, [fileURLToPath(new URL('../src/server.ts', import.meta.url)), '--http', '127.0.0.1:38117']);
+  await new Promise((resolve) => server.stderr.once('data', resolve)); // listening
+  const client = new Client({ name: 'test', version: '0' });
+  try {
+    await client.connect(new StreamableHTTPClientTransport(new URL('http://127.0.0.1:38117/mcp')));
+    assert.deepEqual((await client.listTools()).tools.map((tool) => tool.name).sort(), ['wheres_my_hug', 'wheres_my_hug_verify']);
+    const asked = await client.callTool({ name: 'wheres_my_hug', arguments: { need: 'sort socks', stack: 'Python' } });
+    assert.match((asked.content as { text: string }[])[0].text, /^- compute:/m);
+    assert.equal((await fetch('http://127.0.0.1:38117/elsewhere')).status, 404);
+  } finally {
+    await client.close();
+    server.kill();
   }
 });
 

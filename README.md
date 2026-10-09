@@ -122,6 +122,18 @@ Zed, …): a stdio server, in the client's JSON config. VS Code calls the key
 
 **Gemini CLI**, as an extension: `gemini extensions install https://github.com/bikemeardsley/wheres-my-hug`
 
+**Open WebUI**, and other clients that speak MCP over HTTP only: run it as an
+HTTP server, then add `http://<host>:8000/mcp` in Open WebUI's admin settings
+as an external tool server of type MCP (Streamable HTTP).
+
+```sh
+npx -y github:bikemeardsley/wheres-my-hug --http 0.0.0.0:8000
+```
+
+Without a host it listens on 127.0.0.1 only. Anyone who can reach the port can
+use it, including, with `HF_TOKEN` set, looking up private repos the token can
+see: keep it on a network you trust.
+
 **As an Agent Skill**, for agents that read `SKILL.md` (Claude, Cline, Codex,
 Cursor, Copilot, Gemini CLI and more): `npx skills add bikemeardsley/wheres-my-hug`.
 The skill uses the MCP tools when they're connected, and otherwise runs the
