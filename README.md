@@ -1,27 +1,26 @@
-<div align="center">
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
+    <img src=".github/logo.svg" width="220" alt="The Where's My Hug? mascot: a round ink-drawn character with its arms open wide, eyes glancing sideways, waiting for a hug">
+  </picture>
+</p>
 
-# Where's My Hug?
+<h1 align="center">Where's My Hug?</h1>
 
-<img src=".github/hero.svg" alt="You ask your agent where's my hug at for transcribing handwritten recipe cards. It asks about compute, license, stack and data, then returns parts to use, tune and write, every model checked on Hugging Face." width="820">
-
-<br>
-<br>
-
-<img src="https://img.shields.io/badge/-TypeScript-black?style=for-the-badge&logoColor=white&logo=typescript&color=3178C6" alt="TypeScript">
-<img src="https://img.shields.io/badge/-Node.js-black?style=for-the-badge&logoColor=white&logo=nodedotjs&color=339933" alt="Node.js">
-<img src="https://img.shields.io/badge/-MCP-black?style=for-the-badge&logoColor=white&logo=modelcontextprotocol&color=000000" alt="Model Context Protocol">
-<img src="https://img.shields.io/badge/-Hugging%20Face-black?style=for-the-badge&logoColor=black&logo=huggingface&color=FFD21E" alt="Hugging Face">
-<img src="https://img.shields.io/badge/-Claude%20Code-black?style=for-the-badge&logoColor=white&logo=claude&color=D97757" alt="Claude Code">
-<a href="https://skills.sh/bikemeardsley/wheres-my-hug/wheres-my-hug"><img src="https://img.shields.io/badge/-skills.sh-black?style=for-the-badge&logoColor=white&color=000000" alt="skills.sh"></a>
-
-[![npm](https://img.shields.io/npm/v/wheres-my-hug?color=cb3837&logo=npm)](https://www.npmjs.com/package/wheres-my-hug)
-[![Tests](https://github.com/bikemeardsley/wheres-my-hug/actions/workflows/test.yml/badge.svg)](https://github.com/bikemeardsley/wheres-my-hug/actions/workflows/test.yml)
-[![Node](https://img.shields.io/badge/node-%E2%89%A522.18-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-<a href="https://buymeacoffee.com/bikemeardsley"><img alt="Buy Me a Coffee" src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?logo=buymeacoffee&logoColor=black"></a>
-[![Donate to ALS Research](https://img.shields.io/badge/Donate-ALS%20Research-blueviolet.svg)](https://www.als.net/donate/)
-
-</div>
+<p align="center">
+  <a href="https://www.npmjs.com/package/wheres-my-hug"><img src="https://img.shields.io/npm/v/wheres-my-hug?color=cb3837&logo=npm" alt="npm"></a>
+  <a href="https://github.com/bikemeardsley/wheres-my-hug/actions/workflows/test.yml"><img src="https://github.com/bikemeardsley/wheres-my-hug/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
+  <a href="#install"><img src="https://img.shields.io/badge/works_with-20%2B_agents-111111" alt="Works with 20+ agents"></a>
+  <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-server-111111?logo=modelcontextprotocol&logoColor=white" alt="MCP server"></a>
+  <a href="https://skills.sh/bikemeardsley/wheres-my-hug/wheres-my-hug"><img src="https://img.shields.io/badge/skills.sh-agent_skill-111111" alt="Agent Skill on skills.sh"></a>
+  <a href="https://huggingface.co/models"><img src="https://img.shields.io/badge/Hugging_Face-checked_live-FFD21E?logo=huggingface&logoColor=black" alt="Hugging Face, checked live"></a>
+  <br>
+  <a href="#development"><img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"></a>
+  <a href="#install"><img src="https://img.shields.io/badge/node-%E2%89%A522.18-339933?logo=nodedotjs&logoColor=white" alt="Node 22.18 or later"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+  <a href="https://buymeacoffee.com/bikemeardsley"><img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?logo=buymeacoffee&logoColor=black" alt="Buy Me a Coffee"></a>
+  <a href="https://www.als.net/donate/"><img src="https://img.shields.io/badge/Donate-ALS_Research-blueviolet" alt="Donate to ALS research"></a>
+</p>
 
 Tell your AI agent what you want a model to do. It tells you which parts
 Hugging Face already has, which to fine-tune, which to train, and which are
@@ -30,6 +29,13 @@ hardware.
 
 Works with Claude Code, Codex, Copilot, Cursor, Gemini CLI, Cline, Devin, Open
 WebUI and any other MCP client, or as an Agent Skill.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/flow-dark.svg">
+    <img src=".github/flow.svg" width="820" alt="Your need goes through four questions (compute, license, stack, data), is split into parts marked use, tune, train or write, every model is checked live on Hugging Face, and you get the report.">
+  </picture>
+</p>
 
 ## Try it
 
@@ -183,9 +189,11 @@ Most call the key `mcpServers`; VS Code calls it `servers`, Zed
 { "mcpServers": { "wheres-my-hug": { "command": "npx", "args": ["-y", "wheres-my-hug"] } } }
 ```
 
-The first start downloads the package. If a client gives up waiting, give it
-longer: Claude Code reads `MCP_TIMEOUT` from the environment, Codex
-`startup_timeout_sec` (the plugin sets it).
+`npx` checks for the latest version each time it starts, which takes a few
+seconds. If a client gives up waiting, give it longer (Claude Code reads
+`MCP_TIMEOUT` from the environment; Codex reads `startup_timeout_sec`, which
+the plugin sets), or install it once with `npm install -g wheres-my-hug` and
+use `wheres-my-hug` as the command, which starts at once.
 
 **Gemini CLI**, as an extension: `gemini extensions install https://github.com/bikemeardsley/wheres-my-hug`
 
