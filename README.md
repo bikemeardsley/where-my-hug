@@ -10,7 +10,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/where-my-hug"><img src="https://img.shields.io/npm/v/where-my-hug?color=cb3837&logo=npm" alt="npm"></a>
   <a href="https://github.com/bikemeardsley/where-my-hug/actions/workflows/test.yml"><img src="https://github.com/bikemeardsley/where-my-hug/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
-  <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-111111?logo=modelcontextprotocol&logoColor=white" alt="MCP"></a>
+  <a href="https://registry.modelcontextprotocol.io/?q=where-my-hug"><img src="https://img.shields.io/badge/MCP_Registry-111111?logo=modelcontextprotocol&logoColor=white" alt="In the official MCP Registry"></a>
   <a href="https://skills.sh/bikemeardsley/where-my-hug/where-my-hug"><img src="https://img.shields.io/badge/skills.sh-111111" alt="On skills.sh"></a>
   <a href="https://huggingface.co/models"><img src="https://img.shields.io/badge/Hugging_Face-FFD21E?logo=huggingface&logoColor=black" alt="Hugging Face"></a>
   <br>
