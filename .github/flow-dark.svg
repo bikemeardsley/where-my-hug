@@ -2,30 +2,23 @@
   <title id="flow-dark-title">How Where My Hug At? works</title>
   <desc id="flow-dark-desc">Your need goes through four questions (compute, license, stack, data), is split into parts each marked use, tune, train or write, every model and dataset is checked live on Hugging Face, and you get the report.</desc>
   <defs>
-    <filter id="flow-dark-sketchy" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11"/>
-      <feDisplacementMap in="SourceGraphic" scale="1.2"/>
-    </filter>
     <marker id="flow-dark-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#9da7b3"/>
     </marker>
   </defs>
-
-  <g stroke="#9da7b3" stroke-width="1.2" marker-end="url(#flow-dark-arrow)">
+  <g stroke="#9da7b3" stroke-width="1.4" stroke-linecap="round" marker-end="url(#flow-dark-arrow)">
     <line x1="152" y1="100" x2="172" y2="100"/>
     <line x1="316" y1="100" x2="336" y2="100"/>
     <line x1="480" y1="100" x2="500" y2="100"/>
     <line x1="644" y1="100" x2="664" y2="100"/>
   </g>
-
-  <g filter="url(#flow-dark-sketchy)" stroke="#f0f6fc" stroke-width="1.6" fill="none">
-    <rect x="12" y="40" width="140" height="120" rx="8"/>
-    <rect x="176" y="40" width="140" height="120" rx="8"/>
-    <rect x="340" y="40" width="140" height="120" rx="8"/>
-    <rect x="504" y="40" width="140" height="120" rx="8" fill="#ffd21e" fill-opacity="0.22"/>
-    <rect x="668" y="40" width="140" height="120" rx="8"/>
+  <g stroke="#f0f6fc" stroke-width="2" stroke-linejoin="round" fill="none">
+    <path d="M21 40 Q82 38.4 143 40.6 Q152 40 152.4 49 Q153.2 100 152 151 Q152 160 143 160.4 Q82 161.8 21 160 Q11.6 160 12 151 Q10.6 100 12.4 49 Q12 39.6 21 40Z"/>
+    <path d="M185 40 Q246 41.2 307 40.6 Q316 40 316.4 49 Q314.4 100 316 151 Q316 160 307 160.4 Q246 159 185 160 Q175.6 160 176 151 Q177.6 100 176.4 49 Q176 39.6 185 40Z"/>
+    <path d="M349 40 Q410 39 471 40.6 Q480 40 480.4 49 Q481.8 100 480 151 Q480 160 471 160.4 Q410 161.4 349 160 Q339.6 160 340 151 Q338.8 100 340.4 49 Q340 39.6 349 40Z"/>
+    <path d="M513 40 Q574 41.6 635 40.6 Q644 40 644.4 49 Q642.8 100 644 151 Q644 160 635 160.4 Q574 158.2 513 160 Q503.6 160 504 151 Q505 100 504.4 49 Q504 39.6 513 40Z" fill="#ffd21e" fill-opacity="0.22"/>
+    <path d="M677 40 Q738 38.6 799 40.6 Q808 40 808.4 49 Q809 100 808 151 Q808 160 799 160.4 Q738 161.2 677 160 Q667.6 160 668 151 Q666.2 100 668.4 49 Q668 39.6 677 40Z"/>
   </g>
-
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" text-anchor="middle">
     <g font-size="16" font-weight="600" fill="#f0f6fc">
       <text x="82" y="80">Your need</text>

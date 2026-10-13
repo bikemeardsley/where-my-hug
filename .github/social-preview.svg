@@ -1,10 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="640" viewBox="0 0 1280 640">
-  <rect width="1280" height="640" fill="#f6f4ef"/>
-  <image x="88" y="36" width="288" height="288" href="logo.svg" xlink:href="logo.svg"/>
+  <rect width="1280" height="640" fill="#ffd21e"/>
+  <image x="60" y="28" width="292" height="292" href="logo.svg" xlink:href="logo.svg"/>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" fill="#111">
-    <text x="420" y="164" font-size="80" font-weight="800" letter-spacing="-2">Where My Hug At?</text>
-    <text x="424" y="222" font-size="30" fill="#3d3d3d">Hugging Face models for any ML job,</text>
-    <text x="424" y="262" font-size="30" fill="#3d3d3d">checked live and sized for your hardware.</text>
+    <text x="392" y="124" font-size="80" font-weight="800" letter-spacing="-2">Where My Hug At?</text>
+    <g font-size="26" fill="#2a2200">
+      <text x="396" y="176">Tell your AI agent what you want a model to do.</text>
+      <text x="396" y="210">It tells you which parts already exist on Hugging Face:</text>
+      <text x="396" y="244">which are an exact fit, which to fine-tune, which to train,</text>
+      <text x="396" y="278">and which are just code.</text>
+    </g>
   </g>
-  <image x="107" y="344" width="1066" height="260" href="flow.svg" xlink:href="flow.svg"/>
+  <rect x="64" y="318" width="1152" height="290" rx="18" fill="#fffdf5" transform="rotate(-0.6 640 463)"/>
+  <image x="107" y="334" width="1066" height="260" href="flow.svg" xlink:href="flow.svg"/>
 </svg>

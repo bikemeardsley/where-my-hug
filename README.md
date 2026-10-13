@@ -22,9 +22,9 @@
 </p>
 
 Tell your AI agent what you want a model to do. It tells you which parts
-Hugging Face already has, which to fine-tune, which to train, and which are
-just code, and every model it names is real, current, and sized for your
-hardware.
+already exist on Hugging Face: which are an exact fit, which to fine-tune,
+which to train, and which are just code. Every model it names is real,
+current, and sized for your hardware.
 
 Works with Claude Code, Codex, Copilot, Cursor, Gemini CLI, Cline, Devin, Open
 WebUI and any other MCP client, or as an Agent Skill.
