@@ -36,6 +36,19 @@ WebUI and any other MCP client, or as an Agent Skill.
   </picture>
 </p>
 
+## Contents
+
+- [Try it](#try-it)
+- [How it works](#how-it-works): [four questions](#1-four-questions-first) ·
+  [verdicts](#2-split-the-job-decide-each-part) ·
+  [the live check](#3-check-every-name-on-hugging-face) · [flags](#flags) ·
+  [sizes](#sizes-what-runs-here-and-what-might-do-better)
+- [Example: recipe cards](#example-recipe-cards)
+- [Install](#install) (every agent, step by step: [USAGE.md](USAGE.md))
+- [What leaves your machine](#what-leaves-your-machine) · [Limits](#limits) ·
+  [Security](#security)
+- [Development](#development) · [Credits](#credits) · [License](#license)
+
 ## Try it
 
 Add it to your agent (Claude Code here; [every other option](#install) below):
