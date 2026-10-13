@@ -10,10 +10,9 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/wheres-my-hug"><img src="https://img.shields.io/npm/v/wheres-my-hug?color=cb3837&logo=npm" alt="npm"></a>
   <a href="https://github.com/bikemeardsley/wheres-my-hug/actions/workflows/test.yml"><img src="https://github.com/bikemeardsley/wheres-my-hug/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
-  <a href="#install"><img src="https://img.shields.io/badge/works_with-20%2B_agents-111111" alt="Works with 20+ agents"></a>
-  <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-server-111111?logo=modelcontextprotocol&logoColor=white" alt="MCP server"></a>
-  <a href="https://skills.sh/bikemeardsley/wheres-my-hug/wheres-my-hug"><img src="https://img.shields.io/badge/skills.sh-agent_skill-111111" alt="Agent Skill on skills.sh"></a>
-  <a href="https://huggingface.co/models"><img src="https://img.shields.io/badge/Hugging_Face-checked_live-FFD21E?logo=huggingface&logoColor=black" alt="Hugging Face, checked live"></a>
+  <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-111111?logo=modelcontextprotocol&logoColor=white" alt="MCP"></a>
+  <a href="https://skills.sh/bikemeardsley/wheres-my-hug/wheres-my-hug"><img src="https://img.shields.io/badge/skills.sh-111111" alt="On skills.sh"></a>
+  <a href="https://huggingface.co/models"><img src="https://img.shields.io/badge/Hugging_Face-FFD21E?logo=huggingface&logoColor=black" alt="Hugging Face"></a>
   <br>
   <a href="#development"><img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"></a>
   <a href="#install"><img src="https://img.shields.io/badge/node-%E2%89%A522.18-339933?logo=nodedotjs&logoColor=white" alt="Node 22.18 or later"></a>
