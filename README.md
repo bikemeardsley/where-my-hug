@@ -1,17 +1,17 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
-    <img src=".github/logo.svg" width="220" alt="The Where's My Hug? mascot: a round ink-drawn character with its arms open wide, eyes glancing sideways, waiting for a hug">
+    <img src=".github/logo.svg" width="220" alt="The Where My Hug At? mascot: a round ink-drawn character with its arms open wide, eyes glancing sideways, waiting for a hug">
   </picture>
 </p>
 
-<h1 align="center">Where's My Hug?</h1>
+<h1 align="center">Where My Hug At?</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/wheres-my-hug"><img src="https://img.shields.io/npm/v/wheres-my-hug?color=cb3837&logo=npm" alt="npm"></a>
-  <a href="https://github.com/bikemeardsley/wheres-my-hug/actions/workflows/test.yml"><img src="https://github.com/bikemeardsley/wheres-my-hug/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
+  <a href="https://www.npmjs.com/package/where-my-hug"><img src="https://img.shields.io/npm/v/where-my-hug?color=cb3837&logo=npm" alt="npm"></a>
+  <a href="https://github.com/bikemeardsley/where-my-hug/actions/workflows/test.yml"><img src="https://github.com/bikemeardsley/where-my-hug/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-111111?logo=modelcontextprotocol&logoColor=white" alt="MCP"></a>
-  <a href="https://skills.sh/bikemeardsley/wheres-my-hug/wheres-my-hug"><img src="https://img.shields.io/badge/skills.sh-111111" alt="On skills.sh"></a>
+  <a href="https://skills.sh/bikemeardsley/where-my-hug/where-my-hug"><img src="https://img.shields.io/badge/skills.sh-111111" alt="On skills.sh"></a>
   <a href="https://huggingface.co/models"><img src="https://img.shields.io/badge/Hugging_Face-FFD21E?logo=huggingface&logoColor=black" alt="Hugging Face"></a>
   <br>
   <a href="#development"><img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"></a>
@@ -41,21 +41,21 @@ WebUI and any other MCP client, or as an Agent Skill.
 Add it to your agent (Claude Code here; [every other option](#install) below):
 
 ```sh
-claude mcp add --scope user wheres-my-hug -- npx -y wheres-my-hug
+claude mcp add --scope user where-my-hug -- npx -y where-my-hug
 ```
 
 Then ask:
 
-> **Where's my hug at for transcribing handwritten recipe cards?**
+> **Where my hug at for transcribing handwritten recipe cards?**
 
 Your agent asks the few things it can't guess, splits the job into parts, and
 comes back with a report like the [one below](#example-recipe-cards), every
 model and dataset in it looked up on Hugging Face moments before. It works for
 any job a model might do:
 
-> Where's my hug at for spotting which birds visit my feeder camera?<br>
-> Where's my hug at for sorting support emails by how urgent they are?<br>
-> Where's my hug at for pulling the totals off scanned receipts?
+> Where my hug at for spotting which birds visit my feeder camera?<br>
+> Where my hug at for sorting support emails by how urgent they are?<br>
+> Where my hug at for pulling the totals off scanned receipts?
 
 ## How it works
 
@@ -101,8 +101,8 @@ against your compute, and that report is what you see. The agent decides what
 fits and in what order; every fact in the report (license, size, downloads,
 freshness) comes from Hugging Face.
 
-Under the hood it's an MCP server with two tools: `wheres_my_hug` for steps 1
-and 2, and `wheres_my_hug_verify` for step 3.
+Under the hood it's an MCP server with two tools: `where_my_hug` for steps 1
+and 2, and `where_my_hug_verify` for step 3.
 
 ### Flags
 
@@ -167,17 +167,17 @@ Needs Node 22.18 or later. Pick what your agent uses.
 knows when to reach for them. One marketplace serves all three.
 
 ```sh
-/plugin marketplace add bikemeardsley/wheres-my-hug          # Claude Code
-/plugin install wheres-my-hug@wheres-my-hug
+/plugin marketplace add bikemeardsley/where-my-hug          # Claude Code
+/plugin install where-my-hug@where-my-hug
 
-codex plugin marketplace add bikemeardsley/wheres-my-hug      # Codex
-codex plugin add wheres-my-hug@wheres-my-hug
+codex plugin marketplace add bikemeardsley/where-my-hug      # Codex
+codex plugin add where-my-hug@where-my-hug
 
-copilot plugin marketplace add bikemeardsley/wheres-my-hug    # Copilot CLI
-copilot plugin install wheres-my-hug@wheres-my-hug
+copilot plugin marketplace add bikemeardsley/where-my-hug    # Copilot CLI
+copilot plugin install where-my-hug@where-my-hug
 ```
 
-Devin's CLI reads the same plugin: `devin plugins install bikemeardsley/wheres-my-hug`.
+Devin's CLI reads the same plugin: `devin plugins install bikemeardsley/where-my-hug`.
 
 **Any other MCP client** (Claude Desktop, Cursor, Windsurf, Cline, Goose,
 Kiro, Junie, LM Studio, Warp, …): a stdio server, in the client's config.
@@ -185,23 +185,23 @@ Most call the key `mcpServers`; VS Code calls it `servers`, Zed
 `context_servers`, OpenCode `mcp`.
 
 ```json
-{ "mcpServers": { "wheres-my-hug": { "command": "npx", "args": ["-y", "wheres-my-hug"] } } }
+{ "mcpServers": { "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug"] } } }
 ```
 
 `npx` checks for the latest version each time it starts, which takes a few
 seconds. If a client gives up waiting, give it longer (Claude Code reads
 `MCP_TIMEOUT` from the environment; Codex reads `startup_timeout_sec`, which
-the plugin sets), or install it once with `npm install -g wheres-my-hug` and
-use `wheres-my-hug` as the command, which starts at once.
+the plugin sets), or install it once with `npm install -g where-my-hug` and
+use `where-my-hug` as the command, which starts at once.
 
-**Gemini CLI**, as an extension: `gemini extensions install https://github.com/bikemeardsley/wheres-my-hug`
+**Gemini CLI**, as an extension: `gemini extensions install https://github.com/bikemeardsley/where-my-hug`
 
 **Open WebUI**, and other clients that speak MCP over HTTP only: run it as an
 HTTP server, then add `http://<host>:8000/mcp` in Open WebUI's admin settings
 as an external tool server of type MCP (Streamable HTTP).
 
 ```sh
-npx -y wheres-my-hug --http 0.0.0.0:8000
+npx -y where-my-hug --http 0.0.0.0:8000
 ```
 
 Without a host it listens on 127.0.0.1 only. Anyone who can reach the port can
@@ -210,12 +210,12 @@ see: keep it on a network you trust.
 
 **As an Agent Skill**, for agents that read `SKILL.md` (Cline, Cursor,
 Copilot, Goose, OpenCode, Amp, Zed, Junie, Hermes, Mistral Vibe and more):
-`npx skills add bikemeardsley/wheres-my-hug`. The skill uses the MCP tools
+`npx skills add bikemeardsley/where-my-hug`. The skill uses the MCP tools
 when they're connected, and otherwise runs the same two steps from a shell:
 
 ```sh
-npx -y wheres-my-hug rubric < details.json
-npx -y wheres-my-hug verify < slate.json
+npx -y where-my-hug rubric < details.json
+npx -y where-my-hug verify < slate.json
 ```
 
 **`HF_TOKEN` (optional).** Everything public works without one. To include
@@ -240,7 +240,7 @@ method and the report stay between you and your agent.
 ## Security
 
 Report a vulnerability privately through
-[GitHub Security Advisories](https://github.com/bikemeardsley/wheres-my-hug/security/advisories/new),
+[GitHub Security Advisories](https://github.com/bikemeardsley/where-my-hug/security/advisories/new),
 not a public issue. [SECURITY.md](SECURITY.md) lists what it touches: GETs to
 Hugging Face, and nothing on your machine.
 

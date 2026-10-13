@@ -1,11 +1,11 @@
 {
-  "name": "wheres-my-hug",
-  "description": "Where's my hug at? Tells your agent which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
+  "name": "where-my-hug",
+  "description": "Where my hug at? Tells your agent which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
   "author": { "name": "Mike Beardsley" },
-  "homepage": "https://github.com/bikemeardsley/wheres-my-hug",
+  "homepage": "https://github.com/bikemeardsley/where-my-hug",
   "license": "MIT",
   "keywords": ["hugging-face", "machine-learning", "models", "datasets", "mcp"],
   "mcpServers": {
-    "wheres-my-hug": { "command": "npx", "args": ["-y", "wheres-my-hug"], "startup_timeout_sec": 120 }
+    "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug"], "startup_timeout_sec": 120 }
   }
 }

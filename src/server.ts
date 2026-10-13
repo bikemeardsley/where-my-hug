@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Where's My Hug? as an MCP server on stdio. Two tools, called in order: the rubric the agent follows to propose
+// Where My Hug At? as an MCP server on stdio. Two tools, called in order: the rubric the agent follows to propose
 // models and datasets, then the live check on Hugging Face that writes the report the user sees. For an agent
-// without MCP, the same two run from a shell: `wheres-my-hug rubric` and `wheres-my-hug verify`, JSON on stdin.
-// For a client that speaks MCP over HTTP only, `wheres-my-hug --http` serves them at /mcp.
+// without MCP, the same two run from a shell: `where-my-hug rubric` and `where-my-hug verify`, JSON on stdin.
+// For a client that speaks MCP over HTTP only, `where-my-hug --http` serves them at /mcp.
 import { createServer } from 'node:http';
 import { text } from 'node:stream/consumers';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -35,18 +35,18 @@ const slate = {
 };
 const verified = async (args: z.infer<z.ZodObject<typeof slate>>) => {
   const { markdown, result } = await verify(args);
-  return `${markdown}\n\n<wheres_my_hug_json>\n${JSON.stringify(result)}\n</wheres_my_hug_json>`;
+  return `${markdown}\n\n<where_my_hug_json>\n${JSON.stringify(result)}\n</where_my_hug_json>`;
 };
 
 function serve() {
-  const server = new McpServer({ name: 'wheres-my-hug', version: '0.1.0' });
-  server.registerTool('wheres_my_hug', {
-    title: "Where's my hug at?",
-    description: 'Step 1 of 2, before recommending any Hugging Face model or dataset. If compute, license, stack or data is missing, returns the questions to ask the user first: call again with the answers ("unknown" is fine). Then returns the method for splitting an ML need into parts and deciding which parts Hugging Face covers (use a model as is, fine-tune one, train one) and which are plain code. Follow it, then call wheres_my_hug_verify.',
+  const server = new McpServer({ name: 'where-my-hug', version: '0.1.0' });
+  server.registerTool('where_my_hug', {
+    title: "Where my hug at?",
+    description: 'Step 1 of 2, before recommending any Hugging Face model or dataset. If compute, license, stack or data is missing, returns the questions to ask the user first: call again with the answers ("unknown" is fine). Then returns the method for splitting an ML need into parts and deciding which parts Hugging Face covers (use a model as is, fine-tune one, train one) and which are plain code. Follow it, then call where_my_hug_verify.',
     inputSchema: details,
   }, async (args) => ({ content: [{ type: 'text', text: rubric(args) }] }));
-  server.registerTool('wheres_my_hug_verify', {
-    title: "Where's my hug at? (checked on Hugging Face)",
+  server.registerTool('where_my_hug_verify', {
+    title: "Where my hug at? (checked on Hugging Face)",
     description: 'Step 2 of 2: checks every model and dataset id live on Hugging Face, drops the ones that are not there, flags licenses, gating, staleness and low use, sizes each model against the compute (fits, a stretch that fits only quantized, or cloud, with who hosts it), and returns the report to show the user. If nextAction is RECALL_REPLACEMENTS, propose new ids for the parts it names and call again.',
     inputSchema: slate,
   }, async (args) => ({ content: [{ type: 'text', text: await verified(args) }] }));
@@ -65,13 +65,13 @@ else if (command === '--http' && port) {
     res.on('close', () => transport.close());
     await serve().connect(transport);
     await transport.handleRequest(req, res);
-  }).listen(Number(port), host, () => console.error(`Where's My Hug? at http://${host}:${port}/mcp`));
+  }).listen(Number(port), host, () => console.error(`Where My Hug At? at http://${host}:${port}/mcp`));
 } else if (command) {
   console.error([
-    'Usage: wheres-my-hug                          serve the MCP tools on stdio',
-    '       wheres-my-hug --http [[host:]port]     serve them over HTTP at /mcp (default 127.0.0.1:8000)',
-    '       wheres-my-hug rubric < details.json',
-    '       wheres-my-hug verify < slate.json',
+    'Usage: where-my-hug                          serve the MCP tools on stdio',
+    '       where-my-hug --http [[host:]port]     serve them over HTTP at /mcp (default 127.0.0.1:8000)',
+    '       where-my-hug rubric < details.json',
+    '       where-my-hug verify < slate.json',
   ].join('\n'));
   process.exit(2);
 } else await serve().connect(new StdioServerTransport());

@@ -1,12 +1,12 @@
 {
-  "name": "wheres-my-hug",
+  "name": "where-my-hug",
   "version": "0.1.0",
-  "description": "Where's my hug at? Tell your AI agent what you want a model to do. It finds what Hugging Face already has for it, what to fine-tune, and what's just code, with every model checked live.",
+  "description": "Where my hug at? Tell your AI agent what you want a model to do. It finds what Hugging Face already has for it, what to fine-tune, and what's just code, with every model checked live.",
   "license": "MIT",
-  "mcpName": "io.github.bikemeardsley/wheres-my-hug",
+  "mcpName": "io.github.bikemeardsley/where-my-hug",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bikemeardsley/wheres-my-hug.git"
+    "url": "git+https://github.com/bikemeardsley/where-my-hug.git"
   },
   "keywords": [
     "mcp",
@@ -19,7 +19,7 @@
   ],
   "type": "module",
   "bin": {
-    "wheres-my-hug": "build/src/server.js"
+    "where-my-hug": "build/src/server.js"
   },
   "files": [
     "build/src"

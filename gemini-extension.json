@@ -1,8 +1,8 @@
 {
-  "name": "wheres-my-hug",
+  "name": "where-my-hug",
   "version": "0.1.0",
-  "description": "Where's my hug at? Which parts of an ML need Hugging Face already covers, with every model and dataset checked live.",
+  "description": "Where my hug at? Which parts of an ML need Hugging Face already covers, with every model and dataset checked live.",
   "mcpServers": {
-    "wheres-my-hug": { "command": "npx", "args": ["-y", "wheres-my-hug"] }
+    "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug"] }
   }
 }

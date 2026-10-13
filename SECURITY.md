@@ -12,13 +12,13 @@ Fixes ship on `main` and in the next npm release. Use the latest of either.
 ## Reporting a vulnerability
 
 Report it privately through
-[GitHub Security Advisories](https://github.com/bikemeardsley/wheres-my-hug/security/advisories/new).
+[GitHub Security Advisories](https://github.com/bikemeardsley/where-my-hug/security/advisories/new).
 Please don't open a public issue for a vulnerability.
 
 Include what you can: the version or commit, steps to reproduce, and what an
 attacker gains.
 
-## What Where's My Hug? touches
+## What Where My Hug At? touches
 
 - **The network:** `GET` requests to `huggingface.co/api`, one per model or
   dataset id an agent names, to check it exists and read its facts. Nothing

@@ -1,5 +1,5 @@
 // The first step: the method the agent follows before it names anything. Agents know Hugging Face well but misremember
-// ids and licenses, so the agent proposes and wheres_my_hug_verify checks; this text only has to make the proposals
+// ids and licenses, so the agent proposes and where_my_hug_verify checks; this text only has to make the proposals
 // good ones. Four details change the answer, so they come first: a call missing any gets questions back, not the
 // method, and "unknown" is a fine answer.
 
@@ -15,17 +15,17 @@ const QUESTIONS = {
 export function rubric(details: Details): string {
   const missing = (Object.keys(QUESTIONS) as (keyof typeof QUESTIONS)[]).filter((key) => !details[key]?.trim());
   if (missing.length) {
-    return `Where's my hug at? Before any searching, ${missing.length === 1 ? 'one detail changes' : 'these details change'} the answer.
+    return `Where my hug at? Before any searching, ${missing.length === 1 ? 'one detail changes' : 'these details change'} the answer.
 
 Need: ${details.need}
 
 Fill in what the conversation or the codebase already says. Ask the user for the rest, all at once (with your question tool, if you have one):
 ${missing.map((key) => `- ${key}: ${QUESTIONS[key]}`).join('\n')}
 
-"Not sure yet" is a fine answer: pass "unknown", and the picks will cover the range. Then call wheres_my_hug again with all four filled in.`;
+"Not sure yet" is a fine answer: pass "unknown", and the picks will cover the range. Then call where_my_hug again with all four filled in.`;
   }
   const { need, compute, license, stack, data } = details;
-  return `Where's my hug at? Work out what Hugging Face already has for this need.
+  return `Where my hug at? Work out what Hugging Face already has for this need.
 
 Need: ${need}
 Compute: ${compute}
@@ -51,7 +51,7 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
    - its size against the compute: fine-tuning in full needs several times the memory that running does, QLoRA less than running;
    - its task: a model that captions images doesn't find things in them, however close the names sound.
 
-5. Call wheres_my_hug_verify with:
+5. Call where_my_hug_verify with:
    { "need": "...", "compute": "...",
      "components": [{ "id": "page-reader", "name": "Read the page", "role": "photo of a page -> its text",
                       "verdict": "TUNE", "rationale": "why this verdict, and why these candidates in this order",

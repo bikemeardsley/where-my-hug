@@ -11,29 +11,29 @@ test('serves both tools over stdio, as Claude Code starts it', async () => {
   await client.connect(new StdioClientTransport({ command: process.execPath, args: [fileURLToPath(new URL('../src/server.ts', import.meta.url))] }));
   try {
     const { tools } = await client.listTools();
-    assert.deepEqual(tools.map((tool) => tool.name).sort(), ['wheres_my_hug', 'wheres_my_hug_verify']);
+    assert.deepEqual(tools.map((tool) => tool.name).sort(), ['where_my_hug', 'where_my_hug_verify']);
 
     const text = (result: Awaited<ReturnType<typeof client.callTool>>) => (result.content as { text: string }[])[0].text;
     // Details that change the answer come first: only the missing ones are asked, and no method until they're in.
-    const asked = text(await client.callTool({ name: 'wheres_my_hug', arguments: { need: 'sort socks by color', stack: 'Python' } }));
+    const asked = text(await client.callTool({ name: 'where_my_hug', arguments: { need: 'sort socks by color', stack: 'Python' } }));
     assert.match(asked, /Need: sort socks by color/);
     assert.deepEqual([...asked.matchAll(/^- (\w+):/gm)].map((match) => match[1]), ['compute', 'license', 'data']);
     assert.doesNotMatch(asked, /Split the need/);
     const method = text(await client.callTool({
-      name: 'wheres_my_hug', arguments: { need: 'sort socks by color', compute: 'unknown', license: 'personal', stack: 'Python', data: 'none' },
+      name: 'where_my_hug', arguments: { need: 'sort socks by color', compute: 'unknown', license: 'personal', stack: 'Python', data: 'none' },
     }));
     assert.match(method, /Compute: unknown\n/);
     assert.match(method, /Split the need/);
 
     // A slate with nothing to look up never reaches the network.
     const verified = text(await client.callTool({
-      name: 'wheres_my_hug_verify',
+      name: 'where_my_hug_verify',
       arguments: { need: 'sort socks', components: [{ id: 'sort', name: 'Sort', role: 'socks -> piles', verdict: 'WRITE', rationale: 'a hue threshold', candidates: [] }] },
     }));
-    assert.match(verified, /^# Where's my hug at\?/);
+    assert.match(verified, /^# Where my hug at\?/);
     assert.match(verified, /"nextAction":"DONE"/);
 
-    const refused = await client.callTool({ name: 'wheres_my_hug_verify', arguments: { need: 'x', components: [] } });
+    const refused = await client.callTool({ name: 'where_my_hug_verify', arguments: { need: 'x', components: [] } });
     assert.equal(refused.isError, true);
   } finally {
     await client.close();
@@ -46,8 +46,8 @@ test('serves the same tools over HTTP, for clients that speak only that', async 
   const client = new Client({ name: 'test', version: '0' });
   try {
     await client.connect(new StreamableHTTPClientTransport(new URL('http://127.0.0.1:38117/mcp')));
-    assert.deepEqual((await client.listTools()).tools.map((tool) => tool.name).sort(), ['wheres_my_hug', 'wheres_my_hug_verify']);
-    const asked = await client.callTool({ name: 'wheres_my_hug', arguments: { need: 'sort socks', stack: 'Python' } });
+    assert.deepEqual((await client.listTools()).tools.map((tool) => tool.name).sort(), ['where_my_hug', 'where_my_hug_verify']);
+    const asked = await client.callTool({ name: 'where_my_hug', arguments: { need: 'sort socks', stack: 'Python' } });
     assert.match((asked.content as { text: string }[])[0].text, /^- compute:/m);
     assert.equal((await fetch('http://127.0.0.1:38117/elsewhere')).status, 404);
   } finally {
@@ -61,7 +61,7 @@ test('runs the same two steps from a shell, for an agent without MCP', () => {
     execFileSync(process.execPath, [fileURLToPath(new URL('../src/server.ts', import.meta.url)), command], { input: JSON.stringify(input), encoding: 'utf8', stdio: 'pipe' });
   assert.match(run('rubric', { need: 'sort socks by color', stack: 'Python' }), /^- compute:/m);
   const report = run('verify', { need: 'sort socks', components: [{ id: 'sort', name: 'Sort', role: 'socks -> piles', verdict: 'WRITE', rationale: 'a hue threshold', candidates: [] }] });
-  assert.match(report, /^# Where's my hug at\?/);
+  assert.match(report, /^# Where my hug at\?/);
   assert.match(report, /"nextAction":"DONE"/);
   assert.throws(() => run('verify', { need: 'x', components: [] })); // the same checks as the tool
 });

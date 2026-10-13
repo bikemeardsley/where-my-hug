@@ -1,4 +1,4 @@
-# Where's My Hug?
+# Where My Hug At?
 
 An MCP server: describe an ML need, and it says which parts the Hugging Face
 Hub already covers (USE), which to fine-tune from a base model (TUNE), which
@@ -14,11 +14,11 @@ every model and dataset checked against the live Hub. Start with
   development. `tsc` builds `build/` only on install (`prepare`), because Node
   won't strip types inside `node_modules`, which is where `npx` puts it.
   Dependencies pinned to exact versions; never auto-upgrade.
-- **One entry point, every client.** `npx -y wheres-my-hug` (the npm package)
+- **One entry point, every client.** `npx -y where-my-hug` (the npm package)
   is what the Claude Code plugin, the Cursor plugin, the Gemini extension,
   other MCP clients and the skill's shell fallback all run. It's written in
   `.claude-plugin/plugin.json`, `mcp.json` (Cursor's), `gemini-extension.json`,
-  `skills/wheres-my-hug/SKILL.md` and the README: change one, change them all.
+  `skills/where-my-hug/SKILL.md` and the README: change one, change them all.
 - **American English** in code, docs and commits.
 - **General, not tied to any one project.** It came out of Thicken's vision
   work, but nothing here should know about books, slabs or Thicken.

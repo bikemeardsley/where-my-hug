@@ -65,7 +65,7 @@ export async function verify({ need, components, compute }: { need: string; comp
     components: parts,
     nextAction: recall.length ? 'RECALL_REPLACEMENTS' : 'DONE',
     instructions: recall.length
-      ? `These parts need new candidates: ${recall.join(', ')}. Propose ids for exactly those (not the dropped ones again), then call wheres_my_hug_verify again with the whole slate.`
+      ? `These parts need new candidates: ${recall.join(', ')}. Propose ids for exactly those (not the dropped ones again), then call where_my_hug_verify again with the whole slate.`
       : "Show the user the markdown report as it is. Its facts came from Hugging Face just now; don't restate them from memory.",
   };
   return { markdown: report(need, parts, compute), result };
@@ -139,7 +139,7 @@ function report(need: string, parts: Part[], compute?: string): string {
     .map((verdict) => [parts.filter((part) => part.verdict === verdict).length, { USE: 'to use as is', TUNE: 'to fine-tune', TRAIN: 'to train', WRITE: 'to write' }[verdict]] as const)
     .filter(([n]) => n).map(([n, words]) => `${n} ${words}`);
   const lines = [
-    "# Where's my hug at?", '',
+    "# Where my hug at?", '',
     `**${need}**`, '',
     `${parts.length} ${parts.length === 1 ? 'part' : 'parts'}: ${tally.join(', ')}.`, '',
     `_Checked on Hugging Face just now: ${named} named, ${dropped} not there and dropped${unchecked ? `, ${unchecked} Hugging Face didn't answer for` : ''}._`,
