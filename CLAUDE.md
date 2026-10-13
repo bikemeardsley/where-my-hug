@@ -25,6 +25,6 @@ every model and dataset checked against the live Hub. Start with
 - **Kitbash is GPL-2.0 and not ours.** This borrows its idea (a rubric the
   agent follows, then a verify step that owns the report), never its code or
   text.
-- Private for now on bikemeardsley, MIT, public once clean. `HF_TOKEN` is read
+- Public on bikemeardsley/where-my-hug and npm (where-my-hug), MIT. `HF_TOKEN` is read
   from the environment, sent only to huggingface.co, and never recorded.
 - Tests run offline: the Hub is mocked.

@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="640" viewBox="0 0 1280 640">
   <rect width="1280" height="640" fill="#f6f4ef"/>
-  <image x="72" y="120" width="400" height="400" href="logo.svg" xlink:href="logo.svg"/>
+  <image x="88" y="36" width="288" height="288" href="logo.svg" xlink:href="logo.svg"/>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" fill="#111">
-    <text x="520" y="292" font-size="76" font-weight="800" letter-spacing="-2">Where My Hug At?</text>
-    <text x="524" y="364" font-size="32" fill="#3d3d3d">Hugging Face models for any ML job,</text>
-    <text x="524" y="408" font-size="32" fill="#3d3d3d">checked live and sized for your hardware.</text>
+    <text x="420" y="164" font-size="80" font-weight="800" letter-spacing="-2">Where My Hug At?</text>
+    <text x="424" y="222" font-size="30" fill="#3d3d3d">Hugging Face models for any ML job,</text>
+    <text x="424" y="262" font-size="30" fill="#3d3d3d">checked live and sized for your hardware.</text>
   </g>
+  <image x="107" y="344" width="1066" height="260" href="flow.svg" xlink:href="flow.svg"/>
 </svg>
