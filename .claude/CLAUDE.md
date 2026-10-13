@@ -22,8 +22,10 @@ model and dataset checked live on Hugging Face. Start with
   The three manifests pin the version (`where-my-hug@0.1.0`), as Claude's
   plugin directory requires; the README and skill don't.
 - **A release** bumps the version in `package.json`, `server.json` (twice),
-  `.claude-plugin/plugin.json` (`version` and the pin), `mcp.json` and
-  `gemini-extension.json`; then `npm publish` (staged: approve it on
+  `.claude-plugin/plugin.json` (`version` and the pin), `mcp.json`,
+  `gemini-extension.json` and `.claude-plugin/package.json` (then
+  `npm install --package-lock-only --ignore-scripts` in `.claude-plugin/` once
+  the new version is on npm, for the directory's launcher lock); then `npm publish` (staged: approve it on
   npmjs.com), a `vX.Y.Z` tag and GitHub release, and `mcp-publisher publish`
   for the MCP registry.
 - **American English** in code, docs and commits.

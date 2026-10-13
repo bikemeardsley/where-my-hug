@@ -161,7 +161,11 @@ No model: write this one.
 
 ## Install
 
-Needs Node 22.18 or later. Pick what your agent uses.
+Needs Node 22.18 or later. **[USAGE.md](USAGE.md) has step-by-step setup
+and links for 20+ agents**: Claude Code and Desktop, Codex, Copilot (CLI and
+VS Code), Cursor, Windsurf, Devin, Cline, Gemini CLI, Goose, OpenCode, Zed,
+Junie, Kiro, Amp, Warp, Continue, LM Studio, Hermes, Mistral Vibe and Open
+WebUI. The quick routes:
 
 **Claude Code, Codex, Copilot CLI**, as a plugin: the tools, plus a skill that
 knows when to reach for them. One marketplace serves all three.
@@ -177,53 +181,23 @@ copilot plugin marketplace add bikemeardsley/where-my-hug    # Copilot CLI
 copilot plugin install where-my-hug@where-my-hug
 ```
 
-Devin's CLI reads the same plugin: `devin plugins install bikemeardsley/where-my-hug`.
-
-**Any other MCP client** (Claude Desktop, Cursor, Windsurf, Cline, Goose,
-Kiro, Junie, LM Studio, Warp, …): a stdio server, in the client's config.
-Most call the key `mcpServers`; VS Code calls it `servers`, Zed
-`context_servers`, OpenCode `mcp`.
+**Any other MCP client**: a stdio server in the client's config. Most call the
+key `mcpServers` ([USAGE.md](USAGE.md) has the exceptions).
 
 ```json
 { "mcpServers": { "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug"] } } }
 ```
 
-`npx` checks for the latest version each time it starts, which takes a few
-seconds. If a client gives up waiting, give it longer (Claude Code reads
-`MCP_TIMEOUT` from the environment; Codex reads `startup_timeout_sec`, which
-the plugin sets), or install it once with `npm install -g where-my-hug` and
-use `where-my-hug` as the command, which starts at once.
-
 **Gemini CLI**, as an extension: `gemini extensions install https://github.com/bikemeardsley/where-my-hug`
 
-**Open WebUI**, and other clients that speak MCP over HTTP only: run it as an
-HTTP server, then add `http://<host>:8000/mcp` in Open WebUI's admin settings
-as an external tool server of type MCP (Streamable HTTP).
-
-```sh
-npx -y where-my-hug --http 0.0.0.0:8000
-```
-
-Without a host it listens on 127.0.0.1 only. Anyone who can reach the port can
-use it, including, with `HF_TOKEN` set, looking up private repos the token can
-see: keep it on a network you trust.
-
-**As an Agent Skill**, for agents that read `SKILL.md` (Cline, Cursor,
-Copilot, Goose, OpenCode, Amp, Zed, Junie, Hermes, Mistral Vibe and more):
-`npx skills add bikemeardsley/where-my-hug`. The skill uses the MCP tools
-when they're connected, and otherwise runs the same two steps from a shell:
-
-```sh
-npx -y where-my-hug rubric < details.json
-npx -y where-my-hug verify < slate.json
-```
+**As an Agent Skill**, for agents that read `SKILL.md`:
+`npx skills add bikemeardsley/where-my-hug`.
 
 **`HF_TOKEN` (optional).** Everything public works without one. To include
-private repos your account can see, set `HF_TOKEN` in the environment the
-agent starts from, or add `-e HF_TOKEN=hf_…` to the `claude mcp add` line. The
-Claude Code plugin asks for it instead and keeps it in secure storage.
-Without a token, a private repo looks missing, because Hugging Face answers
-401 for both.
+private or gated repos your account can see, pass a Hugging Face token as
+`HF_TOKEN` ([how, per agent](USAGE.md#before-you-start)); the Claude Code
+plugin asks for it and keeps it in secure storage. Without a token, a private
+repo looks missing, because Hugging Face answers 401 for both.
 
 ## What leaves your machine
 
