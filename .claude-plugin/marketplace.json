@@ -5,7 +5,7 @@
   "plugins": [
     {
       "name": "where-my-hug",
-      "source": ".",
+      "source": "./plugin",
       "description": "Which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live."
     }
   ]

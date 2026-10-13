@@ -32,5 +32,6 @@ JSON to a file and pass it on stdin:
    names and run it again.
 
 Show the user the markdown report as it comes back, without restating its
-facts from memory. Set `HF_TOKEN` in the environment to include private repos
-the token can see; it is sent only to huggingface.co.
+facts from memory. Public models and datasets need no token. Private or gated
+ones need the user's Hugging Face token in the server's own configuration
+(the Claude Code plugin asks for it); never ask for one in the chat.

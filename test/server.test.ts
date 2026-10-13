@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync, spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -54,6 +55,11 @@ test('serves the same tools over HTTP, for clients that speak only that', async 
     await client.close();
     server.kill();
   }
+});
+
+test("the plugin's copy of the skill matches the repo's", () => {
+  const read = (path: string) => readFileSync(fileURLToPath(new URL(path, import.meta.url)), 'utf8');
+  assert.equal(read('../plugin/skills/where-my-hug/SKILL.md'), read('../skills/where-my-hug/SKILL.md'));
 });
 
 test('runs the same two steps from a shell, for an agent without MCP', () => {

@@ -17,14 +17,14 @@ model and dataset checked live on Hugging Face. Start with
 - **One entry point, every client.** `npx -y where-my-hug` (the npm package)
   is what the Claude Code plugin, the Cursor plugin, the Gemini extension,
   other MCP clients and the skill's shell fallback all run. It's written in
-  `.claude-plugin/plugin.json`, `mcp.json` (Cursor's), `gemini-extension.json`,
-  `skills/where-my-hug/SKILL.md` and the README: change one, change them all.
+  `plugin/.claude-plugin/plugin.json`, `mcp.json` (Cursor's), `gemini-extension.json`,
+  `skills/where-my-hug/SKILL.md` (copied to `plugin/skills/`, a test keeps them equal) and the README: change one, change them all. The Claude plugin lives in `plugin/` so its folder holds only what the plugin ships.
   The three manifests pin the version (`where-my-hug@0.1.0`), as Claude's
   plugin directory requires; the README and skill don't.
 - **A release** bumps the version in `package.json`, `server.json` (twice),
-  `.claude-plugin/plugin.json` (`version` and the pin), `mcp.json`,
-  `gemini-extension.json` and `.claude-plugin/package.json` (then
-  `npm install --package-lock-only --ignore-scripts` in `.claude-plugin/` once
+  `plugin/.claude-plugin/plugin.json` (`version` and the pin), `mcp.json`,
+  `gemini-extension.json` and `plugin/package.json` (then
+  `npm install --package-lock-only --ignore-scripts` in `plugin/` once
   the new version is on npm, for the directory's launcher lock); then `npm publish` (staged: approve it on
   npmjs.com), a `vX.Y.Z` tag and GitHub release, and `mcp-publisher publish`
   for the MCP registry.
