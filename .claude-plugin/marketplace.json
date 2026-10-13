@@ -1,12 +1,12 @@
 {
   "name": "wheres-my-hug",
   "owner": { "name": "Mike Beardsley" },
-  "description": "Where's my hug at? Hugging Face picks for an ML need, checked live on the Hub.",
+  "description": "Where's my hug at? Hugging Face models and datasets for an ML need, each one checked live.",
   "plugins": [
     {
       "name": "wheres-my-hug",
       "source": ".",
-      "description": "Which parts of an ML need the Hugging Face Hub already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live."
+      "description": "Which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live."
     }
   ]
 }

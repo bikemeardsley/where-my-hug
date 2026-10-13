@@ -1,5 +1,5 @@
 {
   "mcpServers": {
-    "wheres-my-hug": { "command": "npx", "args": ["-y", "github:bikemeardsley/wheres-my-hug"] }
+    "wheres-my-hug": { "command": "npx", "args": ["-y", "wheres-my-hug"] }
   }
 }

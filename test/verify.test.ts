@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { verify } from '../src/verify.ts';
 
 const now = new Date().toISOString();
-// A small Hub; anything not on it gets the real Hub's answer for a missing repo, a 401.
+// A small Hugging Face; anything not on it gets the real one's answer for a missing repo, a 401.
 const HUB: Record<string, object> = {
   'models/acme/reader': {
     id: 'acme/reader', pipeline_tag: 'image-text-to-text', library_name: 'transformers', downloads: 52_000, likes: 900,
@@ -75,19 +75,19 @@ test("keeps the agent's order, drops what isn't there and flags what bites", asy
   assert.deepEqual(tuner.alternates.map((entry) => [entry.license, entry.flags]), [['other (acme-community)', ['OWN_TERMS']]]);
   assert.equal(tuner.alternates[0].baseModels, undefined); // base_model: [] is no base
 
-  assert.deepEqual(flaky.model?.flags, ['UNCHECKED']); // kept: the Hub didn't say it's missing
+  assert.deepEqual(flaky.model?.flags, ['UNCHECKED']); // kept: Hugging Face didn't say it's missing
   assert.deepEqual([reader, tuner, flaky, rules, bigjob].map((p) => p.missing), [[], [], [], [], []]);
   assert.equal(result.nextAction, 'DONE');
 
   assert.match(markdown, /\*\*Model: \[acme\/reader\]\(https:\/\/huggingface\.co\/acme\/reader\)\*\*/);
   assert.match(markdown, /\*\*Data: \[acme\/pages\]\(https:\/\/huggingface\.co\/datasets\/acme\/pages\)\*\*/);
-  assert.match(markdown, /9 named, 1 not there and dropped, 1 the Hub didn't answer for/);
+  assert.match(markdown, /9 named, 1 not there and dropped, 1 Hugging Face didn't answer for/);
   assert.match(markdown, /If you can make it work, bigger than one 24 GB GPU:\n- \[acme\/giant\]\(https:\/\/huggingface\.co\/acme\/giant\): a stretch: ~31\.2 GB to run, ~7\.8 GB quantized to 4 bits \(gated, own terms\)\n- \[acme\/colossal\]\(https:\/\/huggingface\.co\/acme\/colossal\): cloud: ~168\.0 GB to run, hosted by together\n/);
   assert.match(markdown, /Nothing named runs on one 24 GB GPU: the options below need more/);
   assert.match(markdown, /No model: write this one/);
   assert.match(markdown, /776\.0M parameters \(~1\.9 GB to run\)/); // what it needs, whatever the compute turns out to be
 
-  // The token goes to the Hub, and nowhere else: not into the report or the JSON.
+  // The token goes to Hugging Face, and nowhere else: not into the report or the JSON.
   assert.ok(asked.every((call) => call.authorization === 'Bearer hf_secret_test_token'));
   assert.doesNotMatch(markdown + JSON.stringify(result), /hf_secret/);
 });
@@ -116,10 +116,10 @@ test('sends the agent back for parts left with nothing', async () => {
   assert.ok(!asked.slice(before).some((call) => call.path.includes('evil'))); // a bad id is never sent
   assert.equal(result.components[5].dataset?.id, 'acme/pages');
   assert.deepEqual(result.components[5].dropped, []);
-  // The Hub didn't answer the first time; that isn't remembered, so it's asked again and answers.
+  // Hugging Face didn't answer the first time; that isn't remembered, so it's asked again and answers.
   assert.deepEqual(result.components[6].model?.flags, []);
   assert.equal(asked.filter((call) => call.path === 'models/acme/flaky').length, 2);
-  assert.match(markdown, /No dataset on the Hub for this yet: it needs new candidates/);
+  assert.match(markdown, /No dataset on Hugging Face for this yet: it needs new candidates/);
   assert.match(markdown, /\(~1\.9 GB to run; to fine-tune, ~0\.8 GB with QLoRA, ~12\.4 GB in full\)/); // the TUNE part's model
-  assert.match(markdown, /No dataset on the Hub for this: collect the data/);
+  assert.match(markdown, /No dataset on Hugging Face for this: collect the data/);
 });

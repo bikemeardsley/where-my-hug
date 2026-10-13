@@ -1,0 +1,10 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.bikemeardsley/wheres-my-hug",
+  "description": "Which parts of an ML need Hugging Face already covers. Every model and dataset checked live.",
+  "repository": { "url": "https://github.com/bikemeardsley/wheres-my-hug", "source": "github" },
+  "version": "0.1.0",
+  "packages": [
+    { "registryType": "npm", "identifier": "wheres-my-hug", "version": "0.1.0", "transport": { "type": "stdio" } }
+  ]
+}

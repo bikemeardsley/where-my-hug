@@ -1,8 +1,8 @@
-// The second step: every candidate the agent named is looked up on the Hub. One that isn't there is dropped; the
+// The second step: every candidate the agent named is looked up on Hugging Face. One that isn't there is dropped; the
 // rest are flagged for what would bite later (gated access, terms you can't ship under, years without an update,
 // almost no use) and sized against the compute. What runs on it heads each part; bigger models follow, a stretch
 // or cloud only, as what might do better if it can be made to work. The verdicts and the order are the agent's,
-// since fit comes first; the facts are the Hub's.
+// since fit comes first; the facts are Hugging Face's.
 import { lookUp, type Entry, type Kind } from './hub.ts';
 
 export type Verdict = 'USE' | 'TUNE' | 'TRAIN' | 'WRITE';
@@ -35,7 +35,7 @@ export async function verify({ need, components, compute }: { need: string; comp
     !budget || !params || kind === 'dataset' ? undefined
       : params * BYTES_PER_PARAM <= budget ? 'fits' : params * QUANTIZED_BYTES_PER_PARAM <= budget ? 'stretch' : 'cloud';
   const parts: Part[] = await Promise.all(components.map(async (component) => {
-    // An agent can name a dataset as a model or the other way round: then the Hub has it under the other kind.
+    // An agent can name a dataset as a model or the other way round: then Hugging Face has it under the other kind.
     const entries = await Promise.all(component.candidates.map(async ({ id, kind = 'model' }) => {
       const entry = await lookUp(kind, id);
       if (entry.exists !== false) return entry;
@@ -66,12 +66,12 @@ export async function verify({ need, components, compute }: { need: string; comp
     nextAction: recall.length ? 'RECALL_REPLACEMENTS' : 'DONE',
     instructions: recall.length
       ? `These parts need new candidates: ${recall.join(', ')}. Propose ids for exactly those (not the dropped ones again), then call wheres_my_hug_verify again with the whole slate.`
-      : "Show the user the markdown report as it is. Its facts came from the Hub just now; don't restate them from memory.",
+      : "Show the user the markdown report as it is. Its facts came from Hugging Face just now; don't restate them from memory.",
   };
   return { markdown: report(need, parts, compute), result };
 }
 
-/** What would bite later, in the Hub's own facts. */
+/** What would bite later, in Hugging Face's own facts. */
 function flagsOf(entry: Entry): string[] {
   const flags: string[] = [];
   const license = entry.license?.toLowerCase();
@@ -86,8 +86,8 @@ function flagsOf(entry: Entry): string[] {
 }
 
 const FLAG_WORDS: Record<string, string> = {
-  UNCHECKED: "the Hub didn't answer, so it's unchecked",
-  GATED: 'gated: accept its terms on the Hub before downloading',
+  UNCHECKED: "Hugging Face didn't answer, so it's unchecked",
+  GATED: 'gated: accept its terms on Hugging Face before downloading',
   NO_LICENSE: 'no license on its card: find its terms before relying on it',
   NON_COMMERCIAL: 'non-commercial or research-only terms',
   OWN_TERMS: 'its own terms (custom, use-restricted or no-derivatives): read them',
@@ -104,7 +104,7 @@ const age = (iso: string) => {
   return days < 1 ? 'today' : days < 60 ? `${days} days ago` : days < 730 ? `${Math.round(days / 30)} months ago` : `${Math.round(days / 365)} years ago`;
 };
 
-/** A pick in full: its link, then the Hub's facts about it, then what to watch. */
+/** A pick in full: its link, then Hugging Face's facts about it, then what to watch. */
 function pick(label: string, entry: Checked, tune = false): string[] {
   const facts = [
     entry.task, entry.library, entry.license && `license ${entry.license}`,
@@ -127,7 +127,7 @@ function upgrade(entry: Checked): string {
   const size = entry.tier === 'stretch'
     ? `a stretch: ${gb(entry.params!, BYTES_PER_PARAM)} to run, ${gb(entry.params!, QUANTIZED_BYTES_PER_PARAM)} quantized to 4 bits`
     : `cloud: ${gb(entry.params!, BYTES_PER_PARAM)} to run`;
-  const where = entry.hostedBy ? `hosted by ${entry.hostedBy.join(', ')}` : entry.tier === 'cloud' ? 'on rented GPUs (no host on the Hub serves it)' : undefined;
+  const where = entry.hostedBy ? `hosted by ${entry.hostedBy.join(', ')}` : entry.tier === 'cloud' ? 'on rented GPUs (no host on Hugging Face serves it)' : undefined;
   return `- [${entry.id}](${url(entry)}): ${[size, where].filter(Boolean).join(', ')}${brief(entry)}`;
 }
 
@@ -142,20 +142,20 @@ function report(need: string, parts: Part[], compute?: string): string {
     "# Where's my hug at?", '',
     `**${need}**`, '',
     `${parts.length} ${parts.length === 1 ? 'part' : 'parts'}: ${tally.join(', ')}.`, '',
-    `_Checked on the Hugging Face Hub just now: ${named} named, ${dropped} not there and dropped${unchecked ? `, ${unchecked} the Hub didn't answer for` : ''}._`,
+    `_Checked on Hugging Face just now: ${named} named, ${dropped} not there and dropped${unchecked ? `, ${unchecked} Hugging Face didn't answer for` : ''}._`,
   ];
   for (const part of parts) {
     lines.push('', '---', '', `## ${part.verdict}  ·  ${part.name}`, '', `_${part.role}_`, '');
     if (part.model) lines.push(...pick('Model', part.model, part.verdict === 'TUNE'));
     else if (part.bigger.length) lines.push(`**Nothing named runs on ${compute}: the options below need more.**`, '');
     if (part.dataset) lines.push(...pick('Data', part.dataset));
-    if (part.missing.length) lines.push(`**No ${part.missing.join(' or ')} on the Hub for this yet: it needs new candidates.**`, '');
+    if (part.missing.length) lines.push(`**No ${part.missing.join(' or ')} on Hugging Face for this yet: it needs new candidates.**`, '');
     else if (part.verdict === 'WRITE' && !part.model) lines.push('**No model: write this one.**', '');
-    else if (part.verdict === 'TRAIN' && !part.dataset) lines.push('**No dataset on the Hub for this: collect the data.**', '');
+    else if (part.verdict === 'TRAIN' && !part.dataset) lines.push('**No dataset on Hugging Face for this: collect the data.**', '');
     lines.push(part.rationale);
     if (part.bigger.length) lines.push('', `If you can make it work, bigger than ${compute}:`, ...part.bigger.map(upgrade));
     if (part.alternates.length) lines.push('', `Also: ${part.alternates.map((entry) => `[${entry.id}](${url(entry)})${brief(entry)}`).join('  ·  ')}`);
-    if (part.dropped.length) lines.push('', `Dropped, not on the Hub (or private): ${part.dropped.join(', ')}`);
+    if (part.dropped.length) lines.push('', `Dropped, not on Hugging Face (or private): ${part.dropped.join(', ')}`);
   }
   const width = Math.max(...parts.map((part) => part.name.length));
   lines.push('', '---', '', '## At a glance', '', '```', ...parts.map((part, i) => {

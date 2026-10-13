@@ -1,4 +1,4 @@
-// What the Hugging Face Hub says about a model or dataset: whether it exists, and what it is. A few GETs to
+// What Hugging Face says about a model or dataset: whether it exists, and what it is. A few GETs to
 // huggingface.co/api, its fields read where the API puts them (checked against the live API, 2026-10-02):
 // license in the card data or a license: tag, base_model in the card data (one id or several), size as
 // safetensors.total. HF_TOKEN, if set, is sent so gated and private repos the token can see are found; it
@@ -9,7 +9,7 @@ export type Kind = 'model' | 'dataset';
 export interface Entry {
   id: string;
   kind: Kind;
-  exists: boolean | undefined; // undefined: the Hub couldn't be asked (unreachable, rate-limited, down)
+  exists: boolean | undefined; // undefined: Hugging Face couldn't be asked (unreachable, rate-limited, down)
   status: number | 'unreachable' | 'invalid id';
   task?: string;
   library?: string;
@@ -33,13 +33,13 @@ const TIMEOUT_MS = 15_000;
 
 const cache = new Map<string, { at: number; entry: Promise<Entry> }>();
 
-/** The Hub's record of a model or dataset, from a cache an hour fresh. */
+/** Hugging Face's record of a model or dataset, from a cache an hour fresh. */
 export function lookUp(kind: Kind, id: string): Promise<Entry> {
   const key = `${kind}:${id}`;
   const hit = cache.get(key);
   if (hit && Date.now() - hit.at < CACHE_MS) return hit.entry;
   const entry = fetchEntry(kind, id).then((found) => {
-    if (found.exists === undefined) cache.delete(key); // the Hub didn't answer: ask again next time
+    if (found.exists === undefined) cache.delete(key); // Hugging Face didn't answer: ask again next time
     return found;
   });
   cache.set(key, { at: Date.now(), entry });
@@ -54,7 +54,7 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
       headers: process.env.HF_TOKEN ? { Authorization: `Bearer ${process.env.HF_TOKEN}` } : {},
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
-    // The Hub answers 401, not 404, for a repo that doesn't exist, so private ones can't be probed.
+    // Hugging Face answers 401, not 404, for a repo that doesn't exist, so private ones can't be probed.
     if (response.status === 401 || response.status === 404) return { id, kind, exists: false, status: response.status };
     if (!response.ok) return { id, kind, exists: undefined, status: response.status };
     const json = await response.json();
