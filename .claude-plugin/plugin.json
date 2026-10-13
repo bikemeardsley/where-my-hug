@@ -1,11 +1,31 @@
 {
   "name": "where-my-hug",
+  "displayName": "Where My Hug At?",
+  "version": "0.1.0",
   "description": "Where my hug at? Tells your agent which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
   "author": { "name": "Mike Beardsley" },
   "homepage": "https://github.com/bikemeardsley/where-my-hug",
+  "repository": "https://github.com/bikemeardsley/where-my-hug",
   "license": "MIT",
   "keywords": ["hugging-face", "machine-learning", "models", "datasets", "mcp"],
+  "icon": "./.claude-plugin/icon.png",
+  "documentationUrl": "https://github.com/bikemeardsley/where-my-hug#readme",
+  "supportUrl": "https://github.com/bikemeardsley/where-my-hug/issues",
+  "userConfig": {
+    "hf_token": {
+      "type": "string",
+      "title": "Hugging Face token (optional)",
+      "description": "Only needed to include private or gated repos your account can see. Sent only to huggingface.co, never written to a report.",
+      "sensitive": true,
+      "default": ""
+    }
+  },
   "mcpServers": {
-    "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug"], "startup_timeout_sec": 120 }
+    "where-my-hug": {
+      "command": "npx",
+      "args": ["-y", "where-my-hug@0.1.0"],
+      "env": { "HF_TOKEN": "${user_config.hf_token}" },
+      "startup_timeout_sec": 120
+    }
   }
 }

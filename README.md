@@ -220,7 +220,8 @@ npx -y where-my-hug verify < slate.json
 
 **`HF_TOKEN` (optional).** Everything public works without one. To include
 private repos your account can see, set `HF_TOKEN` in the environment the
-agent starts from, or add `-e HF_TOKEN=hf_…` to the `claude mcp add` line.
+agent starts from, or add `-e HF_TOKEN=hf_…` to the `claude mcp add` line. The
+Claude Code plugin asks for it instead and keeps it in secure storage.
 Without a token, a private repo looks missing, because Hugging Face answers
 401 for both.
 

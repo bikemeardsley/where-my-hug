@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "description": "Where my hug at? Which parts of an ML need Hugging Face already covers, with every model and dataset checked live.",
   "mcpServers": {
-    "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug"] }
+    "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug@0.1.0"] }
   }
 }
