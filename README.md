@@ -218,6 +218,10 @@ Only the ids, as GETs to `huggingface.co/api`, plus your token if you set one.
 The token is sent only there and never appears in a report. The need, the
 method and the report stay between you and your agent.
 
+Starting it with `npx` (as the MCP server, or the skill's shell fallback)
+downloads the `where-my-hug` package from the npm registry, `registry.npmjs.org`.
+Nothing is sent there but the request for the package.
+
 ## Limits
 
 - Sizes come from `safetensors` metadata. Repos with only GGUF or `.bin`
