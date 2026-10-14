@@ -1,44 +1,89 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="820" height="200" viewBox="0 0 820 200" role="img" aria-labelledby="flow-dark-title flow-dark-desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="260" viewBox="0 0 820 260" role="img" aria-labelledby="flow-dark-title flow-dark-desc">
   <title id="flow-dark-title">How Where My Hug At? works</title>
-  <desc id="flow-dark-desc">Your need goes through four questions (compute, license, stack, data), is split into parts each marked use, tune, train or write, every model and dataset is checked live on Hugging Face, and you get the report.</desc>
+  <desc id="flow-dark-desc">Your model need goes through four questions (compute, license, stack, data) and is split into parts, each marked use, tune, train or write; Find hug searches Hugging Face for every model and dataset named, and you get the report.</desc>
   <defs>
     <marker id="flow-dark-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#9da7b3"/>
     </marker>
   </defs>
+  <g stroke="#9da7b3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <line x1="162" y1="140" x2="179" y2="140"/>
+    <line x1="179" y1="62" x2="179" y2="218"/>
+    <line x1="319.5" y1="62" x2="336" y2="62"/>
+    <line x1="319.5" y1="114" x2="336" y2="114"/>
+    <line x1="319.5" y1="166" x2="336" y2="166"/>
+    <line x1="319.5" y1="218" x2="336" y2="218"/>
+    <line x1="336" y1="62" x2="336" y2="218"/>
+    <line x1="477" y1="62" x2="494" y2="62"/>
+    <line x1="477" y1="114" x2="494" y2="114"/>
+    <line x1="477" y1="166" x2="494" y2="166"/>
+    <line x1="477" y1="218" x2="494" y2="218"/>
+    <line x1="494" y1="62" x2="494" y2="218"/>
+    <line x1="646.5" y1="140" x2="663" y2="140"/>
+  </g>
   <g stroke="#9da7b3" stroke-width="1.4" stroke-linecap="round" marker-end="url(#flow-dark-arrow)">
-    <line x1="152" y1="100" x2="172" y2="100"/>
-    <line x1="316" y1="100" x2="336" y2="100"/>
-    <line x1="480" y1="100" x2="500" y2="100"/>
-    <line x1="644" y1="100" x2="664" y2="100"/>
+    <line x1="179" y1="62" x2="191.5" y2="62"/>
+    <line x1="179" y1="114" x2="191.5" y2="114"/>
+    <line x1="179" y1="166" x2="191.5" y2="166"/>
+    <line x1="179" y1="218" x2="191.5" y2="218"/>
+    <line x1="336" y1="62" x2="349" y2="62"/>
+    <line x1="336" y1="114" x2="349" y2="114"/>
+    <line x1="336" y1="166" x2="349" y2="166"/>
+    <line x1="336" y1="218" x2="349" y2="218"/>
+    <line x1="494" y1="140" x2="506.5" y2="140"/>
+    <line x1="663" y1="140" x2="676" y2="140"/>
   </g>
   <g stroke="#f0f6fc" stroke-width="2" stroke-linejoin="round" fill="none">
-    <path d="M21 40 Q82 38.4 143 40.6 Q152 40 152.4 49 Q153.2 100 152 151 Q152 160 143 160.4 Q82 161.8 21 160 Q11.6 160 12 151 Q10.6 100 12.4 49 Q12 39.6 21 40Z"/>
-    <path d="M185 40 Q246 41.2 307 40.6 Q316 40 316.4 49 Q314.4 100 316 151 Q316 160 307 160.4 Q246 159 185 160 Q175.6 160 176 151 Q177.6 100 176.4 49 Q176 39.6 185 40Z"/>
-    <path d="M349 40 Q410 39 471 40.6 Q480 40 480.4 49 Q481.8 100 480 151 Q480 160 471 160.4 Q410 161.4 349 160 Q339.6 160 340 151 Q338.8 100 340.4 49 Q340 39.6 349 40Z"/>
-    <path d="M513 40 Q574 41.6 635 40.6 Q644 40 644.4 49 Q642.8 100 644 151 Q644 160 635 160.4 Q574 158.2 513 160 Q503.6 160 504 151 Q505 100 504.4 49 Q504 39.6 513 40Z" fill="#ffd21e" fill-opacity="0.22"/>
-    <path d="M677 40 Q738 38.6 799 40.6 Q808 40 808.4 49 Q809 100 808 151 Q808 160 799 160.4 Q738 161.2 677 160 Q667.6 160 668 151 Q666.2 100 668.4 49 Q668 39.6 677 40Z"/>
+    <path d="M21 40 Q87 39.4 153 40.6 Q162 40 162.4 49 Q160.9 140 162 231 Q162 240 153 240.4 Q87 240.5 21 240 Q11.6 240 12 231 Q10.6 140 12.4 49 Q12 39.6 21 40Z"/>
+    <path d="M204.5 40 Q257.5 40.1 310.5 40.6 Q319.5 40 319.9 49 Q319.1 62 319.5 75 Q319.5 84 310.5 84.4 Q257.5 82.6 204.5 84 Q195.1 84 195.5 75 Q195.5 62 195.9 49 Q195.5 39.6 204.5 40Z"/>
+    <path d="M204.5 92 Q257.5 90.5 310.5 92.6 Q319.5 92 319.9 101 Q319.3 114 319.5 127 Q319.5 136 310.5 136.4 Q257.5 134.6 204.5 136 Q195.1 136 195.5 127 Q194.2 114 195.9 101 Q195.5 91.6 204.5 92Z"/>
+    <path d="M204.5 144 Q257.5 143.8 310.5 144.6 Q319.5 144 319.9 153 Q320.5 166 319.5 179 Q319.5 188 310.5 188.4 Q257.5 186.8 204.5 188 Q195.1 188 195.5 179 Q194.6 166 195.9 153 Q195.5 143.6 204.5 144Z"/>
+    <path d="M204.5 196 Q257.5 196.4 310.5 196.6 Q319.5 196 319.9 205 Q320.9 218 319.5 231 Q319.5 240 310.5 240.4 Q257.5 240.2 204.5 240 Q195.1 240 195.5 231 Q195.2 218 195.9 205 Q195.5 195.6 204.5 196Z"/>
+    <path d="M362 40 Q415 41.5 468 40.6 Q477 40 477.4 49 Q475.5 62 477 75 Q477 84 468 84.4 Q415 85.1 362 84 Q352.6 84 353 75 Q352.3 62 353.4 49 Q353 39.6 362 40Z"/>
+    <path d="M362 92 Q415 90.9 468 92.6 Q477 92 477.4 101 Q475.8 114 477 127 Q477 136 468 136.4 Q415 135.4 362 136 Q352.6 136 353 127 Q354 114 353.4 101 Q353 91.6 362 92Z"/>
+    <path d="M362 144 Q415 143 468 144.6 Q477 144 477.4 153 Q477.3 166 477 179 Q477 188 468 188.4 Q415 188.4 362 188 Q352.6 188 353 179 Q352.6 166 353.4 153 Q353 143.6 362 144Z"/>
+    <path d="M362 196 Q415 196.2 468 196.6 Q477 196 477.4 205 Q475.6 218 477 231 Q477 240 468 240.4 Q415 238.6 362 240 Q352.6 240 353 231 Q352.1 218 353.4 205 Q353 195.6 362 196Z"/>
+    <path d="M519.5 40 Q578.5 40.6 637.5 40.6 Q646.5 40 646.9 49 Q646.3 140 646.5 231 Q646.5 240 637.5 240.4 Q578.5 239.4 519.5 240 Q510.1 240 510.5 231 Q510.8 140 510.9 49 Q510.5 39.6 519.5 40Z" fill="#ffd21e" fill-opacity="0.22"/>
+    <path d="M689 40 Q744 39.9 799 40.6 Q808 40 808.4 49 Q807.4 140 808 231 Q808 240 799 240.4 Q744 240.9 689 240 Q679.6 240 680 231 Q680.6 140 680.4 49 Q680 39.6 689 40Z"/>
   </g>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" text-anchor="middle">
+    <g font-size="12" font-style="italic" fill="#9da7b3">
+      <text x="257.5" y="26">four questions</text>
+      <text x="415" y="26">split, decide each part</text>
+    </g>
     <g font-size="16" font-weight="600" fill="#f0f6fc">
-      <text x="82" y="80">Your need</text>
-      <text x="246" y="80">Four questions</text>
-      <text x="410" y="80">Split, decide</text>
-      <text x="574" y="80">Checked live</text>
-      <text x="738" y="80">Your report</text>
+      <text x="87" y="90">Your model need</text>
+      <text x="257.5" y="60" font-size="14">Compute</text>
+      <text x="257.5" y="112" font-size="14">License</text>
+      <text x="257.5" y="164" font-size="14">Stack</text>
+      <text x="257.5" y="216" font-size="14">Data</text>
+      <text x="415" y="60" font-size="14">USE</text>
+      <text x="415" y="112" font-size="14">TUNE</text>
+      <text x="415" y="164" font-size="14">TRAIN</text>
+      <text x="415" y="216" font-size="14">WRITE</text>
+      <text x="578.5" y="82">Find hug</text>
+      <text x="744" y="106">Your report</text>
     </g>
     <g font-size="12" fill="#9da7b3">
-      <text x="82" y="108">"transcribe my</text>
-      <text x="82" y="124">recipe cards"</text>
-      <text x="246" y="108">compute · license</text>
-      <text x="246" y="124">stack · data</text>
-      <text x="410" y="108">each part: USE,</text>
-      <text x="410" y="124">TUNE, TRAIN, WRITE</text>
-      <text x="574" y="104">on Hugging Face:</text>
-      <text x="574" y="120">fakes dropped, the</text>
-      <text x="574" y="136">rest flagged, sized</text>
-      <text x="738" y="108">real models that</text>
-      <text x="738" y="124">fit your hardware</text>
+      <text x="87" y="120">what you want</text>
+      <text x="87" y="136">a model to do:</text>
+      <text x="87" y="152">&quot;transcribe my</text>
+      <text x="87" y="168">recipe cards&quot;</text>
+      <text x="257.5" y="75" font-size="11">where it runs</text>
+      <text x="257.5" y="127" font-size="11">what it&#8217;s for</text>
+      <text x="257.5" y="179" font-size="11">what calls it</text>
+      <text x="257.5" y="231" font-size="11">what you have</text>
+      <text x="415" y="75" font-size="11">fits as it is</text>
+      <text x="415" y="127" font-size="11">fine-tune a base</text>
+      <text x="415" y="179" font-size="11">train your own</text>
+      <text x="415" y="231" font-size="11">just code</text>
+      <text x="578.5" y="112">searches Hugging</text>
+      <text x="578.5" y="128">Face for every</text>
+      <text x="578.5" y="144">model and dataset:</text>
+      <text x="578.5" y="160">fakes dropped, the</text>
+      <text x="578.5" y="176">rest flagged, sized</text>
+      <text x="744" y="136">real models that</text>
+      <text x="744" y="152">fit your hardware</text>
     </g>
   </g>
 </svg>
