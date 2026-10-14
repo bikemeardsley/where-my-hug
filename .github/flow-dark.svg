@@ -1,74 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="820" height="262" viewBox="0 0 820 262" role="img" aria-labelledby="flow-dark-title flow-dark-desc">
-  <title id="flow-dark-title">How Where My Hug At? works</title>
-  <desc id="flow-dark-desc">Your model need goes through four questions (compute, license, stack, data) and is split into parts, each marked use, tune, train or write. Find hug searches Hugging Face for every model and dataset the use, tune and train parts name; write parts need no model. Both go into your report.</desc>
-  <defs>
-    <marker id="flow-dark-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#9da7b3"/>
-    </marker>
-  </defs>
-  <g stroke="#6e7681" stroke-width="1.2" stroke-dasharray="4 4" fill="none">
-    <rect x="189.5" y="34" width="136" height="212" rx="12"/>
-    <rect x="353" y="34" width="136" height="212" rx="12"/>
-  </g>
-  <g stroke="#9da7b3" stroke-width="1.4" stroke-linecap="round" marker-end="url(#flow-dark-arrow)">
-    <line x1="162" y1="140" x2="185.5" y2="140"/>
-    <line x1="325.5" y1="140" x2="349" y2="140"/>
-    <line x1="483" y1="62" x2="512.5" y2="62"/>
-    <line x1="483" y1="114" x2="512.5" y2="114"/>
-    <line x1="483" y1="166" x2="512.5" y2="166"/>
-    <line x1="652.5" y1="114" x2="676" y2="114"/>
-    <line x1="483" y1="218" x2="676" y2="218"/>
-  </g>
-  <g stroke="#f0f6fc" stroke-width="2" stroke-linejoin="round" fill="none">
-    <path d="M21 40 Q87 39.5 153 40.6 Q162 40 162.4 49 Q161 140 162 231 Q162 240 153 240.4 Q87 240.4 21 240 Q11.6 240 12 231 Q10.8 140 12.4 49 Q12 39.6 21 40Z"/>
-    <path d="M204.5 40 Q257.5 40.1 310.5 40.6 Q319.5 40 319.9 49 Q319.1 62 319.5 75 Q319.5 84 310.5 84.4 Q257.5 82.8 204.5 84 Q195.1 84 195.5 75 Q195.5 62 195.9 49 Q195.5 39.6 204.5 40Z"/>
-    <path d="M204.5 92 Q257.5 90.7 310.5 92.6 Q319.5 92 319.9 101 Q319.3 114 319.5 127 Q319.5 136 310.5 136.4 Q257.5 134.8 204.5 136 Q195.1 136 195.5 127 Q194.4 114 195.9 101 Q195.5 91.6 204.5 92Z"/>
-    <path d="M204.5 144 Q257.5 143.8 310.5 144.6 Q319.5 144 319.9 153 Q320.4 166 319.5 179 Q319.5 188 310.5 188.4 Q257.5 186.9 204.5 188 Q195.1 188 195.5 179 Q194.7 166 195.9 153 Q195.5 143.6 204.5 144Z"/>
-    <path d="M204.5 196 Q257.5 196.4 310.5 196.6 Q319.5 196 319.9 205 Q320.8 218 319.5 231 Q319.5 240 310.5 240.4 Q257.5 240.2 204.5 240 Q195.1 240 195.5 231 Q195.2 218 195.9 205 Q195.5 195.6 204.5 196Z"/>
-    <path d="M368 40 Q421 41.3 474 40.6 Q483 40 483.4 49 Q481.7 62 483 75 Q483 84 474 84.4 Q421 85 368 84 Q358.6 84 359 75 Q358.4 62 359.4 49 Q359 39.6 368 40Z"/>
-    <path d="M368 92 Q421 91 474 92.6 Q483 92 483.4 101 Q481.9 114 483 127 Q483 136 474 136.4 Q421 135.5 368 136 Q358.6 136 359 127 Q359.9 114 359.4 101 Q359 91.6 368 92Z"/>
-    <path d="M368 144 Q421 143.1 474 144.6 Q483 144 483.4 153 Q483.2 166 483 179 Q483 188 474 188.4 Q421 188.4 368 188 Q358.6 188 359 179 Q358.6 166 359.4 153 Q359 143.6 368 144Z"/>
-    <path d="M368 196 Q421 196.1 474 196.6 Q483 196 483.4 205 Q481.8 218 483 231 Q483 240 474 240.4 Q421 238.8 368 240 Q358.6 240 359 231 Q358.2 218 359.4 205 Q359 195.6 368 196Z"/>
-    <path d="M525.5 40 Q584.5 40.5 643.5 40.6 Q652.5 40 652.9 49 Q652.3 114 652.5 179 Q652.5 188 643.5 188.4 Q584.5 187.5 525.5 188 Q516.1 188 516.5 179 Q516.7 114 516.9 49 Q516.5 39.6 525.5 40Z" fill="#ffd21e" fill-opacity="0.22"/>
-    <path d="M689 40 Q744 39.9 799 40.6 Q808 40 808.4 49 Q807.4 140 808 231 Q808 240 799 240.4 Q744 240.8 689 240 Q679.6 240 680 231 Q680.6 140 680.4 49 Q680 39.6 689 40Z"/>
-  </g>
-  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" text-anchor="middle">
-    <g font-size="12" font-style="italic" fill="#9da7b3">
-      <text x="257.5" y="26">four questions</text>
-      <text x="421" y="26">each part gets one</text>
-      <text x="584.5" y="212">no model to look up</text>
-    </g>
-    <g font-size="16" font-weight="600" fill="#f0f6fc">
-      <text x="87" y="74">Your model need</text>
-      <text x="257.5" y="59" font-size="14">Compute</text>
-      <text x="257.5" y="111" font-size="14">License</text>
-      <text x="257.5" y="163" font-size="14">Stack</text>
-      <text x="257.5" y="215" font-size="14">Data</text>
-      <text x="421" y="59" font-size="14">USE</text>
-      <text x="421" y="111" font-size="14">TUNE</text>
-      <text x="421" y="163" font-size="14">TRAIN</text>
-      <text x="421" y="215" font-size="14">WRITE</text>
-      <text x="584.5" y="74">Find hug</text>
-      <text x="744" y="74">Your report</text>
-    </g>
-    <g font-size="12" fill="#9da7b3">
-      <text x="87" y="100">what you want</text>
-      <text x="87" y="116">a model to do:</text>
-      <text x="87" y="132">&quot;transcribe my</text>
-      <text x="87" y="148">recipe cards&quot;</text>
-      <text x="257.5" y="75" font-size="11">where it runs</text>
-      <text x="257.5" y="127" font-size="11">what it&#8217;s for</text>
-      <text x="257.5" y="179" font-size="11">what calls it</text>
-      <text x="257.5" y="231" font-size="11">what you have</text>
-      <text x="421" y="75" font-size="11">fits as it is</text>
-      <text x="421" y="127" font-size="11">fine-tune a base</text>
-      <text x="421" y="179" font-size="11">train your own</text>
-      <text x="421" y="231" font-size="11">just code</text>
-      <text x="584.5" y="100">searches Hugging</text>
-      <text x="584.5" y="116">Face for every</text>
-      <text x="584.5" y="132">model and dataset</text>
-      <text x="744" y="100">real models that</text>
-      <text x="744" y="116">fit your hardware</text>
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="896" height="416" viewBox="0 0 896 416" role="img" aria-labelledby="flow-dark-title flow-dark-desc">
+<title id="flow-dark-title">How Where My Hug At? works</title>
+<desc id="flow-dark-desc">Your model need goes through four questions (compute, license, stack, data) and is split into parts, each marked use, tune, train or write. Find hug searches Hugging Face for every model and dataset the use, tune and train parts name; write parts need no model. Both go into your report.</desc>
+<defs>
+<marker id="flow-dark-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9da7b3"/></marker>
+</defs>
+<rect width="896" height="416" rx="8" fill="#0d1117"/>
+<line x1="184" y1="144" x2="214" y2="144" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<line x1="360" y1="220" x2="390" y2="220" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<line x1="528" y1="100" x2="566" y2="100" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<line x1="528" y1="180" x2="566" y2="180" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<line x1="528" y1="260" x2="566" y2="260" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<line x1="696" y1="180" x2="726" y2="180" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<path d="M528 340 H784 Q792 340 792 332 V218" fill="none" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<rect x="392" y="64" width="144" height="312" rx="8" fill="none" stroke="#9da7b3" stroke-opacity="0.40" stroke-width="1" stroke-dasharray="4,4"/>
+<rect x="40" y="72" width="144" height="144" rx="6" fill="#0d1117"/>
+<rect x="40" y="72" width="144" height="144" rx="6" fill="#9da7b3" fill-opacity="0.10" stroke="#8b949e" stroke-width="1.6"/>
+<rect x="216" y="72" width="144" height="296" rx="6" fill="#0d1117"/>
+<rect x="216" y="72" width="144" height="296" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
+<rect x="400" y="72" width="128" height="56" rx="6" fill="#0d1117"/>
+<rect x="400" y="72" width="128" height="56" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
+<rect x="400" y="152" width="128" height="56" rx="6" fill="#0d1117"/>
+<rect x="400" y="152" width="128" height="56" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
+<rect x="400" y="232" width="128" height="56" rx="6" fill="#0d1117"/>
+<rect x="400" y="232" width="128" height="56" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
+<rect x="400" y="312" width="128" height="56" rx="6" fill="#0d1117"/>
+<rect x="400" y="312" width="128" height="56" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
+<rect x="568" y="72" width="128" height="216" rx="6" fill="#0d1117"/>
+<rect x="568" y="72" width="128" height="216" rx="6" fill="#ffd21e" fill-opacity="0.14" stroke="#ffd21e" stroke-width="1.6"/>
+<rect x="728" y="72" width="128" height="144" rx="6" fill="#0d1117"/>
+<rect x="728" y="72" width="128" height="144" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
+<line x1="232" y1="116" x2="344" y2="116" stroke="#9da7b3" stroke-opacity="0.40" stroke-width="0.8"/>
+<text x="392" y="52" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em">EACH PART GETS ONE</text>
+<rect x="624" y="320" width="64" height="12" rx="2" fill="#0d1117"/>
+<text x="656" y="328" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">NO LOOKUP</text>
+<text x="112" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Your model need</text>
+<text x="112" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what you want</text>
+<text x="112" y="144" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">a model to do:</text>
+<text x="112" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle" font-style="italic">&#8220;transcribe my</text>
+<text x="112" y="188" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle" font-style="italic">recipe cards&#8221;</text>
+<text x="288" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Four questions</text>
+<text x="288" y="152" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">Compute</text>
+<text x="288" y="168" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">where it runs</text>
+<text x="288" y="208" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">License</text>
+<text x="288" y="224" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what it&#8217;s for</text>
+<text x="288" y="264" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">Stack</text>
+<text x="288" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what calls it</text>
+<text x="288" y="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">Data</text>
+<text x="288" y="336" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what you have</text>
+<text x="464" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">USE</text>
+<text x="464" y="116" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">fits as it is</text>
+<text x="464" y="180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">TUNE</text>
+<text x="464" y="196" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">fine-tune a base</text>
+<text x="464" y="260" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">TRAIN</text>
+<text x="464" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">train your own</text>
+<text x="464" y="340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">WRITE</text>
+<text x="464" y="356" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">just code</text>
+<text x="632" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Find hug</text>
+<text x="632" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">searches Hugging</text>
+<text x="632" y="144" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">Face for every</text>
+<text x="632" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">model and</text>
+<text x="632" y="176" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">dataset named</text>
+<text x="792" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Your report</text>
+<text x="792" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">real models that</text>
+<text x="792" y="144" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">fit your hardware</text>
 </svg>
