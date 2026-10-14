@@ -69,7 +69,8 @@ Or the tools alone:
 
 ```sh
 claude mcp add --scope user where-my-hug -- npx -y where-my-hug
-# with a token: claude mcp add --scope user -e HF_TOKEN=hf_... where-my-hug -- npx -y where-my-hug
+# with a token (the name comes before -e, which takes every value after it):
+# claude mcp add --scope user where-my-hug -e HF_TOKEN=hf_... -- npx -y where-my-hug
 ```
 
 Docs: [plugins](https://code.claude.com/docs/en/plugins/install) ·

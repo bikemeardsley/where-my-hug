@@ -30,7 +30,7 @@ Works with Claude Code, Codex, Copilot, Cursor, Gemini CLI, Cline, Devin, Open
 WebUI and any other MCP client, or as an Agent Skill.
 
 Its companion, [Git for Me](https://github.com/bikemeardsley/git-for-me), does
-the same for GitHub repos.
+the same for open-source repos on GitHub, GitLab and Codeberg.
 
 <p align="center">
   <picture>
