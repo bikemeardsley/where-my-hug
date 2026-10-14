@@ -12,7 +12,7 @@
   </g>
   <rect x="64" y="226" width="1152" height="402" rx="18" fill="#fffdf5" transform="rotate(-0.6 640 427)"/>
   <!-- flow.svg cropped to its content (it carries 40px margins of its own) -->
-  <svg x="148" y="234" width="984" height="386" viewBox="28 36 840 352">
-    <image width="896" height="416" href="flow.svg" xlink:href="flow.svg"/>
+  <svg x="148" y="234" width="984" height="386" viewBox="28 28 808 304">
+    <image width="864" height="360" href="flow.svg" xlink:href="flow.svg"/>
   </svg>
 </svg>
