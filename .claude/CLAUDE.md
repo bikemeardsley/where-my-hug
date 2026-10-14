@@ -17,12 +17,14 @@ model and dataset checked live on Hugging Face. Start with
 - **One entry point, every client.** `npx -y where-my-hug` (the npm package)
   is what the Claude Code plugin, the Cursor plugin, the Gemini extension,
   other MCP clients and the skill's shell fallback all run. It's written in
-  `plugin/.claude-plugin/plugin.json`, `mcp.json` (Cursor's), `gemini-extension.json`,
+  `plugin/.claude-plugin/plugin.json`, `plugin/mcp.json` (Agent Plugins, for
+  Copilot; beside it `plugin/plugin.json`), `mcp.json` (Cursor's), `gemini-extension.json`,
   `skills/where-my-hug/SKILL.md` (copied to `plugin/skills/`, a test keeps them equal) and the README: change one, change them all. The Claude plugin lives in `plugin/` so its folder holds only what the plugin ships.
-  The three manifests pin the version (`where-my-hug@0.1.0`), as Claude's
+  The manifests pin the version (`where-my-hug@0.1.1`), as Claude's
   plugin directory requires; the README and skill don't.
 - **A release** bumps the version in `package.json`, `server.json` (twice),
-  `plugin/.claude-plugin/plugin.json` (`version` and the pin), `mcp.json`,
+  `plugin/.claude-plugin/plugin.json` (`version` and the pin),
+  `plugin/plugin.json`, `plugin/mcp.json` (the pin), `mcp.json`,
   `gemini-extension.json` and `plugin/package.json` (then
   `npm install --package-lock-only --ignore-scripts` in `plugin/` once
   the new version is on npm, for the directory's launcher lock); then `npm publish` (staged: approve it on
@@ -30,12 +32,11 @@ model and dataset checked live on Hugging Face. Start with
   for the MCP registry.
 - **The diagram** (`.github/flow.svg` and `flow-dark.svg`, kept in step) is
   drawn with the `/diagram-design` skill, which runs locally, not in the cloud: change
-  it with that skill, not by hand. Then re-render `.github/social-preview.png`
+  it with that skill, not by hand. `.diagram-design` points the skill at the
+  `where-my-hug` profile (in `~/.diagram-design/profiles/`, not the repo).
+  Then re-render `.github/social-preview.png`
   from `social-preview.svg` at 1280×640 (it pulls in `logo.svg` and `flow.svg`)
-  and upload it under the repo's Settings → Social preview. The 2026-10-14
-  redraw (grouped questions and verdicts, WRITE skipping Find hug) was made in a
-  cloud session without the skill: give it a pass with the skill when local,
-  then drop this sentence.
+  and upload it under the repo's Settings → Social preview.
 - **American English** in code, docs and commits.
 - **General, not tied to any one project.** It came out of Thicken's vision
   work, but nothing here should know about books, slabs or Thicken.

@@ -1,7 +1,7 @@
 {
   "name": "where-my-hug",
   "displayName": "Where My Hug At?",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Where my hug at? Tells your agent which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
   "author": { "name": "Mike Beardsley" },
   "homepage": "https://github.com/bikemeardsley/where-my-hug",
@@ -23,7 +23,7 @@
   "mcpServers": {
     "where-my-hug": {
       "command": "npx",
-      "args": ["-y", "where-my-hug@0.1.0"],
+      "args": ["-y", "where-my-hug@0.1.1"],
       "env": { "HF_TOKEN": "${user_config.hf_token}" },
       "startup_timeout_sec": 120
     }

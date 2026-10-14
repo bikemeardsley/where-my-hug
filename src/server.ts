@@ -39,7 +39,7 @@ const verified = async (args: z.infer<z.ZodObject<typeof slate>>) => {
 };
 
 function serve() {
-  const server = new McpServer({ name: 'where-my-hug', version: '0.1.0' });
+  const server = new McpServer({ name: 'where-my-hug', version: '0.1.1' });
   server.registerTool('where_my_hug', {
     title: "Where my hug at?",
     description: 'Step 1 of 2, before recommending any Hugging Face model or dataset. If compute, license, stack or data is missing, returns the questions to ask the user first: call again with the answers ("unknown" is fine). Then returns the method for splitting an ML need into parts and deciding which parts Hugging Face covers (use a model as is, fine-tune one, train one) and which are plain code. Follow it, then call where_my_hug_verify.',

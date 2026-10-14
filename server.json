@@ -3,8 +3,8 @@
   "name": "io.github.bikemeardsley/where-my-hug",
   "description": "Which parts of an ML need Hugging Face already covers. Every model and dataset checked live.",
   "repository": { "url": "https://github.com/bikemeardsley/where-my-hug", "source": "github" },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packages": [
-    { "registryType": "npm", "identifier": "where-my-hug", "version": "0.1.0", "transport": { "type": "stdio" } }
+    { "registryType": "npm", "identifier": "where-my-hug", "version": "0.1.1", "transport": { "type": "stdio" } }
   ]
 }

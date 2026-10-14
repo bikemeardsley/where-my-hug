@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "where-my-hug",
+  "version": "0.1.1",
+  "description": "Where my hug at? Tells your agent which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
+  "author": { "name": "Mike Beardsley" },
+  "homepage": "https://github.com/bikemeardsley/where-my-hug",
+  "repository": "https://github.com/bikemeardsley/where-my-hug",
+  "license": "MIT",
+  "keywords": ["hugging-face", "machine-learning", "models", "datasets", "mcp"]
+}

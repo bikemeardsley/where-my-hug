@@ -8,7 +8,7 @@ sized against your hardware.
 
 This plugin adds two things to Claude Code:
 
-- **The `where-my-hug` MCP server**, run with `npx -y where-my-hug@0.1.0`
+- **The `where-my-hug` MCP server**, run with `npx -y where-my-hug@0.1.1`
   from the [npm package](https://www.npmjs.com/package/where-my-hug). It
   makes `GET` requests to `huggingface.co/api` for the model and dataset ids
   your agent names, and nothing else. It reads and writes no files. `npx`
