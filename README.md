@@ -32,7 +32,7 @@ WebUI and any other MCP client, or as an Agent Skill.
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/flow-dark.svg">
-    <img src=".github/flow.svg" width="820" alt="Your model need goes through four questions (compute, license, stack, data) and is split into parts, each marked use, tune, train or write; Find hug searches Hugging Face for every model and dataset named, and you get the report.">
+    <img src=".github/flow.svg" width="820" alt="Your model need goes through four questions (compute, license, stack, data) and is split into parts, each marked use, tune, train or write. Find hug searches Hugging Face for every model and dataset the use, tune and train parts name; write parts need no model. Both go into your report.">
   </picture>
 </p>
 
