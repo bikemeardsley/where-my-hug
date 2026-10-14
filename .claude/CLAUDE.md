@@ -28,6 +28,14 @@ model and dataset checked live on Hugging Face. Start with
   the new version is on npm, for the directory's launcher lock); then `npm publish` (staged: approve it on
   npmjs.com), a `vX.Y.Z` tag and GitHub release, and `mcp-publisher publish`
   for the MCP registry.
+- **The diagram** (`.github/flow.svg` and `flow-dark.svg`, kept in step) is
+  drawn with the `/diagram-design` skill, which runs locally, not in the cloud: change
+  it with that skill, not by hand. Then re-render `.github/social-preview.png`
+  from `social-preview.svg` at 1280×640 (it pulls in `logo.svg` and `flow.svg`)
+  and upload it under the repo's Settings → Social preview. The 2026-10-14
+  redraw (grouped questions and verdicts, WRITE skipping Find hug) was made in a
+  cloud session without the skill: give it a pass with the skill when local,
+  then drop this sentence.
 - **American English** in code, docs and commits.
 - **General, not tied to any one project.** It came out of Thicken's vision
   work, but nothing here should know about books, slabs or Thicken.
