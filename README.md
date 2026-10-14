@@ -48,7 +48,7 @@ WebUI and any other MCP client, or as an Agent Skill.
 - [Install](#install) (every agent, step by step: [USAGE.md](USAGE.md))
 - [What leaves your machine](#what-leaves-your-machine) · [Limits](#limits) ·
   [Security](#security)
-- [Development](#development) · [Credits](#credits) · [License](#license)
+- [Development](#development) · [License](#license)
 
 ## Try it
 
@@ -289,13 +289,6 @@ npm run check        # types
 
 `npm install` also builds JavaScript into `build/`, which is what `npx` runs:
 Node won't strip types from a package inside `node_modules`.
-
-## Credits
-
-Inspired by [kitbash](https://github.com/Open-Dev-Society/kitbash), which does
-the same for GitHub repos: a method the agent follows, then a check that owns
-the report. Where My Hug At? adds the search, so the picks don't rest on what
-the agent remembers. No code or text is shared.
 
 ## License
 

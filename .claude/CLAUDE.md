@@ -44,9 +44,12 @@ model and dataset checked live on Hugging Face. Start with
   search of Hugging Face (`where_my_hug_search`). What an agent remembers may
   be added, but it ranks after the search's picks and the report labels it
   "from memory". Don't add a path where a remembered id decides anything.
-- **Kitbash is GPL-2.0 and not ours.** This borrows its idea (a rubric the
-  agent follows, then a verify step that owns the report), never its code or
-  text.
+- **Kitbash is GPL-2.0 and not ours.** Never its code or text. The README
+  no longer credits it (decided 2026-10-14): the search-first design is our
+  own, and only the goal, reuse before building, is shared.
+- **Git for Me** (`P:\windsurf\git-for-me`, private until launch) is the
+  companion: the same tool for GitHub repos. When it goes public, each README
+  links the other; until then, don't link a private repo.
 - Public on bikemeardsley/where-my-hug and npm (where-my-hug), MIT. `HF_TOKEN` is read
   from the environment (the Claude plugin asks for it and passes it in), sent
   only to huggingface.co, and never recorded.
