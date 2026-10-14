@@ -1,21 +1,21 @@
 # Where My Hug At? (plugin)
 
-Tell your AI agent what you want a model to do. It tells you which parts
-already exist on Hugging Face: which are an exact fit, which to fine-tune,
-which to train, and which are just code. Every model and dataset it names is
-checked live on Hugging Face, flagged for license, gating and staleness, and
-sized against your hardware.
+Tell your AI agent what you want a model to do. It searches Hugging Face for
+each part of the job and tells you which parts already exist there: which are
+an exact fit, which to fine-tune, which to train, and which are just code.
+Every model and dataset it picks is checked live on Hugging Face, flagged for
+license, gating and staleness, and sized against your hardware.
 
 This plugin adds two things to Claude Code:
 
-- **The `where-my-hug` MCP server**, run with `npx -y where-my-hug@0.1.1`
+- **The `where-my-hug` MCP server**, run with `npx -y where-my-hug@0.2.0`
   from the [npm package](https://www.npmjs.com/package/where-my-hug). It
-  makes `GET` requests to `huggingface.co/api` for the model and dataset ids
-  your agent names, and nothing else. It reads and writes no files. `npx`
-  downloads the package from the npm registry (`registry.npmjs.org`) when it
-  starts.
+  makes `GET` requests to `huggingface.co/api` (searches from what your agent
+  writes for each part of the job, and the model and dataset ids it picks),
+  and nothing else. It reads and writes no files. `npx` downloads the package
+  from the npm registry (`registry.npmjs.org`) when it starts.
 - **The `where-my-hug` skill**, which tells Claude when to use it. If the
-  server isn't connected, the skill runs the same two steps with
+  server isn't connected, the skill runs the same three steps with
   `npx -y where-my-hug` in a shell, which reaches the same two places: the npm
   registry and `huggingface.co/api`.
 

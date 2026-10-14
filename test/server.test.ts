@@ -7,12 +7,12 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 
-test('serves both tools over stdio, as Claude Code starts it', async () => {
+test('serves the three tools over stdio, as Claude Code starts it', async () => {
   const client = new Client({ name: 'test', version: '0' });
   await client.connect(new StdioClientTransport({ command: process.execPath, args: [fileURLToPath(new URL('../src/server.ts', import.meta.url))] }));
   try {
     const { tools } = await client.listTools();
-    assert.deepEqual(tools.map((tool) => tool.name).sort(), ['where_my_hug', 'where_my_hug_verify']);
+    assert.deepEqual(tools.map((tool) => tool.name).sort(), ['where_my_hug', 'where_my_hug_search', 'where_my_hug_verify']);
 
     const text = (result: Awaited<ReturnType<typeof client.callTool>>) => (result.content as { text: string }[])[0].text;
     // Details that change the answer come first: only the missing ones are asked, and no method until they're in.
@@ -36,6 +36,8 @@ test('serves both tools over stdio, as Claude Code starts it', async () => {
 
     const refused = await client.callTool({ name: 'where_my_hug_verify', arguments: { need: 'x', components: [] } });
     assert.equal(refused.isError, true);
+    const unsearchable = await client.callTool({ name: 'where_my_hug_search', arguments: { parts: [] } });
+    assert.equal(unsearchable.isError, true);
   } finally {
     await client.close();
   }
@@ -47,7 +49,7 @@ test('serves the same tools over HTTP, for clients that speak only that', async 
   const client = new Client({ name: 'test', version: '0' });
   try {
     await client.connect(new StreamableHTTPClientTransport(new URL('http://127.0.0.1:38117/mcp')));
-    assert.deepEqual((await client.listTools()).tools.map((tool) => tool.name).sort(), ['where_my_hug', 'where_my_hug_verify']);
+    assert.deepEqual((await client.listTools()).tools.map((tool) => tool.name).sort(), ['where_my_hug', 'where_my_hug_search', 'where_my_hug_verify']);
     const asked = await client.callTool({ name: 'where_my_hug', arguments: { need: 'sort socks', stack: 'Python' } });
     assert.match((asked.content as { text: string }[])[0].text, /^- compute:/m);
     assert.equal((await fetch('http://127.0.0.1:38117/elsewhere')).status, 404);
@@ -62,7 +64,7 @@ test("the plugin's copy of the skill matches the repo's", () => {
   assert.equal(read('../plugin/skills/where-my-hug/SKILL.md'), read('../skills/where-my-hug/SKILL.md'));
 });
 
-test('runs the same two steps from a shell, for an agent without MCP', () => {
+test('runs the same three steps from a shell, for an agent without MCP', () => {
   const run = (command: string, input: object) =>
     execFileSync(process.execPath, [fileURLToPath(new URL('../src/server.ts', import.meta.url)), command], { input: JSON.stringify(input), encoding: 'utf8', stdio: 'pipe' });
   assert.match(run('rubric', { need: 'sort socks by color', stack: 'Python' }), /^- compute:/m);
@@ -70,4 +72,5 @@ test('runs the same two steps from a shell, for an agent without MCP', () => {
   assert.match(report, /^# Where my hug at\?/);
   assert.match(report, /"nextAction":"DONE"/);
   assert.throws(() => run('verify', { need: 'x', components: [] })); // the same checks as the tool
+  assert.throws(() => run('search', { parts: [] }));
 });

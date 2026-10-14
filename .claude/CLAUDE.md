@@ -20,7 +20,7 @@ model and dataset checked live on Hugging Face. Start with
   `plugin/.claude-plugin/plugin.json`, `plugin/mcp.json` (Agent Plugins, for
   Copilot; beside it `plugin/plugin.json`), `mcp.json` (Cursor's), `gemini-extension.json`,
   `skills/where-my-hug/SKILL.md` (copied to `plugin/skills/`, a test keeps them equal) and the README: change one, change them all. The Claude plugin lives in `plugin/` so its folder holds only what the plugin ships.
-  The manifests pin the version (`where-my-hug@0.1.1`), as Claude's
+  The manifests pin the version (`where-my-hug@0.2.0`), as Claude's
   plugin directory requires; the README and skill don't.
 - **A release** bumps the version in `package.json`, `server.json` (twice),
   `plugin/.claude-plugin/plugin.json` (`version` and the pin),
@@ -40,6 +40,10 @@ model and dataset checked live on Hugging Face. Start with
 - **American English** in code, docs and commits.
 - **General, not tied to any one project.** It came out of Thicken's vision
   work, but nothing here should know about books, slabs or Thicken.
+- **Search decides, memory only supplements.** Candidates come from a live
+  search of Hugging Face (`where_my_hug_search`). What an agent remembers may
+  be added, but it ranks after the search's picks and the report labels it
+  "from memory". Don't add a path where a remembered id decides anything.
 - **Kitbash is GPL-2.0 and not ours.** This borrows its idea (a rubric the
   agent follows, then a verify step that owns the report), never its code or
   text.

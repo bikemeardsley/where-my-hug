@@ -1,24 +1,30 @@
-// The second step: every candidate the agent named is looked up on Hugging Face. One that isn't there is dropped; the
+// The last step: every candidate the agent picked is looked up on Hugging Face. One that isn't there is dropped; the
 // rest are flagged for what would bite later (gated access, terms you can't ship under, years without an update,
-// almost no use) and sized against the compute. What runs on it heads each part; bigger models follow, a stretch
-// or cloud only, as what might do better if it can be made to work. The verdicts and the order are the agent's,
-// since fit comes first; the facts are Hugging Face's.
-import { lookUp, type Entry, type Kind } from './hub.ts';
+// almost no use) and sized against the compute. Each part's search is run again (from the cache, mostly), so the
+// report knows what Hugging Face turned up: a pick the search found outranks one the agent only remembered, and what
+// the search found but the agent didn't pick is shown, so nothing it turned up is hidden. What runs on the compute
+// heads each part; bigger models follow, a stretch or cloud only, as what might do better if it can be made to work.
+import { lookUp, search, type Entry, type Hit, type Kind, type Query } from './hub.ts';
 
 export type Verdict = 'USE' | 'TUNE' | 'TRAIN' | 'WRITE';
 export interface Candidate { id: string; kind?: Kind }
-export interface Component { id: string; name: string; role: string; verdict: Verdict; rationale: string; candidates: Candidate[] }
+export interface Component { id: string; name: string; role: string; verdict: Verdict; rationale: string; candidates: Candidate[]; search?: Query }
 /** Against the compute: runs on it, fits only quantized (a stretch), or needs more hardware or a host (cloud). */
 type Tier = 'fits' | 'stretch' | 'cloud';
-type Checked = Entry & { flags: string[]; tier?: Tier };
+type Checked = Entry & { flags: string[]; tier?: Tier; found?: string[] }; // found: how the search turned it up; [] from memory only
 interface Part extends Component {
   model?: Checked; // the first model that runs on the compute (or the first, when the compute or the size isn't known)
   dataset?: Checked;
-  bigger: Checked[]; // models over the compute, in the agent's order
+  bigger: Checked[]; // models over the compute, found by the search first
   alternates: Checked[];
   dropped: string[];
   missing: Kind[]; // what it needs new candidates for
+  unpicked: Hit[]; // models the search found that weren't picked
+  unsearched: boolean; // a part that needs a model, picked without searching
 }
+
+const UNPICKED = 3;
+const memoryLast = (a: Checked, b: Checked) => Number(a.found?.length === 0) - Number(b.found?.length === 0);
 
 const STALE_DAYS = 730;
 const LITTLE_USED = 100; // downloads in the last 30 days
@@ -34,7 +40,23 @@ export async function verify({ need, components, compute }: { need: string; comp
   const tierOf = ({ kind, params }: Entry): Tier | undefined =>
     !budget || !params || kind === 'dataset' ? undefined
       : params * BYTES_PER_PARAM <= budget ? 'fits' : params * QUANTIZED_BYTES_PER_PARAM <= budget ? 'stretch' : 'cloud';
-  const parts: Part[] = await Promise.all(components.map(async (component) => {
+  const queryOf = ({ search: query }: Component) => (query?.task || query?.keywords?.length || query?.phrase ? query : undefined); // {} searches nothing
+  const searches = await Promise.all(components.map((component) => {
+    const query = queryOf(component);
+    return query ? Promise.all([search('model', query), search('dataset', query)]) : [];
+  }));
+  const searched = searches.map((results) => results.flatMap(({ hits }) => hits));
+  // A search that didn't answer may have held any pick: then none can be called memory.
+  const unanswered = searches.flat().reduce((sum, { failed }) => sum + failed.length, 0);
+  // Found by any part's search counts as found: a dataset one part's search turned up isn't memory when another picks it.
+  // And what any part picked isn't "not picked" in another.
+  const picked = new Set(components.flatMap(({ candidates }) => candidates.map(({ id }) => id.toLowerCase())));
+  const how = new Map<string, string[]>();
+  for (const hit of searched.flat()) {
+    const key = `${hit.kind}:${hit.id.toLowerCase()}`;
+    how.set(key, [...new Set([...(how.get(key) ?? []), ...hit.found])]);
+  }
+  const parts: Part[] = await Promise.all(components.map(async (component, i) => {
     // An agent can name a dataset as a model or the other way round: then Hugging Face has it under the other kind.
     const entries = await Promise.all(component.candidates.map(async ({ id, kind = 'model' }) => {
       const entry = await lookUp(kind, id);
@@ -43,7 +65,15 @@ export async function verify({ need, components, compute }: { need: string; comp
       if (other.exists === undefined) return { ...entry, exists: undefined, status: other.status }; // not ruled out: unchecked, not dropped
       return other.exists ? other : entry;
     }));
-    const found: Checked[] = entries.filter((entry) => entry.exists !== false).map((entry) => ({ ...entry, flags: flagsOf(entry), tier: tierOf(entry) }));
+    const query = queryOf(component);
+    const modelHits = searched[i].filter((hit) => hit.kind === 'model');
+    // A part that skipped the search still gets its picks marked: what no search turned up came from memory.
+    const found: Checked[] = entries.filter((entry, at, all) => entry.exists !== false &&
+      all.findIndex((other) => other.id.toLowerCase() === entry.id.toLowerCase()) === at).map((entry) => ({ // gpt2 and GPT2 are one model
+      ...entry, flags: flagsOf(entry), tier: tierOf(entry),
+      found: how.get(`${entry.kind}:${entry.id.toLowerCase()}`) ?? (unanswered ? undefined : []),
+    })).sort(memoryLast);
+    const named = new Set([...picked, ...found.map((entry) => entry.id.toLowerCase())]); // and Hugging Face's spelling of each
     const models = found.filter((entry) => entry.kind === 'model');
     const bigger = models.filter((entry) => entry.tier === 'stretch' || entry.tier === 'cloud');
     const model = models.find((entry) => !bigger.includes(entry));
@@ -57,18 +87,23 @@ export async function verify({ need, components, compute }: { need: string; comp
       alternates: found.filter((entry) => entry !== model && entry !== dataset && !bigger.includes(entry)),
       dropped: entries.filter((entry) => entry.exists === false).map((entry) => entry.id),
       missing,
+      unpicked: component.verdict === 'WRITE' ? [] : modelHits.filter((hit) => !named.has(hit.id.toLowerCase())).slice(0, UNPICKED),
+      unsearched: component.verdict !== 'WRITE' && !query,
     };
   }));
+  const unsearched = parts.filter((part) => part.unsearched).map((part) => part.id);
   const recall = parts.filter((part) => part.missing.length).map((part) => `${part.id} (a ${part.missing.join(' and a ')})`);
   const result = {
     need,
     components: parts,
-    nextAction: recall.length ? 'RECALL_REPLACEMENTS' : 'DONE',
-    instructions: recall.length
-      ? `These parts need new candidates: ${recall.join(', ')}. Propose ids for exactly those (not the dropped ones again), then call where_my_hug_verify again with the whole slate.`
-      : "Show the user the markdown report as it is. Its facts came from Hugging Face just now; don't restate them from memory.",
+    nextAction: unsearched.length ? 'SEARCH_FIRST' : recall.length ? 'RECALL_REPLACEMENTS' : 'DONE',
+    instructions: unsearched.length
+      ? `These parts were picked without searching: ${unsearched.join(', ')}. Call where_my_hug_search for them, pick their candidates from what it finds, then call where_my_hug_verify again with the whole slate and each part's search query.`
+      : recall.length
+        ? `These parts need new candidates: ${recall.join(', ')}. Pick them from where_my_hug_search's results (not the dropped ones again; search again with other words if those ran out), then call where_my_hug_verify again with the whole slate.`
+        : "Show the user the markdown report as it is. Its facts came from Hugging Face just now; don't restate them from memory.",
   };
-  return { markdown: report(need, parts, compute), result };
+  return { markdown: report(need, parts, compute, unanswered), result };
 }
 
 /** What would bite later, in Hugging Face's own facts. */
@@ -95,10 +130,14 @@ const FLAG_WORDS: Record<string, string> = {
   LITTLE_USED: 'almost nobody downloads it',
 };
 
-const url = ({ id, kind }: Entry) => `https://huggingface.co/${kind === 'dataset' ? 'datasets/' : ''}${id}`;
+const url = ({ id, kind }: { id: string; kind: Kind }) => `https://huggingface.co/${kind === 'dataset' ? 'datasets/' : ''}${id}`;
 const count = (n: number) => (n >= 1e9 ? `${(n / 1e9).toFixed(1)}B` : n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n));
 const gb = (params: number, bytes: number) => `~${((params * bytes) / 1e9).toFixed(1)} GB`;
-const brief = ({ flags }: Checked) => (flags.length ? ` (${flags.map((flag) => flag.toLowerCase().replace('_', ' ')).join(', ')})` : '');
+const brief = ({ flags, found }: Checked) => {
+  const notes = [...flags.map((flag) => flag.toLowerCase().replace('_', ' ')), ...(found?.length === 0 ? ['from memory'] : [])];
+  return notes.length ? ` (${notes.join(', ')})` : '';
+};
+const unpicked = (hit: Hit) => `[${hit.id}](${url(hit)})${hit.downloads !== undefined ? ` (${count(hit.downloads)} downloads a month)` : ''}`;
 const age = (iso: string) => {
   const days = Math.round((Date.now() - Date.parse(iso)) / 864e5);
   return days < 1 ? 'today' : days < 60 ? `${days} days ago` : days < 730 ? `${Math.round(days / 30)} months ago` : `${Math.round(days / 365)} years ago`;
@@ -114,9 +153,10 @@ function pick(label: string, entry: Checked, tune = false): string[] {
     entry.likes !== undefined && `${count(entry.likes)} likes`,
     entry.updated && `updated ${age(entry.updated)}`,
     entry.baseModels && `built on ${entry.baseModels.join(', ')}`,
+    entry.found?.length && `found: ${entry.found.join(', ')}`,
   ].filter(Boolean).join('  ·  ');
   return [
-    `**${label}: [${entry.id}](${url(entry)})**`, facts,
+    `**${label}: [${entry.id}](${url(entry)})**${entry.found?.length === 0 ? " _from memory: the search didn't turn it up_" : ''}`, facts,
     ...(entry.flags.length ? ['', `Watch out: ${entry.flags.map((flag) => FLAG_WORDS[flag]).join('; ')}.`] : []),
     '',
   ];
@@ -131,10 +171,12 @@ function upgrade(entry: Checked): string {
   return `- [${entry.id}](${url(entry)}): ${[size, where].filter(Boolean).join(', ')}${brief(entry)}`;
 }
 
-function report(need: string, parts: Part[], compute?: string): string {
+function report(need: string, parts: Part[], compute: string | undefined, unanswered: number): string {
   const named = parts.reduce((sum, part) => sum + part.candidates.length, 0);
   const dropped = parts.reduce((sum, part) => sum + part.dropped.length, 0);
-  const unchecked = parts.flatMap((part) => [part.model, part.dataset, ...part.bigger, ...part.alternates]).filter((entry) => entry?.flags.includes('UNCHECKED')).length;
+  const kept = parts.flatMap((part) => [part.model, part.dataset, ...part.bigger, ...part.alternates]);
+  const unchecked = kept.filter((entry) => entry?.flags.includes('UNCHECKED')).length;
+  const remembered = kept.filter((entry) => entry?.found?.length === 0).length;
   const tally = (['USE', 'TUNE', 'TRAIN', 'WRITE'] as const)
     .map((verdict) => [parts.filter((part) => part.verdict === verdict).length, { USE: 'to use as is', TUNE: 'to fine-tune', TRAIN: 'to train', WRITE: 'to write' }[verdict]] as const)
     .filter(([n]) => n).map(([n, words]) => `${n} ${words}`);
@@ -142,7 +184,7 @@ function report(need: string, parts: Part[], compute?: string): string {
     "# Where my hug at?", '',
     `**${need}**`, '',
     `${parts.length} ${parts.length === 1 ? 'part' : 'parts'}: ${tally.join(', ')}.`, '',
-    `_Checked on Hugging Face just now: ${named} named, ${dropped} not there and dropped${unchecked ? `, ${unchecked} Hugging Face didn't answer for` : ''}._`,
+    `_Searched and checked on Hugging Face just now: ${named} named${remembered ? `, ${remembered} from memory rather than the search` : ''}, ${dropped} not there and dropped${unchecked ? `, ${unchecked} Hugging Face didn't answer for` : ''}${unanswered ? `; ${unanswered} ${unanswered === 1 ? 'search' : 'searches'} didn't answer, so no pick is marked from memory` : ''}._`,
   ];
   for (const part of parts) {
     lines.push('', '---', '', `## ${part.verdict}  ·  ${part.name}`, '', `_${part.role}_`, '');
@@ -155,6 +197,10 @@ function report(need: string, parts: Part[], compute?: string): string {
     lines.push(part.rationale);
     if (part.bigger.length) lines.push('', `If you can make it work, bigger than ${compute}:`, ...part.bigger.map(upgrade));
     if (part.alternates.length) lines.push('', `Also: ${part.alternates.map((entry) => `[${entry.id}](${url(entry)})${brief(entry)}`).join('  ·  ')}`);
+    if (part.unpicked.length) {
+      lines.push('', part.verdict === 'TRAIN' ? '**The search found models for this job: check them before training one.**' : 'The search also found, not picked:',
+        ...part.unpicked.map((hit) => `- ${unpicked(hit)}: found as ${hit.found.join(', ')}`));
+    }
     if (part.dropped.length) lines.push('', `Dropped, not on Hugging Face (or private): ${part.dropped.join(', ')}`);
   }
   const width = Math.max(...parts.map((part) => part.name.length));

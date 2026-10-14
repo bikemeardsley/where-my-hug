@@ -3,6 +3,6 @@
   "private": true,
   "description": "Pins the npm package the plugin launches, so its install is locked and verifiable.",
   "dependencies": {
-    "where-my-hug": "0.1.1"
+    "where-my-hug": "0.2.0"
   }
 }

@@ -20,12 +20,13 @@ attacker gains.
 
 ## What Where My Hug At? touches
 
-- **The network:** `GET` requests to `huggingface.co/api`, one per model or
-  dataset id an agent names, to check it exists and read its facts. Nothing
-  else is contacted.
+- **The network:** `GET` requests to `huggingface.co/api`: searches built from
+  what the agent writes for each part of a need (a task tag, keywords, a few
+  words about the job), and one lookup per model or dataset id it picks, to
+  check it exists and read its facts. Nothing else is contacted.
 - **`HF_TOKEN`:** read from the environment if set, sent only to
   `huggingface.co`, and never written to a report, a log or a file.
 - **Your machine:** it reads no files, writes no files and runs no commands.
-- **`--http`:** serves the same two tools on a port, on 127.0.0.1 unless you
+- **`--http`:** serves the same three tools on a port, on 127.0.0.1 unless you
   give it a host. Anyone who can reach that port can use them, and with
   `HF_TOKEN` set that includes looking up private repos the token can see.

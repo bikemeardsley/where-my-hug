@@ -43,14 +43,15 @@ The token is sent only to huggingface.co.
 
 ## Check it works
 
-1. The server should show as connected with two tools: `where_my_hug` and
-   `where_my_hug_verify`. The first start downloads the package and can take
-   a few seconds.
+1. The server should show as connected with three tools: `where_my_hug`,
+   `where_my_hug_search` and `where_my_hug_verify`. The first start downloads
+   the package and can take a few seconds.
 2. Try it: ask "Where my hug at for transcribing handwritten recipe cards?"
    Call `where_my_hug` with the need. It returns questions about compute,
-   license, stack and data; ask the user, call it again with the answers,
-   follow the method it returns, then call `where_my_hug_verify` and show the
-   user the report it returns.
+   license, stack and data; ask the user, call it again with the answers, and
+   follow the method it returns: search each part with `where_my_hug_search`,
+   pick from what it finds, then call `where_my_hug_verify` and show the user
+   the report it returns.
 
 ## If it doesn't start
 

@@ -317,10 +317,11 @@ npx skills add bikemeardsley/where-my-hug
 ```
 
 The skill uses the MCP tools when they're connected, and otherwise runs the
-same two steps from a shell:
+same three steps from a shell:
 
 ```sh
 npx -y where-my-hug rubric < details.json
+npx -y where-my-hug search < parts.json
 npx -y where-my-hug verify < slate.json
 ```
 
