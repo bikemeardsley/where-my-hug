@@ -13,6 +13,7 @@
   <a href="https://registry.modelcontextprotocol.io/?q=where-my-hug"><img src="https://img.shields.io/badge/MCP_Registry-111111?logo=modelcontextprotocol&logoColor=white" alt="In the official MCP Registry"></a>
   <a href="https://skills.sh/bikemeardsley/where-my-hug/where-my-hug"><img src="https://img.shields.io/badge/skills.sh-111111" alt="On skills.sh"></a>
   <a href="https://cursor.directory/plugins/where-my-hug-at"><img src="https://img.shields.io/badge/cursor.directory-111111?logo=cursor&logoColor=white" alt="On cursor.directory"></a>
+  <a href="https://smithery.ai/skills/bikemeardsley/where-my-hug"><img src="https://img.shields.io/badge/Smithery-111111" alt="On Smithery"></a>
   <a href="https://huggingface.co/models"><img src="https://img.shields.io/badge/Hugging_Face-FFD21E?logo=huggingface&logoColor=black" alt="Hugging Face"></a>
   <br>
   <a href="#development"><img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"></a>
