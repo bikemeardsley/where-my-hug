@@ -39,4 +39,4 @@ JSON to a file and pass it on stdin:
 Show the user the markdown report as it comes back, without restating its
 facts from memory. Public models and datasets need no token. Private or gated
 ones need the user's Hugging Face token in the server's own configuration
-(the Claude Code plugin asks for it); never ask for one in the chat.
+(a plugin's settings ask for it); never ask for one in the chat.

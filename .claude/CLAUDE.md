@@ -31,6 +31,14 @@ model and dataset checked live on Hugging Face. Start with
   the new version is on npm, for the directory's launcher lock); then `npm publish` (staged: approve it on
   npmjs.com), a `vX.Y.Z` tag and GitHub release, and `mcp-publisher publish`
   for the MCP registry.
+- **Codex / ChatGPT plugin directory.** Being submitted at
+  platform.openai.com/plugins as a skills-only plugin: the portal refuses
+  `userConfig` and local `npx` MCP servers, so the upload is
+  `where-my-hug-codex.zip` (gitignored, repo root) holding
+  `.claude-plugin/plugin.json` minus `userConfig` and `mcpServers`, the icon,
+  and `plugin/skills/`. Rebuild it after a release or a skill change, and keep
+  the skill provider-neutral (no Claude-only wording). Badge only once it's
+  approved.
 - **The diagram** (`.github/flow.svg` and `flow-dark.svg`, kept in step) is
   drawn with the `/diagram-design` skill, which runs locally, not in the cloud: change
   it with that skill, not by hand. `.diagram-design` points the skill at the
