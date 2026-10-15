@@ -47,12 +47,12 @@ model and dataset checked live on Hugging Face. Start with
 - **Kitbash is GPL-2.0 and not ours.** Never its code or text. The README
   no longer credits it (decided 2026-10-14): the search-first design is our
   own, and only the goal, reuse before building, is shared.
-- **Git for Me** (`P:\windsurf\git-for-me`, public as bikemeardsley/git-for-me)
+- **Git for Me!** (`P:\windsurf\git-for-me`, public as bikemeardsley/git-for-me)
   is the companion: the same tool for open-source repos on GitHub, GitLab
   and Codeberg. Each README links the other; keep the two in step where they
   share shape. It found a gap this one shares: a part searched again turns
   its earlier finds into "from memory", since verify takes one search per
-  part; Git for Me now takes a list of up to 3, which is worth porting.
+  part; Git for Me! now takes a list of up to 3, which is worth porting.
 - Public on bikemeardsley/where-my-hug and npm (where-my-hug), MIT. `HF_TOKEN` is read
   from the environment (the Claude plugin asks for it and passes it in), sent
   only to huggingface.co, and never recorded.

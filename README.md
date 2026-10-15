@@ -31,7 +31,7 @@ Every model it names is real, current, and sized for your hardware.
 Works with Claude Code, Codex, Copilot, Cursor, Gemini CLI, Cline, Devin, Open
 WebUI and any other MCP client, or as an Agent Skill.
 
-Its companion, [Git for Me](https://github.com/bikemeardsley/git-for-me), does
+Its companion, [Git for Me!](https://github.com/bikemeardsley/git-for-me), does
 the same for open-source repos on GitHub, GitLab and Codeberg.
 
 <p align="center">
