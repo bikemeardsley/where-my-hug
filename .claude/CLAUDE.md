@@ -24,7 +24,8 @@ model and dataset checked live on Hugging Face. Start with
   plugin directory requires; the README and skill don't.
 - **A release** bumps the version in `package.json`, `server.json` (twice),
   `plugin/.claude-plugin/plugin.json` (`version` and the pin),
-  `plugin/plugin.json`, `plugin/mcp.json` (the pin), `mcp.json`,
+  `plugin/plugin.json`, `plugin/mcp.json` (the pin), `plugin/mcp_config.json`
+  (the same servers, for Antigravity), `mcp.json`,
   `gemini-extension.json` and `plugin/package.json` (then
   `npm install --package-lock-only --ignore-scripts` in `plugin/` once
   the new version is on npm, for the directory's launcher lock); then `npm publish` (staged: approve it on
