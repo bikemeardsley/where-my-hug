@@ -31,14 +31,19 @@ model and dataset checked live on Hugging Face. Start with
   the new version is on npm, for the directory's launcher lock); then `npm publish` (staged: approve it on
   npmjs.com), a `vX.Y.Z` tag and GitHub release, and `mcp-publisher publish`
   for the MCP registry.
-- **Codex / ChatGPT plugin directory.** Being submitted at
-  platform.openai.com/plugins as a skills-only plugin: the portal refuses
-  `userConfig` and local `npx` MCP servers, so the upload is
-  `where-my-hug-codex.zip` (gitignored, repo root) holding
-  `.claude-plugin/plugin.json` minus `userConfig` and `mcpServers`, the icon,
-  and `plugin/skills/`. Rebuild it after a release or a skill change, and keep
-  the skill provider-neutral (no Claude-only wording). Badge only once it's
-  approved.
+- **Codex / ChatGPT plugin directory: likely a dead end, for a while or for
+  good.** Tried 2026-10-15. The portal (platform.openai.com/plugins) answered
+  "We are not accepting more skills-only submissions at this time", and a
+  local `npx` MCP server only gets in through the "desktop-only" path, which
+  is for OpenAI-approved partners and uploads through that same closed
+  skills-only form. Hosting the server for the remote-MCP route is ruled out.
+  Don't spend time on it unless OpenAI reopens skills-only submissions. If it
+  does: `where-my-hug-codex.zip` (gitignored, repo root) holds
+  `.claude-plugin/plugin.json` minus `userConfig` and `mcpServers` (the portal
+  refuses both), the icon and `plugin/skills/`; rebuild it first. The listing
+  also wants a subtitle of 30 characters or fewer, website, support, privacy
+  (PRIVACY.md) and terms (TERMS.md) URLs, and an app icon. Keep the skill
+  provider-neutral either way.
 - **The diagram** (`.github/flow.svg` and `flow-dark.svg`, kept in step) is
   drawn with the `/diagram-design` skill, which runs locally, not in the cloud: change
   it with that skill, not by hand. `.diagram-design` points the skill at the
