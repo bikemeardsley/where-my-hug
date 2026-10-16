@@ -44,6 +44,12 @@ model and dataset checked live on Hugging Face. Start with
   also wants a subtitle of 30 characters or fewer, website, support, privacy
   (PRIVACY.md) and terms (TERMS.md) URLs, and an app icon. Keep the skill
   provider-neutral either way.
+- **GitHub Copilot plugin directory: rejected, closed.** Decided 2026-10-15:
+  not a fit, since it serves one particular way of working and Copilot can
+  already search Hugging Face itself. There is no way to resubmit; don't try
+  the directory again. The self-hosted route (`copilot plugin marketplace
+  add`) still works, so `plugin/plugin.json` and `plugin/mcp.json` stay in the
+  release checklist for it.
 - **The diagram** (`.github/flow.svg` and `flow-dark.svg`, kept in step) is
   drawn with the `/diagram-design` skill, which runs locally, not in the cloud: change
   it with that skill, not by hand. `.diagram-design` points the skill at the
