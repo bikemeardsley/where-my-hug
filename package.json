@@ -1,6 +1,6 @@
 {
   "name": "where-my-hug",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Where my hug at? Tell your AI agent what you want a model to do. It finds what Hugging Face already has for it, what to fine-tune, and what's just code, with every model checked live.",
   "license": "MIT",
   "mcpName": "io.github.bikemeardsley/where-my-hug",
