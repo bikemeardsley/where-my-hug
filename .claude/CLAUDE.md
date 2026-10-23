@@ -29,10 +29,9 @@ model and dataset checked live on Hugging Face. Start with
   `gemini-extension.json` and `plugin/package.json` (then
   `npm install --package-lock-only --ignore-scripts` in `plugin/` once
   the new version is on npm, for the directory's launcher lock); then a
-  `vX.Y.Z` GitHub release on main, which publishes to npm by itself
-  (`.github/workflows/release.yml`, Trusted Publishing, no token; it stops if
-  any manifest is at another version), and `mcp-publisher publish` for the
-  MCP registry.
+  `vX.Y.Z` GitHub release on main, which publishes to npm and then the MCP
+  Registry by itself (`.github/workflows/release.yml`, OIDC, no token; it
+  stops if any manifest is at another version).
 - **Codex / ChatGPT plugin directory: likely a dead end, for a while or for
   good.** Tried 2026-10-15. The portal (platform.openai.com/plugins) answered
   "We are not accepting more skills-only submissions at this time", and a
