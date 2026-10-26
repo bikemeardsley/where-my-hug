@@ -46,12 +46,35 @@ const FULL_TEXT: Record<string, object[]> = {
   ],
   dataset: [{ type: 'dataset', name: 'acme/pages', likes: 1 }],
 };
-const asked: { path: string; query: string; authorization: string | null }[] = [];
+// The other hubs, a dataset or two each: their searches find them for any words, their lookups find them and nothing
+// else, answering as each hub does for a missing one (Kaggle: 403).
+const CARDS = {
+  ref: 'acme/cards', title: 'Acme cards', licenseName: 'CC BY-NC-SA 4.0', downloadCount: 5_000, voteCount: 12, lastUpdated: now,
+  totalBytes: 2.5e9, url: 'https://www.kaggle.com/datasets/acme/cards',
+};
+const SCANS = {
+  id: 42, metadata: { title: 'Card scans', license: { id: 'cc-by-4.0' } }, stats: { downloads: 300 }, updated: now,
+  files: [{ size: 4e5 }, { size: 2e5 }], links: { self_html: 'https://zenodo.org/records/42' },
+};
+const ELSEWHERE: Record<string, object> = {
+  'www.kaggle.com/api/v1/datasets/list': [CARDS],
+  'www.kaggle.com/api/v1/datasets/view/acme/cards': CARDS,
+  'zenodo.org/api/records': { hits: { hits: [SCANS] } },
+  'zenodo.org/api/records/42': SCANS,
+  'www.modelscope.cn/api/v1/dolphin/datasets': { Code: 200, Data: [] },
+  'api.roboflow.com/universe/search': { results: [{ name: 'Slabs', images: 1_200, url: 'https://universe.roboflow.com/acme/slabs' }] },
+  'api.roboflow.com/acme/slabs': { project: { name: 'Slabs', images: 1_200, license: 'CC BY 4.0' } },
+};
+const asked: { host: string; path: string; query: string; authorization: string | null }[] = [];
 let flaky = 0;
 globalThis.fetch = async (input, init) => {
   const url = new URL(String(input));
   const path = url.pathname.replace('/api/', '');
-  asked.push({ path, query: url.search, authorization: new Headers(init?.headers).get('authorization') });
+  asked.push({ host: url.hostname, path, query: url.search, authorization: new Headers(init?.headers).get('authorization') });
+  if (url.hostname !== 'huggingface.co') {
+    const found = ELSEWHERE[url.hostname + url.pathname];
+    return found ? Response.json(found) : new Response('{}', { status: url.hostname === 'www.kaggle.com' ? 403 : 404 });
+  }
   if (path === 'search/full-text') {
     if (url.searchParams.get('q') === 'down') throw new TypeError('fetch failed');
     if (url.searchParams.get('q') === 'garbled') return Response.json(42);
@@ -124,15 +147,16 @@ test("keeps the agent's order, drops what isn't there and flags what bites", asy
   assert.match(markdown, /Also: \[acme\/named-only\]\(https:\/\/huggingface\.co\/acme\/named-only\) \(model, own terms, from memory\)/);
   assert.match(markdown, /2\. tuner {3}TUNE {3}model acme\/old-research \+ dataset acme\/pages\n.*\n.*\n5\. bigjob {2}USE {4}model acme\/colossal \(cloud\)\n```/);
   assert.match(markdown, /```\n\n---\n\n## Start here\n\nTry acme\/reader first\.$/);
-  assert.match(markdown, /9 named, 6 from memory rather than the search, 1 not there and dropped, 1 Hugging Face didn't answer for/);
+  assert.match(markdown, /9 named, 6 from memory rather than the search, 1 not there and dropped, 1 not checked/);
   assert.match(markdown, /If you can make it work, models too big for one 24 GB GPU:\n- \[acme\/giant\]\(https:\/\/huggingface\.co\/acme\/giant\): a stretch: ~31\.2 GB to run, ~7\.8 GB quantized to 4 bits \(gated, own terms, from memory\)\n- \[acme\/colossal\]\(https:\/\/huggingface\.co\/acme\/colossal\): cloud: ~168\.0 GB to run, hosted by together \(from memory\)\n/);
   assert.match(markdown, /Models the search also found, not picked:\n- \[acme\/new-hot\]\(https:\/\/huggingface\.co\/acme\/new-hot\) \(0 downloads a month\): found as trending for image-text-to-text\n- \[acme\/card-only\]\(https:\/\/huggingface\.co\/acme\/card-only\): found as card text\n- \[acme\/popular\]\(https:\/\/huggingface\.co\/acme\/popular\) \(1\.0M downloads a month\): found as most downloaded for image-text-to-text/);
   assert.match(markdown, /Nothing named runs on one 24 GB GPU: the options below need more/);
   assert.match(markdown, /No model: write this one/);
   assert.match(markdown, /776\.0M parameters \(~1\.9 GB to run\)/); // what it needs, whatever the compute turns out to be
 
-  // The token goes to Hugging Face, and nowhere else: not into the report or the JSON.
-  assert.ok(asked.every((call) => call.authorization === 'Bearer hf_secret_test_token'));
+  // The token goes to Hugging Face, and nowhere else: not to the other hubs, nor into the report or the JSON.
+  assert.ok(asked.every((call) => call.authorization === (call.host === 'huggingface.co' ? 'Bearer hf_secret_test_token' : null)));
+  assert.ok(asked.some((call) => call.host === 'zenodo.org'));
   assert.doesNotMatch(markdown + JSON.stringify(result), /hf_secret/);
 });
 
@@ -163,9 +187,9 @@ test('sends the agent back for parts left with nothing', async () => {
   // Hugging Face didn't answer the first time; that isn't remembered, so it's asked again and answers.
   assert.deepEqual(result.components[6].model?.flags, []);
   assert.equal(asked.filter((call) => call.path === 'models/acme/flaky').length, 2);
-  assert.match(markdown, /No dataset on Hugging Face for this yet: it needs new candidates/);
+  assert.match(markdown, /No dataset for this yet: it needs new candidates/);
   assert.match(markdown, /\(~1\.9 GB to run; to fine-tune, ~0\.8 GB with QLoRA, ~12\.4 GB in full\)/); // the TUNE part's model
-  assert.match(markdown, /No dataset on Hugging Face for this: collect the data/);
+  assert.match(markdown, /No dataset for this on any hub: collect the data/);
   assert.doesNotMatch(markdown, /Start here/); // none given, none shown
 });
 
@@ -221,4 +245,41 @@ test('searches every way in, takes the ways in turns, and says which failed', as
   assert.match(cards, /Datasets:\n- acme\/pages {2}· {2}1 likes {2}· {2}found: card text\n/);
   const listedData = await find([{ id: 'p', name: 'P', task: 'image-to-text' }]);
   assert.match(listedData, /^- acme\/pages {2}· {2}image-to-text {2}· {2}under 1K rows {2}· {2}license cc-by-4\.0 /m);
+});
+
+test('searches and checks datasets on the other hubs, each under its own prefix, and Roboflow only with its key', async () => {
+  const before = asked.length;
+  process.env.ROBOFLOW_API_KEY = 'rf_secret_test_key';
+  const found = await find([{ id: 'cards', name: 'Cards', phrase: 'card photos' }]);
+  const { markdown, result } = await verify({
+    need: 'grade cards',
+    components: [part('grader', 'TRAIN', [
+      { id: 'kaggle:acme/cards', kind: 'dataset' }, { id: 'zenodo:42' }, { id: 'roboflow:acme/slabs', kind: 'dataset' },
+      { id: 'kaggle:acme/gone', kind: 'dataset' }, { id: 'modelscope:acme/gone', kind: 'dataset' }, { id: 'zenodo:../1', kind: 'dataset' },
+    ], { phrase: 'card photos' })],
+  });
+  delete process.env.ROBOFLOW_API_KEY;
+
+  // In turns, a hub after another; ModelScope found nothing.
+  assert.match(found, /Datasets on other hubs:\n- kaggle:acme\/cards {2}· {2}"Acme cards" {2}· {2}2\.5 GB {2}· {2}license CC BY-NC-SA 4\.0 {2}· {2}5\.0k downloads in all {2}· {2}12 likes {2}· {2}found: Kaggle search\n- zenodo:42 {2}· {2}"Card scans" {2}· {2}600 kB {2}· {2}license cc-by-4\.0 {2}· {2}300 downloads in all {2}· {2}found: Zenodo search\n- roboflow:acme\/slabs {2}· {2}"Slabs" {2}· {2}1200 images {2}· {2}found: Roboflow Universe search\n/);
+  assert.doesNotMatch(found, /Not searched/);
+
+  const [grader] = result.components;
+  assert.deepEqual([grader.dataset?.id, grader.dataset?.flags, grader.dataset?.found], ['kaggle:acme/cards', ['NON_COMMERCIAL'], ['Kaggle search']]);
+  assert.deepEqual(grader.alternates.map((entry) => [entry.id, entry.kind, entry.flags]), [['zenodo:42', 'dataset', []], ['roboflow:acme/slabs', 'dataset', []]]);
+  assert.deepEqual(grader.dropped, ['kaggle:acme/gone', 'modelscope:acme/gone', 'zenodo:../1']);
+  assert.match(markdown, /\*\*Data: \[kaggle:acme\/cards\]\(https:\/\/www\.kaggle\.com\/datasets\/acme\/cards\)\*\*\n"Acme cards" {2}· {2}2\.5 GB {2}· {2}license CC BY-NC-SA 4\.0 {2}· {2}5\.0k downloads in all {2}· {2}12 likes {2}· {2}updated today {2}· {2}found: Kaggle search\n/);
+  assert.match(markdown, /Also: \[zenodo:42\]\(https:\/\/zenodo\.org\/records\/42\) \(dataset\) {2}· {2}\[roboflow:acme\/slabs\]\(https:\/\/universe\.roboflow\.com\/acme\/slabs\) \(dataset\)/);
+
+  // Roboflow's key goes to Roboflow and nowhere else, and a bad id is never sent.
+  const calls = asked.slice(before);
+  assert.ok(calls.some((call) => call.host === 'api.roboflow.com'));
+  assert.ok(calls.every((call) => call.authorization === (call.host === 'api.roboflow.com' ? 'Bearer rf_secret_test_key' : null)));
+  assert.ok(!calls.some((call) => call.path.includes('..')));
+  assert.doesNotMatch(markdown + JSON.stringify(result), /rf_secret/);
+
+  // Without the key, Roboflow is left out and says so, and a pick from it is unchecked, not dropped.
+  assert.match(await find([{ id: 'cards', name: 'Cards', phrase: 'card photos' }]), /Not searched: Roboflow Universe \(it needs ROBOFLOW_API_KEY\)\./);
+  const keyless = await verify({ need: 'x', components: [part('grader', 'TRAIN', [{ id: 'roboflow:acme/slabs', kind: 'dataset' }], { phrase: 'card photos' })] });
+  assert.deepEqual([keyless.result.components[0].dataset?.flags, keyless.result.components[0].dropped], [['UNCHECKED'], []]);
 });

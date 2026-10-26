@@ -46,7 +46,9 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
      "keywords": ["ocr", "handwritten"],   (1 to 3 single words a fitting model's name might hold)
      "phrase": "handwritten text recognition" }   (the job in a few words, as a model card would put it)
    It searches the task's most downloaded and trending models, names holding each keyword, and the text of model and
-   dataset cards. If a part comes back thin, search again with other words; a job can sit under more than one task tag.
+   dataset cards; and, for datasets, Kaggle, Zenodo, ModelScope and Roboflow Universe by the phrase, which Kaggle matches
+   word for word, so keep it to what a dataset's title would say. If a part comes back thin, search again with other
+   words; a job can sit under more than one task tag.
 
 4. From what the search found, give each part its verdict:
    USE    a model the search found does this job well enough as it is.
@@ -55,7 +57,8 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
    Then pick candidates from the results, by what they say (task, card, use, recency), not by what you remember. For USE and TUNE,
    1 to 4 models, best fit first: at least one that runs on the compute; then, where a bigger model would clearly do better, one a
    little over it (it may fit quantized) and one far over it that could run in the cloud. Say in the rationale what the bigger ones
-   would buy. For TUNE and TRAIN, datasets too (kind "dataset"). A Space is a demo: pick the model behind it. Fit the stack: a model
+   would buy. For TUNE and TRAIN, datasets too (kind "dataset"), from any hub; another hub's keeps its prefix ("kaggle:owner/name").
+   Weigh a dataset by its size and terms as well as its fit: a handful of rows or no license is rarely worth starting from. A Space is a demo: pick the model behind it. Fit the stack: a model
    the stack can't load means running a server, so say so. A model you know that the search didn't turn up may be added, but it
    goes after the search's picks and the report marks it as from memory.
 
@@ -74,5 +77,5 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
      "recommendation": "the one or two picks to act on first and why (fit, license, use), then the ones to skip and why" }
    Pass each part's last search unchanged; a WRITE part has none. The recommendation ends the report as "Start here": with many
    parts and alternates, it's what tells the user where to begin. Show the user nothing until it answers: its report is what they
-   see, with every fact checked on Hugging Face.`;
+   see, with every fact checked live on its hub.`;
 }

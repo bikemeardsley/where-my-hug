@@ -1,9 +1,10 @@
-// The last step: every candidate the agent picked is looked up on Hugging Face. One that isn't there is dropped; the
+// The last step: every candidate the agent picked is looked up on its hub. One that isn't there is dropped; the
 // rest are flagged for what would bite later (gated access, terms you can't ship under, years without an update,
 // almost no use) and sized against the compute. Each part's search is run again (from the cache, mostly), so the
 // report knows what Hugging Face turned up: a pick the search found outranks one the agent only remembered, and what
 // the search found but the agent didn't pick is shown, so nothing it turned up is hidden. What runs on the compute
 // heads each part; bigger models follow, a stretch or cloud only, as what might do better if it can be made to work.
+import { lookUpElsewhere, searchElsewhere, sourceOf } from './elsewhere.ts';
 import { lookUp, search, type Entry, type Hit, type Kind, type Query } from './hub.ts';
 
 export type Verdict = 'USE' | 'TUNE' | 'TRAIN' | 'WRITE';
@@ -43,7 +44,7 @@ export async function verify({ need, components, compute, recommendation }: { ne
   const queryOf = ({ search: query }: Component) => (query?.task || query?.keywords?.length || query?.phrase ? query : undefined); // {} searches nothing
   const searches = await Promise.all(components.map((component) => {
     const query = queryOf(component);
-    return query ? Promise.all([search('model', query), search('dataset', query)]) : [];
+    return query ? Promise.all([search('model', query), search('dataset', query), searchElsewhere(query)]) : [];
   }));
   const searched = searches.map((results) => results.flatMap(({ hits }) => hits));
   // A search that didn't answer may have held any pick: then none can be called memory.
@@ -59,6 +60,7 @@ export async function verify({ need, components, compute, recommendation }: { ne
   const parts: Part[] = await Promise.all(components.map(async (component, i) => {
     // An agent can name a dataset as a model or the other way round: then Hugging Face has it under the other kind.
     const entries = await Promise.all(component.candidates.map(async ({ id, kind = 'model' }) => {
+      if (sourceOf(id)) return lookUpElsewhere(id); // another hub's: a dataset, whatever it was named as
       const entry = await lookUp(kind, id);
       if (entry.exists !== false) return entry;
       const other = await lookUp(kind === 'model' ? 'dataset' : 'model', id);
@@ -101,7 +103,7 @@ export async function verify({ need, components, compute, recommendation }: { ne
       ? `These parts were picked without searching: ${unsearched.join(', ')}. Call where_my_hug_search for them, pick their candidates from what it finds, then call where_my_hug_verify again with the whole slate and each part's search query.`
       : recall.length
         ? `These parts need new candidates: ${recall.join(', ')}. Pick them from where_my_hug_search's results (not the dropped ones again; search again with other words if those ran out), then call where_my_hug_verify again with the whole slate.`
-        : "Show the user the markdown report as it is. Its facts came from Hugging Face just now; don't restate them from memory.",
+        : "Show the user the markdown report as it is. Its facts came from Hugging Face and the other hubs just now; don't restate them from memory.",
   };
   return { markdown: report(need, parts, compute, unanswered, recommendation), result };
 }
@@ -121,7 +123,7 @@ function flagsOf(entry: Entry): string[] {
 }
 
 const FLAG_WORDS: Record<string, string> = {
-  UNCHECKED: "Hugging Face didn't answer, so it's unchecked",
+  UNCHECKED: "its hub didn't answer (or wants a key that isn't set), so it's unchecked",
   GATED: 'gated: accept its terms on Hugging Face before downloading',
   NO_LICENSE: 'no license on its card: find its terms before relying on it',
   NON_COMMERCIAL: 'non-commercial or research-only terms',
@@ -130,7 +132,7 @@ const FLAG_WORDS: Record<string, string> = {
   LITTLE_USED: 'almost nobody downloads it',
 };
 
-const url = ({ id, kind }: { id: string; kind: Kind }) => `https://huggingface.co/${kind === 'dataset' ? 'datasets/' : ''}${id}`;
+const url = ({ id, kind, page }: { id: string; kind: Kind; page?: string }) => page ?? `https://huggingface.co/${kind === 'dataset' ? 'datasets/' : ''}${id}`;
 const count = (n: number) => (n >= 1e9 ? `${(n / 1e9).toFixed(1)}B` : n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n));
 const gb = (params: number, bytes: number) => `~${((params * bytes) / 1e9).toFixed(1)} GB`;
 const brief = ({ flags, found }: Checked, ...first: string[]) => {
@@ -146,10 +148,11 @@ const age = (iso: string) => {
 /** A pick in full: its link, then Hugging Face's facts about it, then what to watch. */
 function pick(label: string, entry: Checked, tune = false): string[] {
   const facts = [
-    entry.task, entry.library, entry.rows && `${entry.rows} rows`, entry.license && `license ${entry.license}`,
+    entry.title && `"${entry.title}"`, entry.task, entry.library, entry.size, entry.license && `license ${entry.license}`,
     entry.params && `${count(entry.params)} parameters (${gb(entry.params, BYTES_PER_PARAM)} to run${tune
       ? `; to fine-tune, ${gb(entry.params, QLORA_BYTES_PER_PARAM)} with QLoRA, ${gb(entry.params, FULL_TUNE_BYTES_PER_PARAM)} in full` : ''})`,
     entry.downloads !== undefined && `${count(entry.downloads)} downloads a month`,
+    entry.downloadsEver !== undefined && `${count(entry.downloadsEver)} downloads in all`,
     entry.likes !== undefined && `${count(entry.likes)} likes`,
     entry.updated && `updated ${age(entry.updated)}`,
     entry.baseModels && `built on ${entry.baseModels.join(', ')}`,
@@ -184,16 +187,16 @@ function report(need: string, parts: Part[], compute: string | undefined, unansw
     "# Where my hug at?", '',
     `**${need}**`, '',
     `${parts.length} ${parts.length === 1 ? 'part' : 'parts'}: ${tally.join(', ')}.`, '',
-    `_Searched and checked on Hugging Face just now: ${named} named${remembered ? `, ${remembered} from memory rather than the search` : ''}, ${dropped} not there and dropped${unchecked ? `, ${unchecked} Hugging Face didn't answer for` : ''}${unanswered ? `; ${unanswered} ${unanswered === 1 ? 'search' : 'searches'} didn't answer, so no pick is marked from memory` : ''}._`,
+    `_Searched and checked on Hugging Face and the other dataset hubs just now: ${named} named${remembered ? `, ${remembered} from memory rather than the search` : ''}, ${dropped} not there and dropped${unchecked ? `, ${unchecked} not checked` : ''}${unanswered ? `; ${unanswered} ${unanswered === 1 ? 'search' : 'searches'} didn't answer, so no pick is marked from memory` : ''}._`,
   ];
   for (const part of parts) {
     lines.push('', '---', '', `## ${part.verdict}  ·  ${part.name}`, '', `_${part.role}_`, '');
     if (part.model) lines.push(...pick('Model', part.model, part.verdict === 'TUNE'));
     else if (part.bigger.length) lines.push(`**Nothing named runs on ${compute}: the options below need more.**`, '');
     if (part.dataset) lines.push(...pick('Data', part.dataset));
-    if (part.missing.length) lines.push(`**No ${part.missing.join(' or ')} on Hugging Face for this yet: it needs new candidates.**`, '');
+    if (part.missing.length) lines.push(`**No ${part.missing.join(' or ')} for this yet: it needs new candidates.**`, '');
     else if (part.verdict === 'WRITE' && !part.model) lines.push('**No model: write this one.**', '');
-    else if (part.verdict === 'TRAIN' && !part.dataset) lines.push('**No dataset on Hugging Face for this: collect the data.**', '');
+    else if (part.verdict === 'TRAIN' && !part.dataset) lines.push('**No dataset for this on any hub: collect the data.**', '');
     lines.push(part.rationale);
     if (part.bigger.length) lines.push('', `If you can make it work, models too big for ${compute}:`, ...part.bigger.map(upgrade));
     if (part.alternates.length) lines.push('', `Also: ${part.alternates.map((entry) => `[${entry.id}](${url(entry)})${brief(entry, entry.kind)}`).join('  ·  ')}`);
@@ -201,7 +204,7 @@ function report(need: string, parts: Part[], compute: string | undefined, unansw
       lines.push('', part.verdict === 'TRAIN' ? '**The search found models for this job: check them before training one.**' : 'Models the search also found, not picked:',
         ...part.unpicked.map((hit) => `- ${unpicked(hit)}: found as ${hit.found.join(', ')}`));
     }
-    if (part.dropped.length) lines.push('', `Dropped, not on Hugging Face (or private): ${part.dropped.join(', ')}`);
+    if (part.dropped.length) lines.push('', `Dropped, not on its hub (or private): ${part.dropped.join(', ')}`);
   }
   const width = Math.max(...parts.map((part) => part.name.length));
   lines.push('', '---', '', '## At a glance', '', '```', ...parts.map((part, i) => {

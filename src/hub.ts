@@ -10,23 +10,26 @@ export interface Entry {
   id: string;
   kind: Kind;
   exists: boolean | undefined; // undefined: Hugging Face couldn't be asked (unreachable, rate-limited, down)
-  status: number | 'unreachable' | 'invalid id';
+  status: number | 'unreachable' | 'invalid id' | 'no key';
+  title?: string; // a dataset's own name, on hubs whose ids don't say much ("zenodo:18180184")
   task?: string;
   library?: string;
   license?: string;
   baseModels?: string[];
   params?: number;
   downloads?: number; // in the last 30 days
+  downloadsEver?: number; // all-time, as the other dataset hubs count them
   likes?: number;
   updated?: string;
+  page?: string; // its page, where it isn't on Hugging Face
   gated?: boolean | string; // false, or how access is granted ("auto", "manual")
   hostedBy?: string[]; // inference providers serving it live, so it can be called without running it
-  rows?: string; // a dataset's size, from its size_categories tag: "10K to 100K"
+  size?: string; // a dataset's: "10K to 100K rows", "1.2k images", "380.0 MB"
 }
 
-// "size_categories:10K<n<100K" -> "10K to 100K"; "n<1K" -> "under 1K"; "n>1T" -> "over 1T"
+// "size_categories:10K<n<100K" -> "10K to 100K rows"; "n<1K" -> "under 1K rows"; "n>1T" -> "over 1T rows"
 const rowsOf = (tags: string[]) => tags.find((tag) => tag.startsWith('size_categories:'))?.slice(16)
-  .replace(/^n<(.+)$/, 'under $1').replace(/^(.+)<n<(.+)$/, '$1 to $2').replace(/^n>(.+)$/, 'over $1');
+  .replace(/^n<(.+)$/, 'under $1').replace(/^(.+)<n<(.+)$/, '$1 to $2').replace(/^n>(.+)$/, 'over $1').concat(' rows');
 
 const EXPAND: Record<Kind, string[]> = {
   model: ['pipeline_tag', 'library_name', 'downloads', 'likes', 'lastModified', 'gated', 'cardData', 'safetensors', 'tags', 'inferenceProviderMapping'],
@@ -34,7 +37,7 @@ const EXPAND: Record<Kind, string[]> = {
 };
 const ID = /^\w[\w.-]*(\/\w[\w.-]*)?$/; // owner/name, or an old canonical name like "gpt2"; never "." or "..", so the path stays put
 const CACHE_MS = 60 * 60 * 1000; // a session asks about the same ids again and again
-const TIMEOUT_MS = 15_000;
+export const TIMEOUT_MS = 15_000;
 
 const cache = new Map<string, { at: number; entry: Promise<Entry> }>();
 const headers = (): Record<string, string> => (process.env.HF_TOKEN ? { Authorization: `Bearer ${process.env.HF_TOKEN}` } : {});
@@ -87,7 +90,7 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
       updated: json.lastModified,
       gated: json.gated,
       hostedBy: hosted.length ? hosted : undefined,
-      rows: rowsOf(tags),
+      size: rowsOf(tags),
     };
   } catch {
     return { id, kind, exists: undefined, status: 'unreachable' };
@@ -108,30 +111,35 @@ export interface Hit {
   task?: string;
   license?: string;
   downloads?: number;
+  downloadsEver?: number;
   likes?: number;
   created?: string;
-  rows?: string;
+  title?: string;
+  size?: string;
+  page?: string;
   snippet?: string; // what the card says, when full text found it
 }
 
 const PER_QUERY = 8;
-const searches = new Map<string, { at: number; hits: Promise<Hit[] | undefined> }>();
+const answers = new Map<string, { at: number; answer: Promise<unknown> }>();
 
-/** One query's hits, or undefined if Hugging Face didn't answer; from a cache an hour fresh. */
-function ask(url: string, how: string, kind: Kind, read: (json: any) => Hit[] = (json) =>
-  json.filter((item: any) => typeof item?.id === 'string').map((item: any) => listed(item, kind, how))): Promise<Hit[] | undefined> {
-  const hit = searches.get(url);
-  if (hit && Date.now() - hit.at < CACHE_MS) return hit.hits;
-  const hits = fetch(url, { headers: headers(), signal: AbortSignal.timeout(TIMEOUT_MS) })
+/** A search's answer as read, or undefined if the host didn't answer or garbled it; from a cache an hour fresh. */
+export function get<T>(url: string, read: (json: any) => T, auth: Record<string, string> = {}): Promise<T | undefined> {
+  const hit = answers.get(url);
+  if (hit && Date.now() - hit.at < CACHE_MS) return hit.answer as Promise<T | undefined>;
+  const answer = fetch(url, { headers: auth, signal: AbortSignal.timeout(TIMEOUT_MS) })
     .then(async (response) => (response.ok ? read(await response.json()) : undefined))
     .catch(() => undefined)
     .then((found) => {
-      if (!found) searches.delete(url);
+      if (found === undefined) answers.delete(url);
       return found;
     });
-  searches.set(url, { at: Date.now(), hits });
-  return hits;
+  answers.set(url, { at: Date.now(), answer });
+  return answer;
 }
+
+const ask = (url: string, how: string, kind: Kind, read: (json: any) => Hit[] = (json) =>
+  json.filter((item: any) => typeof item?.id === 'string').map((item: any) => listed(item, kind, how))) => get(url, read, headers());
 
 const listed = (item: any, kind: Kind, how: string): Hit => {
   const tags: string[] = Array.isArray(item.tags) ? item.tags : [];
@@ -139,7 +147,7 @@ const listed = (item: any, kind: Kind, how: string): Hit => {
     id: item.id, kind, found: [how],
     task: item.pipeline_tag ?? (tags.filter((tag) => tag.startsWith('task_categories:')).map((tag) => tag.slice(16)).join(', ') || undefined),
     license: tags.find((tag) => tag.startsWith('license:'))?.slice(8),
-    downloads: item.downloads, likes: item.likes, created: item.createdAt, rows: rowsOf(tags),
+    downloads: item.downloads, likes: item.likes, created: item.createdAt, size: rowsOf(tags),
   };
 };
 
