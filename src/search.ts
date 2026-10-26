@@ -2,14 +2,13 @@
 // recalled. The agent picks from this list; ids it knows that aren't on it may be added, and the report marks them as
 // from memory, so what an agent happens to remember never outranks what Hugging Face turned up.
 import { searchElsewhere } from './elsewhere.ts';
-import { search, type Hit, type Query } from './hub.ts';
+import { count, search, type Hit, type Query } from './hub.ts';
 
 export interface Wanted extends Query { id: string; name: string }
 
 const MODELS = 15;
 const DATASETS = 10;
 
-const count = (n: number) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n));
 const line = (hit: Hit) => `- ${[
   hit.id, hit.title && `"${hit.title}"`, hit.task, hit.size, hit.license && `license ${hit.license}`,
   hit.downloads !== undefined && `${count(hit.downloads)} downloads a month`,
@@ -18,6 +17,9 @@ const line = (hit: Hit) => `- ${[
   hit.created && `created ${hit.created.slice(0, 10)}`,
   `found: ${hit.found.join(', ')}`,
 ].filter(Boolean).join('  ·  ')}${hit.snippet ? `\n  > ${hit.snippet}` : ''}`;
+const section = (label: string, hits: Hit[], most: number) => [
+  `${label}${hits.length > most ? ` (${most} of ${hits.length})` : ''}:`, ...(hits.length ? hits.slice(0, most).map(line) : ['- none']), '',
+];
 
 export async function find(parts: Wanted[]): Promise<string> {
   const lines = ['# Found on Hugging Face and other dataset hubs just now', ''];
@@ -26,12 +28,9 @@ export async function find(parts: Wanted[]): Promise<string> {
     const failed = [...models.failed.map((how) => `models: ${how}`), ...datasets.failed.map((how) => `datasets: ${how}`)];
     lines.push(
       `## ${part.name} (${part.id})`, '',
-      `Models${models.hits.length > MODELS ? ` (${MODELS} of ${models.hits.length})` : ''}:`,
-      ...(models.hits.length ? models.hits.slice(0, MODELS).map(line) : ['- none']), '',
-      `Datasets${datasets.hits.length > DATASETS ? ` (${DATASETS} of ${datasets.hits.length})` : ''}:`,
-      ...(datasets.hits.length ? datasets.hits.slice(0, DATASETS).map(line) : ['- none']), '',
-      `Datasets on other hubs${elsewhere.hits.length > DATASETS ? ` (${DATASETS} of ${elsewhere.hits.length})` : ''}:`,
-      ...(elsewhere.hits.length ? elsewhere.hits.slice(0, DATASETS).map(line) : ['- none']), '',
+      ...section('Models', models.hits, MODELS),
+      ...section('Datasets', datasets.hits, DATASETS),
+      ...section('Datasets on other hubs', elsewhere.hits, DATASETS),
       ...(failed.length ? [`Hugging Face didn't answer: ${failed.join('; ')}.`, ''] : []),
       ...(elsewhere.failed.length ? [`Didn't answer: ${elsewhere.failed.join(', ')}.`, ''] : []),
       ...(elsewhere.skipped.length ? [`Not searched: ${elsewhere.skipped.join(', ')}.`, ''] : []),

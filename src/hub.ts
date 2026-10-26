@@ -24,12 +24,14 @@ export interface Entry {
   page?: string; // its page, where it isn't on Hugging Face
   gated?: boolean | string; // false, or how access is granted ("auto", "manual")
   hostedBy?: string[]; // inference providers serving it live, so it can be called without running it
-  size?: string; // a dataset's: "10K to 100K rows", "1.2k images", "380.0 MB"
+  size?: string; // a dataset's: "10K to 100K rows", "1.2k images", "380.0 MB" (kept as text: the hubs measure it differently)
 }
 
+export const count = (n: number) => (n >= 1e9 ? `${(n / 1e9).toFixed(1)}B` : n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n));
+const tagged = (tags: string[], prefix: string) => tags.find((tag) => tag.startsWith(prefix))?.slice(prefix.length);
 // "size_categories:10K<n<100K" -> "10K to 100K rows"; "n<1K" -> "under 1K rows"; "n>1T" -> "over 1T rows"
-const rowsOf = (tags: string[]) => tags.find((tag) => tag.startsWith('size_categories:'))?.slice(16)
-  .replace(/^n<(.+)$/, 'under $1').replace(/^(.+)<n<(.+)$/, '$1 to $2').replace(/^n>(.+)$/, 'over $1').concat(' rows');
+const rowsOf = (tags: string[]) => tagged(tags, 'size_categories:')
+  ?.replace(/^n<(.+)$/, 'under $1').replace(/^(.+)<n<(.+)$/, '$1 to $2').replace(/^n>(.+)$/, 'over $1').concat(' rows');
 
 const EXPAND: Record<Kind, string[]> = {
   model: ['pipeline_tag', 'library_name', 'downloads', 'likes', 'lastModified', 'gated', 'cardData', 'safetensors', 'tags', 'inferenceProviderMapping'],
@@ -39,21 +41,29 @@ const ID = /^\w[\w.-]*(\/\w[\w.-]*)?$/; // owner/name, or an old canonical name 
 const CACHE_MS = 60 * 60 * 1000; // a session asks about the same ids again and again
 export const TIMEOUT_MS = 15_000;
 
-const cache = new Map<string, { at: number; entry: Promise<Entry> }>();
+const cache = new Map<string, { at: number; answer: Promise<unknown> }>();
 const headers = (): Record<string, string> => (process.env.HF_TOKEN ? { Authorization: `Bearer ${process.env.HF_TOKEN}` } : {});
 
-/** Hugging Face's record of a model or dataset, from a cache an hour fresh. */
-export function lookUp(kind: Kind, id: string): Promise<Entry> {
-  const key = `${kind}:${id}`;
+/** An answer from a cache an hour fresh; one not worth keeping (the host didn't answer) is asked again next time. */
+function cached<T>(key: string, ask: () => Promise<T>, kept: (answer: T) => boolean): Promise<T> {
   const hit = cache.get(key);
-  if (hit && Date.now() - hit.at < CACHE_MS) return hit.entry;
-  const entry = fetchEntry(kind, id).then((found) => {
-    if (found.exists === undefined) cache.delete(key); // Hugging Face didn't answer: ask again next time
+  if (hit && Date.now() - hit.at < CACHE_MS) return hit.answer as Promise<T>;
+  const answer = ask().then((found) => {
+    if (!kept(found)) cache.delete(key);
     return found;
   });
-  cache.set(key, { at: Date.now(), entry });
-  return entry;
+  cache.set(key, { at: Date.now(), answer });
+  return answer;
 }
+
+/** Hugging Face's record of a model or dataset. */
+export const lookUp = (kind: Kind, id: string) => cached(`${kind}:${id}`, () => fetchEntry(kind, id), (found) => found.exists !== undefined);
+
+/** A search's answer as read, or undefined if the host didn't answer or garbled it. */
+export const get = <T>(url: string, read: (json: any) => T, auth: Record<string, string> = {}) => cached(url,
+  () => fetch(url, { headers: auth, signal: AbortSignal.timeout(TIMEOUT_MS) })
+    .then(async (response) => (response.ok ? read(await response.json()) : undefined)).catch(() => undefined),
+  (found) => found !== undefined);
 
 async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
   if (!ID.test(id)) return { id, kind, exists: false, status: 'invalid id' };
@@ -69,9 +79,8 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
     const json = await response.json();
     const card = json.cardData ?? {};
     const tags: string[] = Array.isArray(json.tags) ? json.tags : [];
-    const tagged = (prefix: string) => tags.find((tag) => tag.startsWith(prefix))?.slice(prefix.length);
     // Custom terms are "other", named in license_name; some cards give only the name. Either way: "other (qwen-research)".
-    const license = [card.license || tagged('license:')].flat().filter(Boolean).join(', ');
+    const license = [card.license || tagged(tags, 'license:')].flat().filter(Boolean).join(', ');
     const base: string[] = [card.base_model ?? []].flat();
     // { provider: { status: "live" | "staging", ... } }
     const hosted = Object.entries(json.inferenceProviderMapping ?? {}).filter(([, p]) => (p as { status?: string })?.status === 'live').map(([name]) => name);
@@ -80,7 +89,7 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
       kind,
       exists: true,
       status: response.status,
-      task: json.pipeline_tag ?? tagged('task_categories:'),
+      task: json.pipeline_tag ?? tagged(tags, 'task_categories:'),
       library: json.library_name,
       license: (license.toLowerCase() === 'other' || !license) && card.license_name ? `other (${card.license_name})` : license || undefined,
       baseModels: base.length ? base : undefined,
@@ -104,49 +113,24 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
 // own search page and isn't documented, so its failing costs only its own hits.
 
 export interface Query { task?: string; keywords?: string[]; phrase?: string }
-export interface Hit {
-  id: string;
-  kind: Kind;
+export interface Hit extends Omit<Entry, 'exists' | 'status'> {
   found: string[]; // how: "most downloaded for image-to-text", "trending for image-to-text", "name has ocr", "card text"
-  task?: string;
-  license?: string;
-  downloads?: number;
-  downloadsEver?: number;
-  likes?: number;
   created?: string;
-  title?: string;
-  size?: string;
-  page?: string;
   snippet?: string; // what the card says, when full text found it
 }
 
 const PER_QUERY = 8;
-const answers = new Map<string, { at: number; answer: Promise<unknown> }>();
 
-/** A search's answer as read, or undefined if the host didn't answer or garbled it; from a cache an hour fresh. */
-export function get<T>(url: string, read: (json: any) => T, auth: Record<string, string> = {}): Promise<T | undefined> {
-  const hit = answers.get(url);
-  if (hit && Date.now() - hit.at < CACHE_MS) return hit.answer as Promise<T | undefined>;
-  const answer = fetch(url, { headers: auth, signal: AbortSignal.timeout(TIMEOUT_MS) })
-    .then(async (response) => (response.ok ? read(await response.json()) : undefined))
-    .catch(() => undefined)
-    .then((found) => {
-      if (found === undefined) answers.delete(url);
-      return found;
-    });
-  answers.set(url, { at: Date.now(), answer });
-  return answer;
-}
-
-const ask = (url: string, how: string, kind: Kind, read: (json: any) => Hit[] = (json) =>
-  json.filter((item: any) => typeof item?.id === 'string').map((item: any) => listed(item, kind, how))) => get(url, read, headers());
+/** Lists taken in turns: each one's first, then each one's second, and so on. */
+export const inTurns = <T>(lists: (T[] | undefined)[]): T[] =>
+  Array.from({ length: PER_QUERY }, (_, rank) => lists.flatMap((list) => list?.[rank] ?? [])).flat();
 
 const listed = (item: any, kind: Kind, how: string): Hit => {
   const tags: string[] = Array.isArray(item.tags) ? item.tags : [];
   return {
     id: item.id, kind, found: [how],
-    task: item.pipeline_tag ?? (tags.filter((tag) => tag.startsWith('task_categories:')).map((tag) => tag.slice(16)).join(', ') || undefined),
-    license: tags.find((tag) => tag.startsWith('license:'))?.slice(8),
+    task: item.pipeline_tag ?? (tags.filter((tag) => tag.startsWith('task_categories:')).map((tag) => tag.slice('task_categories:'.length)).join(', ') || undefined),
+    license: tagged(tags, 'license:'),
     downloads: item.downloads, likes: item.likes, created: item.createdAt, size: rowsOf(tags),
   };
 };
@@ -171,17 +155,15 @@ export async function search(kind: Kind, { task, keywords = [], phrase }: Query)
       })),
     ]] as [string, string, (json: any) => Hit[]][] : []),
   ];
-  const answers = await Promise.all(queries.map(([url, how, read]) => ask(url, how, kind, read)));
+  const answers = await Promise.all(queries.map(([url, how, read = (json: any): Hit[] =>
+    json.filter((item: any) => typeof item?.id === 'string').map((item: any) => listed(item, kind, how))]) => get(url, read, headers())));
   const merged = new Map<string, Hit>();
-  for (let rank = 0; rank < PER_QUERY; rank++) {
-    for (const hit of answers.map((hits) => hits?.[rank])) {
-      if (!hit) continue;
-      const seen = merged.get(hit.id.toLowerCase()); // the Hub's ids are case-insensitive
-      if (!seen) merged.set(hit.id.toLowerCase(), { ...hit, found: [...hit.found] });
-      else {
-        seen.found = [...new Set([...seen.found, ...hit.found])];
-        for (const [key, value] of Object.entries(hit)) if ((seen as any)[key] === undefined) (seen as any)[key] = value; // full text knows the card, the list the counts
-      }
+  for (const hit of inTurns(answers)) {
+    const seen = merged.get(hit.id.toLowerCase()); // the Hub's ids are case-insensitive
+    if (!seen) merged.set(hit.id.toLowerCase(), { ...hit, found: [...hit.found] });
+    else {
+      seen.found = [...new Set([...seen.found, ...hit.found])];
+      for (const [key, value] of Object.entries(hit)) if ((seen as any)[key] === undefined) (seen as any)[key] = value; // full text knows the card, the list the counts
     }
   }
   return { hits: [...merged.values()], failed: queries.filter((_, i) => !answers[i]).map(([, how]) => how) };

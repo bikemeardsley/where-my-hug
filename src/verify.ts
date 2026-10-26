@@ -5,7 +5,7 @@
 // the search found but the agent didn't pick is shown, so nothing it turned up is hidden. What runs on the compute
 // heads each part; bigger models follow, a stretch or cloud only, as what might do better if it can be made to work.
 import { lookUpElsewhere, searchElsewhere, sourceOf } from './elsewhere.ts';
-import { lookUp, search, type Entry, type Hit, type Kind, type Query } from './hub.ts';
+import { count, lookUp, search, type Entry, type Hit, type Kind, type Query } from './hub.ts';
 
 export type Verdict = 'USE' | 'TUNE' | 'TRAIN' | 'WRITE';
 export interface Candidate { id: string; kind?: Kind }
@@ -133,7 +133,6 @@ const FLAG_WORDS: Record<string, string> = {
 };
 
 const url = ({ id, kind, page }: { id: string; kind: Kind; page?: string }) => page ?? `https://huggingface.co/${kind === 'dataset' ? 'datasets/' : ''}${id}`;
-const count = (n: number) => (n >= 1e9 ? `${(n / 1e9).toFixed(1)}B` : n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n));
 const gb = (params: number, bytes: number) => `~${((params * bytes) / 1e9).toFixed(1)} GB`;
 const brief = ({ flags, found }: Checked, ...first: string[]) => {
   const notes = [...first, ...flags.map((flag) => flag.toLowerCase().replace('_', ' ')), ...(found?.length === 0 ? ['from memory'] : [])];

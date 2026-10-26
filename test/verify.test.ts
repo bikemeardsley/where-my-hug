@@ -50,18 +50,18 @@ const FULL_TEXT: Record<string, object[]> = {
 // else, answering as each hub does for a missing one (Kaggle: 403).
 const CARDS = {
   ref: 'acme/cards', title: 'Acme cards', licenseName: 'CC BY-NC-SA 4.0', downloadCount: 5_000, voteCount: 12, lastUpdated: now,
-  totalBytes: 2.5e9, url: 'https://www.kaggle.com/datasets/acme/cards',
+  totalBytes: 2.5e9,
 };
 const SCANS = {
   id: 42, metadata: { title: 'Card scans', license: { id: 'cc-by-4.0' } }, stats: { downloads: 300 }, updated: now,
-  files: [{ size: 4e5 }, { size: 2e5 }], links: { self_html: 'https://zenodo.org/records/42' },
+  files: [{ size: 4e5 }, { size: 2e5 }],
 };
 const ELSEWHERE: Record<string, object> = {
   'www.kaggle.com/api/v1/datasets/list': [CARDS],
   'www.kaggle.com/api/v1/datasets/view/acme/cards': CARDS,
   'zenodo.org/api/records': { hits: { hits: [SCANS] } },
   'zenodo.org/api/records/42': SCANS,
-  'www.modelscope.cn/api/v1/dolphin/datasets': { Code: 200, Data: [] },
+  'www.modelscope.cn/api/v1/dolphin/datasets': { Data: [] },
   'api.roboflow.com/universe/search': { results: [{ name: 'Slabs', images: 1_200, url: 'https://universe.roboflow.com/acme/slabs' }] },
   'api.roboflow.com/acme/slabs': { project: { name: 'Slabs', images: 1_200, license: 'CC BY 4.0' } },
 };
@@ -261,7 +261,7 @@ test('searches and checks datasets on the other hubs, each under its own prefix,
   delete process.env.ROBOFLOW_API_KEY;
 
   // In turns, a hub after another; ModelScope found nothing.
-  assert.match(found, /Datasets on other hubs:\n- kaggle:acme\/cards {2}· {2}"Acme cards" {2}· {2}2\.5 GB {2}· {2}license CC BY-NC-SA 4\.0 {2}· {2}5\.0k downloads in all {2}· {2}12 likes {2}· {2}found: Kaggle search\n- zenodo:42 {2}· {2}"Card scans" {2}· {2}600 kB {2}· {2}license cc-by-4\.0 {2}· {2}300 downloads in all {2}· {2}found: Zenodo search\n- roboflow:acme\/slabs {2}· {2}"Slabs" {2}· {2}1200 images {2}· {2}found: Roboflow Universe search\n/);
+  assert.match(found, /Datasets on other hubs:\n- kaggle:acme\/cards {2}· {2}"Acme cards" {2}· {2}2\.5 GB {2}· {2}license CC BY-NC-SA 4\.0 {2}· {2}5\.0k downloads in all {2}· {2}12 likes {2}· {2}found: Kaggle search\n- zenodo:42 {2}· {2}"Card scans" {2}· {2}600 kB {2}· {2}license cc-by-4\.0 {2}· {2}300 downloads in all {2}· {2}found: Zenodo search\n- roboflow:acme\/slabs {2}· {2}"Slabs" {2}· {2}1\.2k images {2}· {2}found: Roboflow Universe search\n/);
   assert.doesNotMatch(found, /Not searched/);
 
   const [grader] = result.components;

@@ -4,7 +4,7 @@
 // without a key. Roboflow needs one, ROBOFLOW_API_KEY, sent only to api.roboflow.com and never recorded; without it
 // Roboflow is skipped, and the search says so. ModelScope's search is the one its own site uses and isn't documented,
 // so its failing costs only its own hits. Their download counts are all-time, not Hugging Face's last 30 days.
-import { get, TIMEOUT_MS, type Entry, type Hit, type Query } from './hub.ts';
+import { count, get, inTurns, TIMEOUT_MS, type Entry, type Hit, type Query } from './hub.ts';
 
 type Facts = Partial<Omit<Entry, 'kind' | 'exists' | 'status'>>; // id: the hub's own, without the prefix
 interface Hub {
@@ -26,7 +26,7 @@ const AGENT = { 'User-Agent': 'where-my-hug (+https://github.com/bikemeardsley/w
 const bytes = (n?: number) => (!n ? undefined : n >= 1e9 ? `${(n / 1e9).toFixed(1)} GB` : n >= 1e6 ? `${(n / 1e6).toFixed(1)} MB` : `${Math.ceil(n / 1e3)} kB`);
 const seconds = (s?: number) => (typeof s === 'number' ? new Date(s * 1000).toISOString() : undefined);
 
-const HUBS = {
+const HUBS: Record<string, Hub> = {
   kaggle: {
     name: 'Kaggle', page: 'https://www.kaggle.com/datasets/', id: OWNER_NAME,
     search: (words) => `https://www.kaggle.com/api/v1/datasets/list?search=${words}`, list: (json) => json,
@@ -61,14 +61,13 @@ const HUBS = {
     // A hit names its project by its page, universe.roboflow.com/<workspace>/<project>; a looked-up one doesn't.
     read: (r) => ({
       id: /universe\.roboflow\.com\/([^/?#]+\/[^/?#]+)/.exec(r.url ?? '')?.[1], title: r.name, license: r.license,
-      size: typeof r.images === 'number' ? `${r.images} images` : undefined, updated: seconds(r.updated),
+      size: typeof r.images === 'number' ? `${count(r.images)} images` : undefined, updated: seconds(r.updated),
     }),
   },
-} satisfies Record<string, Hub>;
-type Source = keyof typeof HUBS;
+};
 
 /** The hub a prefixed id is on; undefined for a Hugging Face id. */
-export const sourceOf = (id: string) => (Object.keys(HUBS) as Source[]).find((source) => id.toLowerCase().startsWith(`${source}:`));
+export const sourceOf = (id: string) => Object.keys(HUBS).find((source) => id.toLowerCase().startsWith(`${source}:`));
 
 const keyOf = (hub: Hub) => (hub.key ? process.env[hub.key] : undefined);
 const headers = (hub: Hub) => ({ ...AGENT, ...(keyOf(hub) ? { Authorization: `Bearer ${keyOf(hub)}` } : {}) });
@@ -76,17 +75,15 @@ const headers = (hub: Hub) => ({ ...AGENT, ...(keyOf(hub) ? { Authorization: `Be
 /** Every other hub's datasets for a query, taken in turns like Hugging Face's ways in; which hubs didn't answer, and which need a key. */
 export async function searchElsewhere({ phrase, keywords = [], task }: Query): Promise<{ hits: Hit[]; failed: string[]; skipped: string[] }> {
   const words = phrase || keywords.join(' ') || task?.replace(/-/g, ' ');
-  const hubs = Object.entries(HUBS) as [Source, Hub][];
+  const hubs = Object.entries(HUBS);
   const asked = hubs.filter(([, hub]) => !hub.key || keyOf(hub));
   if (!words) return { hits: [], failed: [], skipped: [] };
   const answers = await Promise.all(asked.map(([source, hub]) => get(hub.search(encodeURIComponent(words)), (json): Hit[] =>
-    hub.list(json).slice(0, PER_HUB).map(hub.read).filter(({ id }) => typeof id === 'string' && hub.id.test(id)).map((facts) => ({
+    hub.list(json).map(hub.read).filter(({ id }) => typeof id === 'string' && hub.id.test(id)).map((facts) => ({
       ...facts, id: `${source}:${facts.id}`, kind: 'dataset', found: [`${hub.name} search`], page: hub.page + facts.id,
     })), headers(hub))));
-  const hits: Hit[] = [];
-  for (let rank = 0; rank < PER_HUB; rank++) for (const answer of answers) if (answer?.[rank]) hits.push(answer[rank]);
   return {
-    hits,
+    hits: inTurns(answers),
     failed: asked.filter((_, i) => !answers[i]).map(([, hub]) => hub.name),
     skipped: hubs.filter(([, hub]) => hub.key && !keyOf(hub)).map(([, hub]) => `${hub.name} (it needs ${hub.key})`),
   };
@@ -95,7 +92,7 @@ export async function searchElsewhere({ phrase, keywords = [], task }: Query): P
 /** What a hub says about one of its datasets: whether it exists, and what it is. */
 export async function lookUpElsewhere(prefixed: string): Promise<Entry> {
   const source = sourceOf(prefixed)!;
-  const hub: Hub = HUBS[source];
+  const hub = HUBS[source];
   const id = prefixed.slice(source.length + 1);
   const entry = (status: Entry['status'], exists: boolean | undefined, { id: spelled, ...facts }: Facts = {}): Entry => {
     const own = spelled && hub.id.test(spelled) ? spelled : id; // the hub's spelling of it, if it's an id at all
