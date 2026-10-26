@@ -1,7 +1,7 @@
 {
   "name": "where-my-hug",
   "displayName": "Where My Hug At?",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Where my hug at? Tells your agent which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
   "author": { "name": "Mike Beardsley" },
   "homepage": "https://github.com/bikemeardsley/where-my-hug",
@@ -18,13 +18,20 @@
       "description": "Only needed to include private or gated repos your account can see. Sent only to huggingface.co, never written to a report.",
       "sensitive": true,
       "default": ""
+    },
+    "roboflow_api_key": {
+      "type": "string",
+      "title": "Roboflow API key (optional)",
+      "description": "Adds Roboflow Universe to the dataset search; Kaggle, Zenodo and ModelScope need no key. Free at roboflow.com, under Settings, API Keys. Sent only to api.roboflow.com, never written to a report.",
+      "sensitive": true,
+      "default": ""
     }
   },
   "mcpServers": {
     "where-my-hug": {
       "command": "npx",
-      "args": ["-y", "where-my-hug@0.2.1"],
-      "env": { "HF_TOKEN": "${user_config.hf_token}" },
+      "args": ["-y", "where-my-hug@0.3.0"],
+      "env": { "HF_TOKEN": "${user_config.hf_token}", "ROBOFLOW_API_KEY": "${user_config.roboflow_api_key}" },
       "startup_timeout_sec": 120
     }
   }

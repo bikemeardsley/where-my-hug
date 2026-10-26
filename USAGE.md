@@ -27,6 +27,13 @@ Setup for each agent, then what to expect when you use it. The
   at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
   and pass it as `HF_TOKEN`, shown for each agent below. It is sent only to
   huggingface.co.
+- **A Roboflow key is optional too.** Datasets on Kaggle, Zenodo and
+  ModelScope are searched without one. Roboflow Universe, a large home of
+  labeled image sets, is searched only with a key: sign up free at
+  [roboflow.com](https://roboflow.com), copy your private API key from your
+  workspace's settings (Settings → API Keys), and pass it as
+  `ROBOFLOW_API_KEY` the same way as `HF_TOKEN`. It is sent only to
+  api.roboflow.com. Without it, the search says Roboflow wasn't searched.
 
 The server config most agents take, in one place:
 
@@ -47,7 +54,8 @@ Ask your agent in plain words, starting with the hook if you like:
    fine answer.
 2. **Parts and verdicts.** It splits the job into parts and marks each USE,
    TUNE, TRAIN or WRITE, naming exact models and datasets.
-3. **The live check.** Every name is looked up on Hugging Face. Missing ones
+3. **The live check.** Every name is looked up where it lives: Hugging Face,
+   or the dataset hub it came from. Missing ones
    are dropped and the agent proposes others; the rest are flagged and sized
    against your hardware. The report you see comes from that check.
 
@@ -63,14 +71,15 @@ As a plugin (the tools plus a skill that knows when to use them):
 /plugin install where-my-hug@where-my-hug
 ```
 
-It asks for the optional Hugging Face token and keeps it in secure storage.
+It asks for the optional Hugging Face token and Roboflow key and keeps them in
+secure storage.
 
 Or the tools alone:
 
 ```sh
 claude mcp add --scope user where-my-hug -- npx -y where-my-hug
-# with a token (the name comes before -e, which takes every value after it):
-# claude mcp add --scope user where-my-hug -e HF_TOKEN=hf_... -- npx -y where-my-hug
+# with keys (the name comes before -e, which takes every value after it):
+# claude mcp add --scope user where-my-hug -e HF_TOKEN=hf_... -e ROBOFLOW_API_KEY=... -- npx -y where-my-hug
 ```
 
 Docs: [plugins](https://code.claude.com/docs/en/plugins/install) ·
@@ -79,8 +88,8 @@ Docs: [plugins](https://code.claude.com/docs/en/plugins/install) ·
 ## Claude Desktop
 
 Settings → Developer → Edit Config opens `claude_desktop_config.json`. Add the
-server under `mcpServers` (with `"env": { "HF_TOKEN": "hf_..." }` if you want
-one), save, and restart Claude Desktop.
+server under `mcpServers` (with `"env": { "HF_TOKEN": "hf_...", "ROBOFLOW_API_KEY": "..." }`
+for either key you want), save, and restart Claude Desktop.
 
 Docs: [local MCP servers](https://modelcontextprotocol.io/docs/develop/connect-local-servers)
 
@@ -101,7 +110,7 @@ default, so allow more for the first download:
 command = "npx"
 args = ["-y", "where-my-hug"]
 startup_timeout_sec = 120
-# env = { HF_TOKEN = "hf_..." }
+# env = { HF_TOKEN = "hf_...", ROBOFLOW_API_KEY = "..." }
 ```
 
 Docs: [Codex MCP](https://developers.openai.com/codex/mcp) ·
@@ -313,7 +322,8 @@ npx -y where-my-hug --http 0.0.0.0:8000
 Then Admin Settings → External Tools → add `http://<host>:8000/mcp`, type
 MCP (Streamable HTTP). Without a host it listens on 127.0.0.1 only. Anyone who
 can reach the port can use it, including, with `HF_TOKEN` set, looking up
-private repos the token can see.
+private repos the token can see, and, with `ROBOFLOW_API_KEY` set, searching
+Roboflow on your key.
 
 Docs: [Open WebUI MCP](https://docs.openwebui.com/features/extensibility/mcp/)
 
@@ -354,4 +364,6 @@ Copilot, Cursor and Gemini plugins pin a version and update with the plugin
   `npm install -g where-my-hug` and use `where-my-hug` as the command.
 - **A private repo shows as missing:** set `HF_TOKEN`. Without one, Hugging
   Face answers "not found" for private repos.
+- **"Not searched: Roboflow Universe":** set `ROBOFLOW_API_KEY`. A Roboflow
+  pick without it is kept but marked unchecked.
 - **Anything else:** [open an issue](https://github.com/bikemeardsley/where-my-hug/issues).

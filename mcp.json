@@ -1,5 +1,5 @@
 {
   "mcpServers": {
-    "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug@0.2.1"] }
+    "where-my-hug": { "command": "npx", "args": ["-y", "where-my-hug@0.3.0"] }
   }
 }

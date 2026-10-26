@@ -1,6 +1,6 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
-    "where-my-hug": { "type": "stdio", "command": "npx", "args": ["-y", "where-my-hug@0.2.1"] }
+    "where-my-hug": { "type": "stdio", "command": "npx", "args": ["-y", "where-my-hug@0.3.0"] }
   }
 }

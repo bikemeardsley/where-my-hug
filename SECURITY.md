@@ -23,10 +23,17 @@ attacker gains.
 - **The network:** `GET` requests to `huggingface.co/api`: searches built from
   what the agent writes for each part of a need (a task tag, keywords, a few
   words about the job), and one lookup per model or dataset id it picks, to
-  check it exists and read its facts. Nothing else is contacted.
+  check it exists and read its facts. The same words search for datasets on
+  `www.kaggle.com/api`, `zenodo.org/api`, `www.modelscope.cn/api` and, with a
+  key, `api.roboflow.com`, with one lookup per dataset picked from them. Every
+  id is checked against its hub's id shape before it goes into a URL. Nothing
+  else is contacted.
 - **`HF_TOKEN`:** read from the environment if set, sent only to
   `huggingface.co`, and never written to a report, a log or a file.
+- **`ROBOFLOW_API_KEY`:** the same, sent only to `api.roboflow.com`, as a
+  header, never in a URL.
 - **Your machine:** it reads no files, writes no files and runs no commands.
 - **`--http`:** serves the same three tools on a port, on 127.0.0.1 unless you
   give it a host. Anyone who can reach that port can use them, and with
-  `HF_TOKEN` set that includes looking up private repos the token can see.
+  `HF_TOKEN` set that includes looking up private repos the token can see;
+  with `ROBOFLOW_API_KEY` set, searches run on your Roboflow key.

@@ -18,6 +18,10 @@
   <a href="https://smithery.ai/skills/bikemeardsley/where-my-hug"><img src="https://img.shields.io/badge/Smithery-FF5601?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODggMjExIiBmaWxsPSIjZmZmIj48cGF0aCBkPSJNNDEuNzAxMSA3Ny40OEgwVjEwMC4yNjRDMCAxMTguMTcxIDE0LjUyNzUgMTMyLjY5OCAzMi40MzQyIDEzMi42OThINTUuMjE4M1Y5MC45OTcxQzU1LjIxODMgODMuNTQxOCA0OS4xNTY1IDc3LjQ4IDQxLjcwMTEgNzcuNDhaIi8%2BPHBhdGggZD0iTTY2LjA4NzkgOTAuOTk3MVYxMzIuNjk4SDEwNy43ODlDMTE1LjI0NCAxMzIuNjk4IDEyMS4zMDYgMTI2LjYzNiAxMjEuMzA2IDExOS4xODFWNzcuNDhINzkuNjA1MUM3Mi4xNDk3IDc3LjQ4IDY2LjA4NzkgODMuNTQxOCA2Ni4wODc5IDkwLjk5NzFaIi8%2BPHBhdGggZD0iTTE1NC45OTUgNzcuNDhIMTMyLjIxVjExOS4xODFDMTMyLjIxIDEyNi42MzYgMTM4LjI3MiAxMzIuNjk4IDE0NS43MjggMTMyLjY5OEgxODcuNDI5VjEwNi4xNTJDMTg3LjQyOSA4OC4yNDQ5IDE3Mi45MDEgNzcuNTE0OCAxNTQuOTk1IDc3LjUxNDhWNzcuNDhaIi8%2BPHBhdGggZD0iTTAgNDUuOTUxNFY2Ni42MTAzSDQxLjcwMTFDNDkuMTU2NSA2Ni42MTAzIDU1LjIxODMgNjAuNTQ4NSA1NS4yMTgzIDUzLjA5MzJWMEMyNS44NDk4IDAuMjA5MDI4IDAuMDM0ODM4IDE0LjY2NjggMCA0NS45NTE0WiIvPjxwYXRoIGQ9Ik02Ni4wODc5IDUzLjA5M0M2Ni4wODc5IDYwLjU0ODMgNzIuMTQ5NyA2Ni42MTAxIDc5LjYwNTEgNjYuNjEwMUgxMjEuMzA2VjExLjQ2MTVDMTAwLjkyNiA4LjM2MDkyIDkwLjMwMDMgMS43NDE2OSA2Ni4wODc5IDAuMjQzNjUyVjUzLjA1ODFWNTMuMDkzWiIvPjxwYXRoIGQ9Ik0xNDQuMDkgMTMuMDYzOUMxMzkuNzcgMTMuMDYzOSAxMzUuODM0IDEyLjkyNDYgMTMyLjIxIDEyLjY4MDdWNjYuNjFIMTU0Ljk5NUMxNzIuOTAxIDY2LjYxIDE4Ny40MjkgNTIuMDgyNSAxODcuNDI5IDM0LjE3NThWMC4xNzM4MjhDMTc3LjI5MSA4LjExNjkgMTYyLjkwMyAxMy4wNjM5IDE0NC4wOSAxMy4wNjM5WiIvPjxwYXRoIGQ9Ik0wIDE3Ni4wMDJWMjEwLjAwNEMxMC4xMzc5IDIwMi4wNjEgMjQuNTI2IDE5Ny4xMTQgNDMuMzM4NSAxOTcuMTE0QzQ3LjY1ODQgMTk3LjExNCA1MS41OTUxIDE5Ny4yNTMgNTUuMjE4MyAxOTcuNTMyVjE0My42MDNIMzIuNDM0MkMxNC41Mjc1IDE0My42MDMgMCAxNTguMTMgMCAxNzYuMDM3TDAgMTc2LjAwMloiLz48cGF0aCBkPSJNMTA3Ljc4OSAxNDMuNjAzSDY2LjA4NzlWMTk4LjcxNkM4Ni40NjgxIDIwMS44MTcgOTcuMDkzOCAyMDguNDM2IDEyMS4zMDYgMjA5LjkzNFYxNTcuMTJDMTIxLjMwNiAxNDkuNjY0IDExNS4yNDQgMTQzLjYwMyAxMDcuNzg5IDE0My42MDNaIi8%2BPHBhdGggZD0iTTEzMi4yMSAxNTcuMDg1VjIxMC4xNzhDMTYxLjU0NCAyMDkuOTY5IDE4Ny4zMjQgMTk1LjUxMSAxODcuNDI5IDE2NC4yOTZWMTQzLjU2OEgxNDUuNzI4QzEzOC4yNzIgMTQzLjU2OCAxMzIuMjEgMTQ5LjYzIDEzMi4yMSAxNTcuMDg1WiIvPjwvc3ZnPg%3D%3D" alt="On Smithery"></a>
   <a href="https://glama.ai/mcp/servers/bikemeardsley/where-my-hug"><img src="https://glama.ai/mcp/servers/bikemeardsley/where-my-hug/badges/score.svg" alt="Where My Hug At? MCP server, quality and maintenance score on Glama"></a>
   <a href="https://huggingface.co/models"><img src="https://img.shields.io/badge/Hugging_Face-FFD21E?logo=huggingface&logoColor=black" alt="Hugging Face"></a>
+  <a href="https://www.kaggle.com/datasets"><img src="https://img.shields.io/badge/Kaggle-20BEFF?logo=kaggle&logoColor=white" alt="Kaggle datasets"></a>
+  <a href="https://zenodo.org"><img src="https://img.shields.io/badge/Zenodo-1682D4?logo=zenodo&logoColor=white" alt="Zenodo datasets"></a>
+  <a href="https://modelscope.cn/datasets"><img src="https://img.shields.io/badge/ModelScope-624AFF?logo=modelscope&logoColor=white" alt="ModelScope datasets"></a>
+  <a href="https://universe.roboflow.com"><img src="https://img.shields.io/badge/Roboflow_Universe-6706CE?logo=roboflow&logoColor=white" alt="Roboflow Universe datasets"></a>
   <br>
   <a href="#development"><img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"></a>
   <a href="#install"><img src="https://img.shields.io/node/v/where-my-hug?color=339933&logo=nodedotjs&logoColor=white" alt="Node 22.18 or later"></a>
@@ -27,9 +31,11 @@
 </p>
 
 Tell your AI agent what you want a model to do. It searches Hugging Face for
-each part of the job and tells you which parts already exist there: which are
-an exact fit, which to fine-tune, which to train, and which are just code.
-Every model it names is real, current, and sized for your hardware.
+each part of the job, and Kaggle, Zenodo, ModelScope and Roboflow Universe
+for datasets, and tells you which parts already exist: which are an exact
+fit, which to fine-tune, which to train, and which are just code. Every model
+and dataset it names is real, checked live, and every model is sized for your
+hardware. It ends with where to start.
 
 Works with Claude Code, Codex, Copilot, Cursor, Gemini CLI, Cline, Devin, Open
 WebUI and any other MCP client, or as an Agent Skill.
@@ -40,7 +46,7 @@ the same for open-source repos on GitHub, GitLab and Codeberg.
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/flow-dark.svg">
-    <img src=".github/flow.svg" width="820" alt="Your model need, with four questions asked first (compute, license, stack, data), is split into parts: jobs with an input and an output. A part that's a model's job goes to Find hug, which searches Hugging Face four ways: most downloaded, trending, names and card text. Its verdict, use, tune or train, comes from what the search found. A part that's just code is marked write and needs no search. Your report checks every pick live and sizes it for your hardware.">
+    <img src=".github/flow.svg" width="820" alt="Your model need, with four questions asked first (compute, license, stack, data), is split into parts: jobs with an input and an output. A part that's a model's job goes to Find hug, which searches Hugging Face four ways: most downloaded, trending, names and card text. The same search looks for datasets on other hubs: Kaggle, Zenodo, ModelScope, and Roboflow with your key. The verdict, use, tune or train, comes from what both found. A part that's just code is marked write and needs no search. Your report checks every pick live, sizes it for your hardware, and ends with where to start.">
   </picture>
 </p>
 
@@ -48,7 +54,7 @@ the same for open-source repos on GitHub, GitLab and Codeberg.
 
 - [Try it](#try-it)
 - [How it works](#how-it-works): [four questions](#1-four-questions-first) ·
-  [parts](#2-split-the-job) · [the search](#3-search-hugging-face-for-each-part) ·
+  [parts](#2-split-the-job) · [the search](#3-search-for-each-part) ·
   [verdicts](#4-decide-each-part-from-what-turned-up) ·
   [the live check](#5-check-every-pick) · [flags](#flags) ·
   [sizes](#sizes-what-runs-here-and-what-might-do-better)
@@ -72,8 +78,8 @@ Then ask:
 
 Your agent asks the few things it can't guess, splits the job into parts, and
 comes back with a report like the [one below](#example-recipe-cards), every
-model and dataset in it looked up on Hugging Face moments before. It works for
-any job a model might do:
+model and dataset in it looked up live moments before. It works for any job a
+model might do:
 
 > Where my hug at for spotting which birds visit my feeder camera?<br>
 > Where my hug at for sorting support emails by how urgent they are?<br>
@@ -107,12 +113,12 @@ geometry, parsing, lookups) is marked **WRITE**: code does it exactly. Most
 needs have one. A model doing work that code does exactly is a cost, not a
 feature.
 
-### 3. Search Hugging Face for each part
+### 3. Search for each part
 
 What an agent remembers of Hugging Face is as old as its training, and misses
 the long tail. So nothing is picked from memory. For every other part, the
 agent writes a search (the Hub's task tag, a few keywords, the job in a few
-words), and it runs four ways:
+words), and it runs four ways on Hugging Face:
 
 | Way | What it finds |
 |---|---|
@@ -123,6 +129,20 @@ words), and it runs four ways:
 
 The ways take turns in the results, so a niche fine-tune isn't buried under
 whatever is popular for the task.
+
+Training data often lives elsewhere, so the same few words also search four
+other dataset hubs, which take turns the same way:
+
+| Hub | What it adds | Key |
+|---|---|---|
+| [Kaggle](https://www.kaggle.com/datasets) | Competition and community datasets | none |
+| [Zenodo](https://zenodo.org) | Research datasets, with DOIs | none |
+| [ModelScope](https://modelscope.cn/datasets) | Alibaba's hub, strong on Chinese-language data | none |
+| [Roboflow Universe](https://universe.roboflow.com) | Labeled image sets for detection and segmentation | `ROBOFLOW_API_KEY`, [free](#install) |
+
+A dataset from one of them keeps its hub's name in its id
+(`kaggle:landlord/handwriting-recognition`, `zenodo:1297399`), so it's never
+mistaken for a Hugging Face one.
 
 ### 4. Decide each part from what turned up
 
@@ -139,13 +159,18 @@ the search's, and the report marks it **from memory**.
 
 ### 5. Check every pick
 
-Every pick is looked up on Hugging Face, live. Any that don't exist are
-dropped, and the agent goes back to the search for others. The rest are
-flagged for what would bite later and sized against your compute, and that
-report is what you see. It also lists what the search found that wasn't
+Every pick is looked up live where it lives: Hugging Face, or the dataset's
+hub. Any that don't exist are dropped, and the agent goes back to the search
+for others. The rest are flagged for what would bite later and sized against
+your compute, and that report is what you see. Every id says whether it's a
+model or a dataset, and every dataset shows its size where the hub gives one
+(rows, images or bytes). It also lists what the search found that wasn't
 picked, so nothing it turned up is hidden. A TRAIN part whose search found
 models says to check them before training one. Every fact in the report
-(license, size, downloads, freshness) comes from Hugging Face.
+(license, size, downloads, freshness) comes from the hubs themselves.
+
+The report ends with **Start here**: the agent's pick of what to try first
+and why, and what to skip.
 
 Under the hood it's an MCP server with three tools: `where_my_hug` for the
 method (steps 1, 2 and 4), `where_my_hug_search` for step 3, and
@@ -155,13 +180,13 @@ method (steps 1, 2 and 4), `where_my_hug_search` for step 3, and
 
 | Flag | When |
 |---|---|
-| UNCHECKED | Hugging Face didn't answer (down, rate-limited). The id is kept, and asked again next time. |
+| UNCHECKED | Its hub didn't answer (down, rate-limited), or it's on Roboflow and no key is set. The id is kept, and asked again next time. |
 | GATED | You must accept its terms on Hugging Face before downloading. |
 | NO_LICENSE | No license on its card. |
 | NON_COMMERCIAL | Non-commercial or research-only terms (`cc-by-nc-*`, `*-research`, …). |
 | OWN_TERMS | Custom, use-restricted or no-derivatives terms (`other`, Llama, Gemma, RAIL, `-nd-`). Can come with NON_COMMERCIAL: `cc-by-nc-nd` is both. |
 | STALE | Not updated in two years. |
-| LITTLE_USED | Under 100 downloads in the last month. |
+| LITTLE_USED | Under 100 downloads in the last month (Hugging Face only: the other hubs count downloads for all time, shown as such). |
 
 ### Sizes: what runs here, and what might do better
 
@@ -185,35 +210,41 @@ custom terms (reported as `other (qwen-research)`), or a `license:` tag.
 
 ## Example: recipe cards
 
-The prompt above, from a live run on 2026-10-14 for one 24 GB GPU (abridged):
+The prompt above, from a live run on 2026-10-26 for one 24 GB GPU (abridged):
 
 ```
-_Searched and checked on Hugging Face just now: 7 named, 1 from memory rather than the search, 0 not there and dropped._
+_Searched and checked on Hugging Face and the other dataset hubs just now: 7 named, 0 not there and dropped._
 
 ## USE  ·  Read the card
 **Model: zai-org/GLM-OCR**
-license mit · 1.3B parameters (~3.2 GB to run) · 1.7M downloads a month · found: name has ocr, most downloaded for image-to-text
-If you can make it work, bigger than one 24 GB GPU:
-- Qwen/Qwen3.8-27B: a stretch: ~66.7 GB to run, ~16.7 GB quantized to 4 bits, hosted by novita, cerebras, …
-- google/gemma-4-31B-it: a stretch: ~75.1 GB to run, ~18.8 GB quantized to 4 bits, hosted by novita, …
-Also: deepseek-ai/DeepSeek-OCR
-The search also found, not picked:
-- google/gemma-4-26B-A4B-it (11.3M downloads a month): found as most downloaded for image-text-to-text
-- openbmb/MiniCPM-V-4.7-35B-A3B (4.2k downloads a month): found as trending for image-text-to-text
+image-to-text · license mit · 1.3B parameters (~3.2 GB to run) · 1.7M downloads a month · found: most downloaded for image-to-text, trending for image-to-text, name has ocr
+Also: deepseek-ai/DeepSeek-OCR (model) · baidu/Unlimited-OCR (model)
+Models the search also found, not picked:
+- datalab-to/indra-ocr (5.0k downloads a month): found as trending for image-to-text
 
 ## TUNE  ·  Read the hard hands
 **Model: microsoft/trocr-base-handwritten**
-license mit · 333.3M parameters (~0.8 GB to run; to fine-tune, ~0.3 GB with QLoRA, ~5.3 GB in full) · found: name has handwritten
-**Data: Voxel51/iam_handwriting_finevision**
-license cc · 1.9k downloads a month · found: name has handwriting
-Also: Teklia/IAM-line (stale, from memory)
+image-to-text · license mit · 333.3M parameters (~0.8 GB to run; to fine-tune, ~0.3 GB with QLoRA, ~5.3 GB in full) · found: name has handwritten
+**Data: kaggle:landlord/handwriting-recognition**
+"Handwriting Recognition" · 1.4 GB · license CC0: Public Domain · 49.7k downloads in all · 483 likes · updated 6 years ago · found: Kaggle search
+Watch out: not updated in two years.
+Also: Voxel51/iam_handwriting_finevision (dataset) · zenodo:1297399 (dataset, stale)
 
 ## WRITE  ·  Parse the amounts
 No model: write this one.
+
+## At a glance
+1. Read the card        USE    model zai-org/GLM-OCR
+2. Read the hard hands  TUNE   model microsoft/trocr-base-handwritten + dataset kaggle:landlord/handwriting-recognition
+3. Parse the amounts    WRITE  your code
+
+## Start here
+Run zai-org/GLM-OCR on a dozen cards first: it fits the GPU, is MIT, and may read most hands as it is.
+Tune TrOCR only on the lines it misses, starting from the Kaggle handwriting set (CC0, the most used).
 ```
 
-Every model there was turned up by the search, including ones released this
-year. The one dataset the agent added from what it remembered is marked.
+Every pick there was turned up by a search: the models and one dataset on
+Hugging Face, the others on Kaggle and Zenodo.
 
 ## Install
 
@@ -257,13 +288,22 @@ private or gated repos your account can see, pass a Hugging Face token as
 plugin asks for it and keeps it in secure storage. Without a token, a private
 repo looks missing, because Hugging Face answers 401 for both.
 
+**`ROBOFLOW_API_KEY` (optional).** Kaggle, Zenodo and ModelScope are searched
+without a key. To add Roboflow Universe, sign up free at
+[roboflow.com](https://roboflow.com), copy your private API key (Settings →
+API Keys), and pass it as `ROBOFLOW_API_KEY`, the same way as `HF_TOKEN`; the
+Claude Code plugin asks for it too. Without it, the search says Roboflow
+wasn't searched.
+
 ## What leaves your machine
 
 The search the agent writes for each part (a task tag, keywords, a few words
 about the job) and the ids it picks, as GETs to `huggingface.co/api`, plus
-your token if you set one. The token is sent only there and never appears in
-a report. The need as you wrote it, the method and the report stay between you
-and your agent.
+your token if you set one. The few words about each job, and the dataset ids
+picked from them, also go to the dataset APIs of Kaggle, Zenodo, ModelScope
+(run by Alibaba Cloud in China) and, with your key, Roboflow. Each key is sent
+only to its own hub and never appears in a report. The need as you wrote it,
+the method and the report stay between you and your agent.
 
 Starting it with `npx` (as the MCP server, or the skill's shell fallback)
 downloads the `where-my-hug` package from the npm registry, `registry.npmjs.org`.
@@ -280,20 +320,24 @@ Nothing is sent there but the request for the package.
   missed.
 - Card text is searched through the API behind the Hub's search page, which
   isn't documented. If it changes, that way fails and the results say so; the
-  other three carry on.
+  other three carry on. ModelScope's dataset search is likewise the one its
+  site uses.
+- The other hubs are searched by the job's few words, not by task tag, and
+  Kaggle wants every word to match, so a short, plain phrase finds most
+  there. Their downloads are all-time, so they're never flagged little used.
 
 ## Security
 
 Report a vulnerability privately through
 [GitHub Security Advisories](https://github.com/bikemeardsley/where-my-hug/security/advisories/new),
 not a public issue. [SECURITY.md](SECURITY.md) lists what it touches: GETs to
-Hugging Face, and nothing on your machine.
+Hugging Face and the four dataset hubs, and nothing on your machine.
 
 ## Development
 
 ```sh
 node src/server.ts   # the server, straight from source
-npm test             # offline: Hugging Face is mocked, and the server is driven over stdio and HTTP
+npm test             # offline: every hub is mocked, and the server is driven over stdio and HTTP
 npm run check        # types
 ```
 

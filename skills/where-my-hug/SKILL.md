@@ -1,6 +1,6 @@
 ---
 name: where-my-hug
-description: Find out what Hugging Face already has for a machine learning need before recommending any model or dataset. Use when the user wants a model for a task, asks which Hugging Face model or dataset to use, or is planning something with ML parts. Splits the need into parts, searches Hugging Face live for each, decides from what it finds whether to use a model as is (USE), fine-tune one (TUNE), train one (TRAIN), or write plain code (WRITE), and checks every model and dataset picked, with licenses, gating and memory sized against the user's hardware.
+description: Find out what Hugging Face already has for a machine learning need before recommending any model or dataset. Use when the user wants a model for a task, asks which Hugging Face model or dataset to use, is looking for training data, or is planning something with ML parts. Splits the need into parts, searches Hugging Face live for each (and Kaggle, Zenodo, ModelScope and Roboflow Universe for datasets), decides from what it finds whether to use a model as is (USE), fine-tune one (TUNE), train one (TRAIN), or write plain code (WRITE), and checks every model and dataset picked, with licenses, gating, dataset sizes and memory sized against the user's hardware.
 ---
 
 # Where my hug at?
@@ -38,5 +38,6 @@ JSON to a file and pass it on stdin:
 
 Show the user the markdown report as it comes back, without restating its
 facts from memory. Public models and datasets need no token. Private or gated
-ones need the user's Hugging Face token in the server's own configuration
-(a plugin's settings ask for it); never ask for one in the chat.
+ones need the user's Hugging Face token, and Roboflow Universe needs their
+Roboflow key, in the server's own configuration (a plugin's settings ask for
+both); never ask for either in the chat.

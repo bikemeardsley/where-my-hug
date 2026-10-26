@@ -1,7 +1,7 @@
 {
   "name": "where-my-hug",
-  "version": "0.2.1",
-  "description": "Where my hug at? Tell your AI agent what you want a model to do. It finds what Hugging Face already has for it, what to fine-tune, and what's just code, with every model checked live.",
+  "version": "0.3.0",
+  "description": "Where my hug at? Tell your AI agent what you want a model to do. It finds what Hugging Face already has for it, what to fine-tune, and what's just code, plus training data on Kaggle, Zenodo, ModelScope and Roboflow, with every pick checked live.",
   "license": "MIT",
   "mcpName": "io.github.bikemeardsley/where-my-hug",
   "repository": {
@@ -14,6 +14,11 @@
     "hugging-face",
     "huggingface",
     "machine-learning",
+    "datasets",
+    "kaggle",
+    "zenodo",
+    "modelscope",
+    "roboflow",
     "claude-code",
     "agent-skills"
   ],

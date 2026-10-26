@@ -3,8 +3,9 @@
 An MCP server: describe an ML need, and it says which parts the Hugging Face
 already covers (USE), which to fine-tune from a base model (TUNE), which need
 their own training (TRAIN), and which aren't a model at all (WRITE), with every
-model and dataset checked live on Hugging Face. Start with
-[README.md](../README.md).
+model and dataset checked live. Datasets also come from Kaggle, Zenodo,
+ModelScope and Roboflow Universe (`src/elsewhere.ts`, one `HUBS` entry each,
+ids prefixed `kaggle:` etc.). Start with [README.md](../README.md).
 
 ## Conventions
 
@@ -20,7 +21,7 @@ model and dataset checked live on Hugging Face. Start with
   `plugin/.claude-plugin/plugin.json`, `plugin/mcp.json` (Agent Plugins, for
   Copilot; beside it `plugin/plugin.json`), `mcp.json` (Cursor's), `gemini-extension.json`,
   `skills/where-my-hug/SKILL.md` (copied to `plugin/skills/`, a test keeps them equal) and the README: change one, change them all. The Claude plugin lives in `plugin/` so its folder holds only what the plugin ships.
-  The manifests pin the version (`where-my-hug@0.2.1`), as Claude's
+  The manifests pin the version (`where-my-hug@0.3.0`), as Claude's
   plugin directory requires; the README and skill don't.
 - **A release** bumps the version in `package.json`, `server.json` (twice),
   `plugin/.claude-plugin/plugin.json` (`version` and the pin),
@@ -76,5 +77,7 @@ model and dataset checked live on Hugging Face. Start with
   part; Git for Me! now takes a list of up to 3, which is worth porting.
 - Public on bikemeardsley/where-my-hug and npm (where-my-hug), MIT. `HF_TOKEN` is read
   from the environment (the Claude plugin asks for it and passes it in), sent
-  only to huggingface.co, and never recorded.
+  only to huggingface.co, and never recorded. `ROBOFLOW_API_KEY` the same,
+  only to api.roboflow.com; Kaggle, Zenodo and ModelScope take no key (checked
+  2026-10-26; Zenodo's key only lifts its general rate limit, not search's).
 - Tests run offline: Hugging Face is mocked.

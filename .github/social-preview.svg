@@ -5,14 +5,14 @@
     <text x="352" y="84" font-size="72" font-weight="800" letter-spacing="-2">Where My Hug At?</text>
     <g font-size="22" fill="#2a2200">
       <text x="356" y="122">Tell your AI agent what you want a model to do.</text>
-      <text x="356" y="150">It tells you which parts already exist on Hugging Face:</text>
-      <text x="356" y="178">which are an exact fit, which to fine-tune, which to train,</text>
-      <text x="356" y="206">and which are just code.</text>
+      <text x="356" y="150">It tells you which parts already exist on Hugging Face,</text>
+      <text x="356" y="178">with training data from Kaggle, Zenodo and more: an exact</text>
+      <text x="356" y="206">fit, what to fine-tune, what to train, what's just code.</text>
     </g>
   </g>
   <rect x="64" y="226" width="1152" height="402" rx="18" fill="#fffdf5" transform="rotate(-0.6 640 427)"/>
   <!-- flow.svg cropped to its content (it carries 40px margins of its own) -->
-  <svg x="148" y="234" width="984" height="386" viewBox="28 28 864 304">
-    <image width="920" height="360" href="flow.svg" xlink:href="flow.svg"/>
+  <svg x="148" y="234" width="984" height="386" viewBox="28 16 864 500">
+    <image width="920" height="528" href="flow.svg" xlink:href="flow.svg"/>
   </svg>
 </svg>
