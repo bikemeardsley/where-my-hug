@@ -21,7 +21,12 @@ export interface Entry {
   updated?: string;
   gated?: boolean | string; // false, or how access is granted ("auto", "manual")
   hostedBy?: string[]; // inference providers serving it live, so it can be called without running it
+  rows?: string; // a dataset's size, from its size_categories tag: "10K to 100K"
 }
+
+// "size_categories:10K<n<100K" -> "10K to 100K"; "n<1K" -> "under 1K"; "n>1T" -> "over 1T"
+const rowsOf = (tags: string[]) => tags.find((tag) => tag.startsWith('size_categories:'))?.slice(16)
+  .replace(/^n<(.+)$/, 'under $1').replace(/^(.+)<n<(.+)$/, '$1 to $2').replace(/^n>(.+)$/, 'over $1');
 
 const EXPAND: Record<Kind, string[]> = {
   model: ['pipeline_tag', 'library_name', 'downloads', 'likes', 'lastModified', 'gated', 'cardData', 'safetensors', 'tags', 'inferenceProviderMapping'],
@@ -82,6 +87,7 @@ async function fetchEntry(kind: Kind, id: string): Promise<Entry> {
       updated: json.lastModified,
       gated: json.gated,
       hostedBy: hosted.length ? hosted : undefined,
+      rows: rowsOf(tags),
     };
   } catch {
     return { id, kind, exists: undefined, status: 'unreachable' };
@@ -104,6 +110,7 @@ export interface Hit {
   downloads?: number;
   likes?: number;
   created?: string;
+  rows?: string;
   snippet?: string; // what the card says, when full text found it
 }
 
@@ -132,7 +139,7 @@ const listed = (item: any, kind: Kind, how: string): Hit => {
     id: item.id, kind, found: [how],
     task: item.pipeline_tag ?? (tags.filter((tag) => tag.startsWith('task_categories:')).map((tag) => tag.slice(16)).join(', ') || undefined),
     license: tags.find((tag) => tag.startsWith('license:'))?.slice(8),
-    downloads: item.downloads, likes: item.likes, created: item.createdAt,
+    downloads: item.downloads, likes: item.likes, created: item.createdAt, rows: rowsOf(tags),
   };
 };
 

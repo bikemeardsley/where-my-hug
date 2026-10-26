@@ -28,7 +28,7 @@ const HUB: Record<string, object> = {
   },
   'models/acme/flaky': { id: 'acme/flaky', downloads: 500, lastModified: now, cardData: { license: 'mit' } }, // once it answers
   'datasets/acme/pages': {
-    id: 'acme/pages', downloads: 3_000, lastModified: now, cardData: {}, tags: ['license:cc-by-4.0', 'task_categories:image-to-text'],
+    id: 'acme/pages', downloads: 3_000, lastModified: now, cardData: {}, tags: ['license:cc-by-4.0', 'task_categories:image-to-text', 'size_categories:n<1K'],
   },
 };
 // Its search: lists by query (the limit aside), full text by kind. A query not here finds nothing.
@@ -83,6 +83,7 @@ test("keeps the agent's order, drops what isn't there and flags what bites", asy
       part('rules', 'WRITE', []),
       part('bigjob', 'USE', [{ id: 'acme/colossal' }]),
     ],
+    recommendation: ' Try acme/reader first.\n',
   });
   delete process.env.HF_TOKEN;
   const [reader, tuner, flaky, rules, bigjob] = result.components;
@@ -118,10 +119,14 @@ test("keeps the agent's order, drops what isn't there and flags what bites", asy
 
   assert.match(markdown, /\*\*Model: \[acme\/reader\]\(https:\/\/huggingface\.co\/acme\/reader\)\*\*\n.*found: most downloaded for image-text-to-text, name has reader, card text\n/);
   assert.match(markdown, /\*\*Model: \[acme\/old-research\]\(https:\/\/huggingface\.co\/acme\/old-research\)\*\* _from memory: the search didn't turn it up_/);
-  assert.match(markdown, /\*\*Data: \[acme\/pages\]\(https:\/\/huggingface\.co\/datasets\/acme\/pages\)\*\*/);
+  assert.match(markdown, /\*\*Data: \[acme\/pages\]\(https:\/\/huggingface\.co\/datasets\/acme\/pages\)\*\*\nimage-to-text {2}· {2}under 1K rows {2}· {2}license cc-by-4\.0/);
+  // Every id says what it is, not only the lead picks.
+  assert.match(markdown, /Also: \[acme\/named-only\]\(https:\/\/huggingface\.co\/acme\/named-only\) \(model, own terms, from memory\)/);
+  assert.match(markdown, /2\. tuner {3}TUNE {3}model acme\/old-research \+ dataset acme\/pages\n.*\n.*\n5\. bigjob {2}USE {4}model acme\/colossal \(cloud\)\n```/);
+  assert.match(markdown, /```\n\n---\n\n## Start here\n\nTry acme\/reader first\.$/);
   assert.match(markdown, /9 named, 6 from memory rather than the search, 1 not there and dropped, 1 Hugging Face didn't answer for/);
-  assert.match(markdown, /If you can make it work, bigger than one 24 GB GPU:\n- \[acme\/giant\]\(https:\/\/huggingface\.co\/acme\/giant\): a stretch: ~31\.2 GB to run, ~7\.8 GB quantized to 4 bits \(gated, own terms, from memory\)\n- \[acme\/colossal\]\(https:\/\/huggingface\.co\/acme\/colossal\): cloud: ~168\.0 GB to run, hosted by together \(from memory\)\n/);
-  assert.match(markdown, /The search also found, not picked:\n- \[acme\/new-hot\]\(https:\/\/huggingface\.co\/acme\/new-hot\) \(0 downloads a month\): found as trending for image-text-to-text\n- \[acme\/card-only\]\(https:\/\/huggingface\.co\/acme\/card-only\): found as card text\n- \[acme\/popular\]\(https:\/\/huggingface\.co\/acme\/popular\) \(1\.0M downloads a month\): found as most downloaded for image-text-to-text/);
+  assert.match(markdown, /If you can make it work, models too big for one 24 GB GPU:\n- \[acme\/giant\]\(https:\/\/huggingface\.co\/acme\/giant\): a stretch: ~31\.2 GB to run, ~7\.8 GB quantized to 4 bits \(gated, own terms, from memory\)\n- \[acme\/colossal\]\(https:\/\/huggingface\.co\/acme\/colossal\): cloud: ~168\.0 GB to run, hosted by together \(from memory\)\n/);
+  assert.match(markdown, /Models the search also found, not picked:\n- \[acme\/new-hot\]\(https:\/\/huggingface\.co\/acme\/new-hot\) \(0 downloads a month\): found as trending for image-text-to-text\n- \[acme\/card-only\]\(https:\/\/huggingface\.co\/acme\/card-only\): found as card text\n- \[acme\/popular\]\(https:\/\/huggingface\.co\/acme\/popular\) \(1\.0M downloads a month\): found as most downloaded for image-text-to-text/);
   assert.match(markdown, /Nothing named runs on one 24 GB GPU: the options below need more/);
   assert.match(markdown, /No model: write this one/);
   assert.match(markdown, /776\.0M parameters \(~1\.9 GB to run\)/); // what it needs, whatever the compute turns out to be
@@ -161,6 +166,7 @@ test('sends the agent back for parts left with nothing', async () => {
   assert.match(markdown, /No dataset on Hugging Face for this yet: it needs new candidates/);
   assert.match(markdown, /\(~1\.9 GB to run; to fine-tune, ~0\.8 GB with QLoRA, ~12\.4 GB in full\)/); // the TUNE part's model
   assert.match(markdown, /No dataset on Hugging Face for this: collect the data/);
+  assert.doesNotMatch(markdown, /Start here/); // none given, none shown
 });
 
 test('sends the agent to search first, and a TRAIN verdict shows what the search found', async () => {
@@ -213,4 +219,6 @@ test('searches every way in, takes the ways in turns, and says which failed', as
   const both = await find([{ id: 'r', name: 'R', keywords: ['reader'], phrase: 'signs' }]);
   assert.deepEqual([...both.matchAll(/^- (acme\/reader) .*found: (.*)$/gim)].map((match) => [match[1], match[2]]), [['acme/reader', 'name has reader, card text']]); // Acme/Reader too
   assert.match(cards, /Datasets:\n- acme\/pages {2}· {2}1 likes {2}· {2}found: card text\n/);
+  const listedData = await find([{ id: 'p', name: 'P', task: 'image-to-text' }]);
+  assert.match(listedData, /^- acme\/pages {2}· {2}image-to-text {2}· {2}under 1K rows {2}· {2}license cc-by-4\.0 /m);
 });

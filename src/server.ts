@@ -42,6 +42,7 @@ const slate = {
     search: z.object(query).optional().describe("The part's last where_my_hug_search query, unchanged; none for a WRITE part"),
     candidates: z.array(z.object({ id: z.string().min(1), kind: z.enum(['model', 'dataset']).optional() })).max(6),
   })).min(1).max(8), // at most 48 lookups a call
+  recommendation: z.string().optional().describe('What to act on first: the one or two picks worth trying now and why (fit, license, use), then the ones to skip and why. Shown last, as "Start here"'),
 };
 const verified = async (args: z.infer<z.ZodObject<typeof slate>>) => {
   const { markdown, result } = await verify(args);

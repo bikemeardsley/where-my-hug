@@ -70,7 +70,9 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
      "components": [{ "id": "page-reader", "name": "Read the page", "role": "photo of a page -> its text",
                       "verdict": "TUNE", "rationale": "why this verdict, and why these candidates in this order",
                       "search": { "task": "image-to-text", "keywords": ["ocr", "handwritten"], "phrase": "handwritten text recognition" },
-                      "candidates": [{ "id": "owner/model", "kind": "model" }, { "id": "owner/data", "kind": "dataset" }] }] }
-   Pass each part's last search unchanged; a WRITE part has none. Show the user nothing until it answers: its report is what they
+                      "candidates": [{ "id": "owner/model", "kind": "model" }, { "id": "owner/data", "kind": "dataset" }] }],
+     "recommendation": "the one or two picks to act on first and why (fit, license, use), then the ones to skip and why" }
+   Pass each part's last search unchanged; a WRITE part has none. The recommendation ends the report as "Start here": with many
+   parts and alternates, it's what tells the user where to begin. Show the user nothing until it answers: its report is what they
    see, with every fact checked on Hugging Face.`;
 }

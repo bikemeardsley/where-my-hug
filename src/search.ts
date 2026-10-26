@@ -10,7 +10,7 @@ const DATASETS = 10;
 
 const count = (n: number) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n));
 const line = (hit: Hit) => `- ${[
-  hit.id, hit.task, hit.license && `license ${hit.license}`,
+  hit.id, hit.task, hit.rows && `${hit.rows} rows`, hit.license && `license ${hit.license}`,
   hit.downloads !== undefined && `${count(hit.downloads)} downloads a month`,
   hit.likes !== undefined && `${count(hit.likes)} likes`,
   hit.created && `created ${hit.created.slice(0, 10)}`,
