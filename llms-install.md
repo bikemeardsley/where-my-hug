@@ -43,16 +43,15 @@ The token is sent only to huggingface.co.
 
 ## Optional: a Roboflow key
 
-Datasets on Kaggle, Zenodo and ModelScope are searched without a key.
-Roboflow Universe is searched only with one. Only if the user wants it, ask
-them for their Roboflow API key (never invent one) and add it beside any
-token:
+Models and datasets on Kaggle, Zenodo and ModelScope are searched without a
+key. Roboflow Universe is searched only with one. Only if the user wants it,
+ask for their Roboflow API key (never invent one) and add it beside any token:
 
 ```json
 "env": { "ROBOFLOW_API_KEY": "..." }
 ```
 
-The key is sent only to api.roboflow.com.
+It is sent only to api.roboflow.com.
 
 ## Check it works
 

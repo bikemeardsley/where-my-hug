@@ -22,7 +22,7 @@
     "roboflow_api_key": {
       "type": "string",
       "title": "Roboflow API key (optional)",
-      "description": "Adds Roboflow Universe to the dataset search; Kaggle, Zenodo and ModelScope need no key. Free at roboflow.com, under Settings, API Keys. Sent only to api.roboflow.com, never written to a report.",
+      "description": "Adds Roboflow Universe to the search; Kaggle, Zenodo and ModelScope need no key. Free at roboflow.com, under Settings, API Keys. Sent only to api.roboflow.com, never written to a report.",
       "sensitive": true,
       "default": ""
     }

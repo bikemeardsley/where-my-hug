@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Where My Hug At? as an MCP server on stdio. Three tools, called in order: the rubric the agent follows, the search
-// of Hugging Face it picks models and datasets from, then the live check that writes the report the user sees. For an
+// of Hugging Face and the other hubs it picks models and datasets from, then the live check that writes the report the user sees. For an
 // agent without MCP, the same three run from a shell: `where-my-hug rubric`, `search` and `verify`, JSON on stdin.
 // For a client that speaks MCP over HTTP only, `where-my-hug --http` serves them at /mcp.
 import { createServer } from 'node:http';
@@ -53,17 +53,17 @@ function serve() {
   const server = new McpServer({ name: 'where-my-hug', version: '0.3.0' });
   server.registerTool('where_my_hug', {
     title: "Where my hug at?",
-    description: 'Step 1 of 3, before recommending any Hugging Face model or dataset. If compute, license, stack or data is missing, returns the questions to ask the user first: call again with the answers ("unknown" is fine). Then returns the method: split the ML need into parts, search Hugging Face for each with where_my_hug_search, and decide from what it finds which parts Hugging Face covers (use a model as is, fine-tune one, train one) and which are plain code. Follow it.',
+    description: 'Step 1 of 3, before recommending any machine learning model or dataset. If compute, license, stack or data is missing, returns the questions to ask the user first: call again with the answers ("unknown" is fine). Then returns the method: split the ML need into parts, search Hugging Face and the other hubs for each with where_my_hug_search, and decide from what it finds which parts they cover (use a model as is, fine-tune one, train one) and which are plain code. Follow it.',
     inputSchema: details,
   }, async (args) => ({ content: [{ type: 'text', text: rubric(args) }] }));
   server.registerTool('where_my_hug_search', {
     title: "Where my hug at? (searched live)",
-    description: "Step 2 of 3: searches Hugging Face for each part of the need: the task's most downloaded and trending models, names holding each keyword, and the text of model and dataset cards; and datasets on Kaggle, Zenodo, ModelScope and Roboflow Universe. Returns what it found, with downloads, likes, license, age and how each turned up, to pick each part's verdict and candidates from. Then call where_my_hug_verify.",
+    description: "Step 2 of 3: searches Hugging Face for each part of the need (the task's most downloaded and trending, names holding each keyword, and the text of model and dataset cards), and Kaggle, Zenodo, ModelScope and Roboflow Universe, for models and datasets alike. One found on several hubs is listed once, naming the others. Returns what it found, with downloads, likes, license, size, age and how each turned up, to pick each part's verdict and candidates from. Then call where_my_hug_verify.",
     inputSchema: wanted,
   }, async ({ parts }) => ({ content: [{ type: 'text', text: await find(parts) }] }));
   server.registerTool('where_my_hug_verify', {
     title: "Where my hug at? (checked live)",
-    description: "Step 3 of 3: checks every picked model and dataset id live on its hub, drops the ones that are not there, flags licenses, gating, staleness and low use, sizes each model against the compute (fits, a stretch that fits only quantized, or cloud, with who hosts it), marks picks the search didn't turn up as from memory, shows what it found that wasn't picked, and returns the report to show the user. If nextAction is SEARCH_FIRST or RECALL_REPLACEMENTS, do what its instructions say and call again.",
+    description: "Step 3 of 3: checks every picked model and dataset id live on its hub, drops the ones that are not there, flags licenses, gating, staleness and low use, sizes each model against the compute (fits, a stretch that fits only quantized, or cloud, with who hosts it), marks picks the search didn't turn up as from memory, names every hub a pick is on, shows what it found that wasn't picked, and returns the report to show the user. If nextAction is SEARCH_FIRST or RECALL_REPLACEMENTS, do what its instructions say and call again.",
     inputSchema: slate,
   }, async (args) => ({ content: [{ type: 'text', text: await verified(args) }] }));
   return server;

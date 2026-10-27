@@ -1,6 +1,6 @@
 // The first step: the method the agent follows before anything is named. What an agent remembers of Hugging Face is
 // as old as its training and misses the long tail, so it doesn't pick from memory: it splits the need into parts,
-// where_my_hug_search finds what Hugging Face has for each, the agent judges those results, and where_my_hug_verify
+// where_my_hug_search finds what the hubs have for each, the agent judges those results, and where_my_hug_verify
 // checks the picks. Four details change the answer, so they come first: a call missing any gets questions back, not
 // the method, and "unknown" is a fine answer.
 
@@ -26,7 +26,7 @@ ${missing.map((key) => `- ${key}: ${QUESTIONS[key]}`).join('\n')}
 "Not sure yet" is a fine answer: pass "unknown", and the picks will cover the range. Then call where_my_hug again with all four filled in.`;
   }
   const { need, compute, license, stack, data } = details;
-  return `Where my hug at? Work out what Hugging Face already has for this need.
+  return `Where my hug at? Work out what Hugging Face and the other hubs already have for this need.
 
 Need: ${need}
 Compute: ${compute}
@@ -45,10 +45,11 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
      "task": "image-to-text",              (the Hugging Face task tag the job falls under, as the Hub's filters name it)
      "keywords": ["ocr", "handwritten"],   (1 to 3 single words a fitting model's name might hold)
      "phrase": "handwritten text recognition" }   (the job in a few words, as a model card would put it)
-   It searches the task's most downloaded and trending models, names holding each keyword, and the text of model and
-   dataset cards; and, for datasets, Kaggle, Zenodo, ModelScope and Roboflow Universe by the phrase, which Kaggle matches
-   word for word, so keep it to what a dataset's title would say. If a part comes back thin, search again with other
-   words; a job can sit under more than one task tag.
+   On Hugging Face it searches the task's most downloaded and trending models and datasets, names holding each keyword,
+   and the text of model and dataset cards. It searches Kaggle, Zenodo, ModelScope and Roboflow Universe for both too:
+   ModelScope by each keyword (it matches names), the others by the phrase, which Kaggle matches word for word, so keep it
+   to what a title would say. One model or dataset on several hubs comes back once, naming the others. If a part comes
+   back thin, search again with other words; a job can sit under more than one task tag.
 
 4. From what the search found, give each part its verdict:
    USE    a model the search found does this job well enough as it is.
@@ -57,7 +58,8 @@ Where a detail is "unknown", cover the range (a small pick and a big one, say) a
    Then pick candidates from the results, by what they say (task, card, use, recency), not by what you remember. For USE and TUNE,
    1 to 4 models, best fit first: at least one that runs on the compute; then, where a bigger model would clearly do better, one a
    little over it (it may fit quantized) and one far over it that could run in the cloud. Say in the rationale what the bigger ones
-   would buy. For TUNE and TRAIN, datasets too (kind "dataset"), from any hub; another hub's keeps its prefix ("kaggle:owner/name").
+   would buy. For TUNE and TRAIN, datasets too (kind "dataset"). Models and datasets alike may come from any hub; another hub's id
+   keeps its prefix ("kaggle:owner/name"), and one on several hubs is picked by the id it's listed under.
    Weigh a dataset by its size and terms as well as its fit: a handful of rows or no license is rarely worth starting from. A Space is a demo: pick the model behind it. Fit the stack: a model
    the stack can't load means running a server, so say so. A model you know that the search didn't turn up may be added, but it
    goes after the search's picks and the report marks it as from memory.

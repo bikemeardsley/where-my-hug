@@ -3,9 +3,11 @@
 An MCP server: describe an ML need, and it says which parts the Hugging Face
 already covers (USE), which to fine-tune from a base model (TUNE), which need
 their own training (TRAIN), and which aren't a model at all (WRITE), with every
-model and dataset checked live. Datasets also come from Kaggle, Zenodo,
-ModelScope and Roboflow Universe (`src/elsewhere.ts`, one `HUBS` entry each,
-ids prefixed `kaggle:` etc.). Start with [README.md](../README.md).
+model and dataset checked live. Models and datasets also come from Kaggle,
+Zenodo, ModelScope and Roboflow Universe (`src/hub.ts`, one `HUBS` entry each,
+Hugging Face's too, ids prefixed `kaggle:` etc.). The same owner/name on
+several hubs is one finding, its other hubs listed under `also`, so the user
+picks the hub. Start with [README.md](../README.md).
 
 ## Conventions
 
@@ -78,6 +80,11 @@ ids prefixed `kaggle:` etc.). Start with [README.md](../README.md).
 - Public on bikemeardsley/where-my-hug and npm (where-my-hug), MIT. `HF_TOKEN` is read
   from the environment (the Claude plugin asks for it and passes it in), sent
   only to huggingface.co, and never recorded. `ROBOFLOW_API_KEY` the same,
-  only to api.roboflow.com; Kaggle, Zenodo and ModelScope take no key (checked
-  2026-10-26; Zenodo's key only lifts its general rate limit, not search's).
-- Tests run offline: Hugging Face is mocked.
+  only to api.roboflow.com (required: Roboflow is skipped without it). Kaggle,
+  Zenodo and ModelScope take no key (checked 2026-10-26). A Zenodo token was
+  built and dropped the same day: live, it changed neither Zenodo's limits
+  (133/min records, 30/min search, one per-IP bucket) nor its answers.
+  Roboflow checked live with Mike's key 2026-10-26: its search answers
+  type=model and type=dataset alike, so a model is a project with a trained
+  version (`modelCount`), and its dates are ISO in a hit, seconds in a lookup.
+- Tests run offline: every hub is mocked.

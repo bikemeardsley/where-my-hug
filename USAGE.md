@@ -27,13 +27,20 @@ Setup for each agent, then what to expect when you use it. The
   at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
   and pass it as `HF_TOKEN`, shown for each agent below. It is sent only to
   huggingface.co.
-- **A Roboflow key is optional too.** Datasets on Kaggle, Zenodo and
-  ModelScope are searched without one. Roboflow Universe, a large home of
-  labeled image sets, is searched only with a key: sign up free at
-  [roboflow.com](https://roboflow.com), copy your private API key from your
-  workspace's settings (Settings → API Keys), and pass it as
+- **A Roboflow key is optional too.** Models and datasets on Kaggle, Zenodo
+  and ModelScope are searched without one. Roboflow Universe, a large home of
+  labeled image sets and the models trained on them, is searched only with a
+  key: sign up free at [roboflow.com](https://roboflow.com), copy your private
+  API key from your workspace's settings (Settings → API Keys), and pass it as
   `ROBOFLOW_API_KEY` the same way as `HF_TOKEN`. It is sent only to
   api.roboflow.com. Without it, the search says Roboflow wasn't searched.
+- **On Windows, a key can live in your user environment** instead of a
+  config file, typed without it showing on screen. In PowerShell, one line per
+  key; agents started afterwards pass it on to the server:
+
+  ```powershell
+  [Environment]::SetEnvironmentVariable('ROBOFLOW_API_KEY', [Net.NetworkCredential]::new('', (Read-Host 'Roboflow API key' -AsSecureString)).Password, 'User')
+  ```
 
 The server config most agents take, in one place:
 
@@ -89,7 +96,7 @@ Docs: [plugins](https://code.claude.com/docs/en/plugins/install) ·
 
 Settings → Developer → Edit Config opens `claude_desktop_config.json`. Add the
 server under `mcpServers` (with `"env": { "HF_TOKEN": "hf_...", "ROBOFLOW_API_KEY": "..." }`
-for either key you want), save, and restart Claude Desktop.
+for any key you want), save, and restart Claude Desktop.
 
 Docs: [local MCP servers](https://modelcontextprotocol.io/docs/develop/connect-local-servers)
 

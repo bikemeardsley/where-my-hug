@@ -1,18 +1,19 @@
 // The last step: every candidate the agent picked is looked up on its hub. One that isn't there is dropped; the
 // rest are flagged for what would bite later (gated access, terms you can't ship under, years without an update,
 // almost no use) and sized against the compute. Each part's search is run again (from the cache, mostly), so the
-// report knows what Hugging Face turned up: a pick the search found outranks one the agent only remembered, and what
-// the search found but the agent didn't pick is shown, so nothing it turned up is hidden. What runs on the compute
-// heads each part; bigger models follow, a stretch or cloud only, as what might do better if it can be made to work.
-import { lookUpElsewhere, searchElsewhere, sourceOf } from './elsewhere.ts';
-import { count, lookUp, search, type Entry, type Hit, type Kind, type Query } from './hub.ts';
+// report knows what the hubs turned up: a pick the search found outranks one the agent only remembered, what the
+// search found but the agent didn't pick is shown, so nothing it turned up is hidden, and a pick found on several hubs
+// names them all. What runs on the compute heads each part; bigger models follow, a stretch or cloud only, as what
+// might do better if it can be made to work.
+import { bare, count, hubOf, lookUp, pageOf, search, type Entry, type Hit, type Kind, type Query } from './hub.ts';
 
 export type Verdict = 'USE' | 'TUNE' | 'TRAIN' | 'WRITE';
 export interface Candidate { id: string; kind?: Kind }
 export interface Component { id: string; name: string; role: string; verdict: Verdict; rationale: string; candidates: Candidate[]; search?: Query }
 /** Against the compute: runs on it, fits only quantized (a stretch), or needs more hardware or a host (cloud). */
 type Tier = 'fits' | 'stretch' | 'cloud';
-type Checked = Entry & { flags: string[]; tier?: Tier; found?: string[] }; // found: how the search turned it up; [] from memory only
+// found: how the search turned it up, [] from memory only; also: the same owner/name on other hubs
+type Checked = Entry & { flags: string[]; tier?: Tier; found?: string[]; also?: string[] };
 interface Part extends Component {
   model?: Checked; // the first model that runs on the compute (or the first, when the compute or the size isn't known)
   dataset?: Checked;
@@ -44,23 +45,23 @@ export async function verify({ need, components, compute, recommendation }: { ne
   const queryOf = ({ search: query }: Component) => (query?.task || query?.keywords?.length || query?.phrase ? query : undefined); // {} searches nothing
   const searches = await Promise.all(components.map((component) => {
     const query = queryOf(component);
-    return query ? Promise.all([search('model', query), search('dataset', query), searchElsewhere(query)]) : [];
+    return query ? Promise.all([search('model', query), search('dataset', query)]) : [];
   }));
   const searched = searches.map((results) => results.flatMap(({ hits }) => hits));
   // A search that didn't answer may have held any pick: then none can be called memory.
   const unanswered = searches.flat().reduce((sum, { failed }) => sum + failed.length, 0);
   // Found by any part's search counts as found: a dataset one part's search turned up isn't memory when another picks it.
-  // And what any part picked isn't "not picked" in another.
-  const picked = new Set(components.flatMap(({ candidates }) => candidates.map(({ id }) => id.toLowerCase())));
-  const how = new Map<string, string[]>();
+  // And what any part picked isn't "not picked" in another. Keyed without the hub, so a pick on one hub is found on any.
+  const same = ({ kind, id }: { kind: Kind; id: string }) => `${kind}:${bare(id).toLowerCase()}`;
+  const picked = new Set(components.flatMap(({ candidates }) => candidates.map(({ id }) => bare(id).toLowerCase())));
+  const how = new Map<string, { found: string[]; ids: string[] }>();
   for (const hit of searched.flat()) {
-    const key = `${hit.kind}:${hit.id.toLowerCase()}`;
-    how.set(key, [...new Set([...(how.get(key) ?? []), ...hit.found])]);
+    const seen = how.get(same(hit));
+    how.set(same(hit), { found: [...new Set([...(seen?.found ?? []), ...hit.found])], ids: [...new Set([...(seen?.ids ?? []), hit.id, ...(hit.also ?? [])])] });
   }
   const parts: Part[] = await Promise.all(components.map(async (component, i) => {
-    // An agent can name a dataset as a model or the other way round: then Hugging Face has it under the other kind.
+    // An agent can name a dataset as a model or the other way round: then its hub has it under the other kind.
     const entries = await Promise.all(component.candidates.map(async ({ id, kind = 'model' }) => {
-      if (sourceOf(id)) return lookUpElsewhere(id); // another hub's: a dataset, whatever it was named as
       const entry = await lookUp(kind, id);
       if (entry.exists !== false) return entry;
       const other = await lookUp(kind === 'model' ? 'dataset' : 'model', id);
@@ -69,13 +70,18 @@ export async function verify({ need, components, compute, recommendation }: { ne
     }));
     const query = queryOf(component);
     const modelHits = searched[i].filter((hit) => hit.kind === 'model');
+    const kept = entries.filter((entry) => entry.exists !== false);
+    // One finding once: gpt2 and GPT2 are one model, and so is one owner/name on two hubs, which the first names as "also".
     // A part that skipped the search still gets its picks marked: what no search turned up came from memory.
-    const found: Checked[] = entries.filter((entry, at, all) => entry.exists !== false &&
-      all.findIndex((other) => other.id.toLowerCase() === entry.id.toLowerCase()) === at).map((entry) => ({ // gpt2 and GPT2 are one model
-      ...entry, flags: flagsOf(entry), tier: tierOf(entry),
-      found: how.get(`${entry.kind}:${entry.id.toLowerCase()}`) ?? (unanswered ? undefined : []),
-    })).sort(memoryLast);
-    const named = new Set([...picked, ...found.map((entry) => entry.id.toLowerCase())]); // and Hugging Face's spelling of each
+    const found: Checked[] = kept.filter((entry, at) => kept.findIndex((other) => same(other) === same(entry)) === at).map((entry) => {
+      const ids = [...(how.get(same(entry))?.ids ?? []), ...kept.filter((other) => same(other) === same(entry)).map((other) => other.id)];
+      const also = [...new Map(ids.map((id) => [id.toLowerCase(), id])).values()].filter((id) => id.toLowerCase() !== entry.id.toLowerCase()); // a pick's spelling last, so it stands
+      return {
+        ...entry, flags: flagsOf(entry), tier: tierOf(entry),
+        found: how.get(same(entry))?.found ?? (unanswered ? undefined : []), also: also.length ? also : undefined,
+      };
+    }).sort(memoryLast);
+    const named = new Set([...picked, ...found.map((entry) => bare(entry.id).toLowerCase())]); // and its hub's spelling of each
     const models = found.filter((entry) => entry.kind === 'model');
     const bigger = models.filter((entry) => entry.tier === 'stretch' || entry.tier === 'cloud');
     const model = models.find((entry) => !bigger.includes(entry));
@@ -89,7 +95,7 @@ export async function verify({ need, components, compute, recommendation }: { ne
       alternates: found.filter((entry) => entry !== model && entry !== dataset && !bigger.includes(entry)),
       dropped: entries.filter((entry) => entry.exists === false).map((entry) => entry.id),
       missing,
-      unpicked: component.verdict === 'WRITE' ? [] : modelHits.filter((hit) => !named.has(hit.id.toLowerCase())).slice(0, UNPICKED),
+      unpicked: component.verdict === 'WRITE' ? [] : modelHits.filter((hit) => !named.has(bare(hit.id).toLowerCase())).slice(0, UNPICKED),
       unsearched: component.verdict !== 'WRITE' && !query,
     };
   }));
@@ -124,7 +130,7 @@ function flagsOf(entry: Entry): string[] {
 
 const FLAG_WORDS: Record<string, string> = {
   UNCHECKED: "its hub didn't answer (or wants a key that isn't set), so it's unchecked",
-  GATED: 'gated: accept its terms on Hugging Face before downloading',
+  GATED: 'gated: accept its terms on its hub before downloading',
   NO_LICENSE: 'no license on its card: find its terms before relying on it',
   NON_COMMERCIAL: 'non-commercial or research-only terms',
   OWN_TERMS: 'its own terms (custom, use-restricted or no-derivatives): read them',
@@ -132,13 +138,20 @@ const FLAG_WORDS: Record<string, string> = {
   LITTLE_USED: 'almost nobody downloads it',
 };
 
-const url = ({ id, kind, page }: { id: string; kind: Kind; page?: string }) => page ?? `https://huggingface.co/${kind === 'dataset' ? 'datasets/' : ''}${id}`;
+const url = ({ id, kind }: { id: string; kind: Kind }) => pageOf(id, kind);
 const gb = (params: number, bytes: number) => `~${((params * bytes) / 1e9).toFixed(1)} GB`;
-const brief = ({ flags, found }: Checked, ...first: string[]) => {
-  const notes = [...first, ...flags.map((flag) => flag.toLowerCase().replace('_', ' ')), ...(found?.length === 0 ? ['from memory'] : [])];
+/** The other hubs it's on, each a link, so the user can take it from whichever they use. */
+const alsoOn = ({ also, kind }: { also?: string[]; kind: Kind }) => also && `also on ${also.map((id) => `[${hubOf(id).name}](${url({ id, kind })})`).join(', ')}`;
+const brief = (entry: Checked, ...first: string[]) => {
+  const notes = [...first, alsoOn(entry), ...entry.flags.map((flag) => flag.toLowerCase().replace('_', ' ')), entry.found?.length === 0 && 'from memory'].filter(Boolean);
   return notes.length ? ` (${notes.join(', ')})` : '';
 };
-const unpicked = (hit: Hit) => `[${hit.id}](${url(hit)})${hit.downloads !== undefined ? ` (${count(hit.downloads)} downloads a month)` : ''}`;
+const unpicked = (hit: Hit) => {
+  const notes = [
+    hit.downloads !== undefined && `${count(hit.downloads)} downloads a month`, hit.downloadsEver !== undefined && `${count(hit.downloadsEver)} downloads in all`, alsoOn(hit),
+  ].filter(Boolean);
+  return `[${hit.id}](${url(hit)})${notes.length ? ` (${notes.join(', ')})` : ''}`;
+};
 const age = (iso: string) => {
   const days = Math.round((Date.now() - Date.parse(iso)) / 864e5);
   return days < 1 ? 'today' : days < 60 ? `${days} days ago` : days < 730 ? `${Math.round(days / 30)} months ago` : `${Math.round(days / 365)} years ago`;
@@ -155,6 +168,7 @@ function pick(label: string, entry: Checked, tune = false): string[] {
     entry.likes !== undefined && `${count(entry.likes)} likes`,
     entry.updated && `updated ${age(entry.updated)}`,
     entry.baseModels && `built on ${entry.baseModels.join(', ')}`,
+    alsoOn(entry),
     entry.found?.length && `found: ${entry.found.join(', ')}`,
   ].filter(Boolean).join('  ·  ');
   return [
@@ -169,7 +183,8 @@ function upgrade(entry: Checked): string {
   const size = entry.tier === 'stretch'
     ? `a stretch: ${gb(entry.params!, BYTES_PER_PARAM)} to run, ${gb(entry.params!, QUANTIZED_BYTES_PER_PARAM)} quantized to 4 bits`
     : `cloud: ${gb(entry.params!, BYTES_PER_PARAM)} to run`;
-  const where = entry.hostedBy ? `hosted by ${entry.hostedBy.join(', ')}` : entry.tier === 'cloud' ? 'on rented GPUs (no host on Hugging Face serves it)' : undefined;
+  const where = entry.hostedBy ? `hosted by ${entry.hostedBy.join(', ')}`
+    : entry.tier === 'cloud' ? `on rented GPUs${hubOf(entry.id).prefix ? '' : ' (no host on Hugging Face serves it)'}` : undefined;
   return `- [${entry.id}](${url(entry)}): ${[size, where].filter(Boolean).join(', ')}${brief(entry)}`;
 }
 
@@ -186,7 +201,7 @@ function report(need: string, parts: Part[], compute: string | undefined, unansw
     "# Where my hug at?", '',
     `**${need}**`, '',
     `${parts.length} ${parts.length === 1 ? 'part' : 'parts'}: ${tally.join(', ')}.`, '',
-    `_Searched and checked on Hugging Face and the other dataset hubs just now: ${named} named${remembered ? `, ${remembered} from memory rather than the search` : ''}, ${dropped} not there and dropped${unchecked ? `, ${unchecked} not checked` : ''}${unanswered ? `; ${unanswered} ${unanswered === 1 ? 'search' : 'searches'} didn't answer, so no pick is marked from memory` : ''}._`,
+    `_Searched and checked on Hugging Face and the other hubs just now: ${named} named${remembered ? `, ${remembered} from memory rather than the search` : ''}, ${dropped} not there and dropped${unchecked ? `, ${unchecked} not checked` : ''}${unanswered ? `; ${unanswered} ${unanswered === 1 ? 'search' : 'searches'} didn't answer, so no pick is marked from memory` : ''}._`,
   ];
   for (const part of parts) {
     lines.push('', '---', '', `## ${part.verdict}  ·  ${part.name}`, '', `_${part.role}_`, '');

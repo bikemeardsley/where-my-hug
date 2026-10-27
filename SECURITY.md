@@ -23,9 +23,9 @@ attacker gains.
 - **The network:** `GET` requests to `huggingface.co/api`: searches built from
   what the agent writes for each part of a need (a task tag, keywords, a few
   words about the job), and one lookup per model or dataset id it picks, to
-  check it exists and read its facts. The same words search for datasets on
-  `www.kaggle.com/api`, `zenodo.org/api`, `www.modelscope.cn/api` and, with a
-  key, `api.roboflow.com`, with one lookup per dataset picked from them. Every
+  check it exists and read its facts. The same search looks for models and
+  datasets on `www.kaggle.com/api`, `zenodo.org/api`, `www.modelscope.cn/openapi`
+  and, with a key, `api.roboflow.com`, with one lookup per id picked from them. Every
   id is checked against its hub's id shape before it goes into a URL. Nothing
   else is contacted.
 - **`HF_TOKEN`:** read from the environment if set, sent only to

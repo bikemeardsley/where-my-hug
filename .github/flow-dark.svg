@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="920" height="528" viewBox="0 0 920 528" role="img" aria-labelledby="flow-dark-title flow-dark-desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="528" viewBox="0 0 1080 528" role="img" aria-labelledby="flow-dark-title flow-dark-desc">
 <title id="flow-dark-title">How Where My Hug At? works</title>
-<desc id="flow-dark-desc">Your model need, with four questions asked first (compute, license, stack, data), is split into parts: jobs with an input and an output. A part that's a model's job goes to Find hug, which searches Hugging Face four ways: most downloaded, trending, names and card text. The same search looks for datasets on other hubs: Kaggle, Zenodo, ModelScope, and Roboflow with your key. The verdict, use, tune or train, comes from what both found. A part that's just code is marked write and needs no search. Your report checks every pick live, sizes it for your hardware, and ends with where to start.</desc>
+<desc id="flow-dark-desc">Your ML need, a model, a dataset or both, with four questions asked first (compute, license, stack, data), is split into parts: jobs with an input and an output. A part to search goes to Find hug, which searches Hugging Face four ways for models and datasets: most downloaded, trending, names and card text. The same search covers the other hubs, for models and datasets too: Kaggle, Zenodo, ModelScope, and Roboflow with your key. What turns up on several hubs is consolidated into one finding that names every hub it's on, so you pick the one you use. The verdict, use, tune or train, comes from those findings. A part that's just code is marked write and needs no search. Your report checks every pick live, sizes it for your hardware, and ends with where to start.</desc>
 <defs>
 <marker id="flow-dark-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9da7b3"/></marker>
 </defs>
-<rect width="920" height="528" rx="8" fill="#0d1117"/>
+<rect width="1080" height="528" rx="8" fill="#0d1117"/>
 <line x1="184" y1="320" x2="214" y2="320" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
 <line x1="344" y1="320" x2="430" y2="320" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
 <line x1="560" y1="320" x2="590" y2="320" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
 <line x1="720" y1="320" x2="750" y2="320" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<line x1="880" y1="320" x2="910" y2="320" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
 <line x1="496" y1="224" x2="496" y2="194" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
 <path d="M560 108 H648 Q656 108 656 116 V222" fill="none" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
-<line x1="816" y1="224" x2="816" y2="194" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<line x1="976" y1="224" x2="976" y2="194" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
 <line x1="280" y1="416" x2="280" y2="446" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
-<path d="M344 476 H808 Q816 476 816 468 V418" fill="none" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
+<path d="M344 476 H968 Q976 476 976 468 V418" fill="none" stroke="#9da7b3" stroke-width="1.6" marker-end="url(#flow-dark-arrow)"/>
 <rect x="40" y="224" width="144" height="192" rx="6" fill="#0d1117"/>
 <rect x="40" y="224" width="144" height="192" rx="6" fill="#9da7b3" fill-opacity="0.10" stroke="#8b949e" stroke-width="1.6"/>
 <rect x="216" y="224" width="128" height="192" rx="6" fill="#0d1117"/>
@@ -25,31 +26,34 @@
 <rect x="592" y="224" width="128" height="192" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
 <rect x="752" y="224" width="128" height="192" rx="6" fill="#0d1117"/>
 <rect x="752" y="224" width="128" height="192" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
+<rect x="912" y="224" width="128" height="192" rx="6" fill="#0d1117"/>
+<rect x="912" y="224" width="128" height="192" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
 <rect x="432" y="24" width="128" height="168" rx="6" fill="#0d1117"/>
 <rect x="432" y="24" width="128" height="168" rx="6" fill="#f0f6fc" fill-opacity="0.03" stroke="#f0f6fc" stroke-opacity="0.30" stroke-width="1.6"/>
-<rect x="752" y="88" width="128" height="104" rx="6" fill="#0d1117"/>
-<rect x="752" y="88" width="128" height="104" rx="6" fill="#ffd21e" fill-opacity="0.14" stroke="#ffd21e" stroke-width="1.6"/>
+<rect x="912" y="88" width="128" height="104" rx="6" fill="#0d1117"/>
+<rect x="912" y="88" width="128" height="104" rx="6" fill="#ffd21e" fill-opacity="0.14" stroke="#ffd21e" stroke-width="1.6"/>
 <rect x="216" y="448" width="128" height="56" rx="6" fill="#0d1117"/>
 <rect x="216" y="448" width="128" height="56" rx="6" fill="#161b22" stroke="#f0f6fc" stroke-width="1.6"/>
 <line x1="56" y1="312" x2="168" y2="312" stroke="#9da7b3" stroke-width="0.8"/>
-<line x1="448" y1="308" x2="544" y2="308" stroke="#9da7b3" stroke-width="0.8"/>
-<line x1="608" y1="284" x2="704" y2="284" stroke="#9da7b3" stroke-width="0.8"/>
+<line x1="448" y1="324" x2="544" y2="324" stroke="#9da7b3" stroke-width="0.8"/>
+<line x1="608" y1="340" x2="704" y2="340" stroke="#9da7b3" stroke-width="0.8"/>
+<line x1="768" y1="284" x2="864" y2="284" stroke="#9da7b3" stroke-width="0.8"/>
 <line x1="448" y1="84" x2="544" y2="84" stroke="#9da7b3" stroke-width="0.8"/>
-<rect x="348" y="300" width="80" height="12" rx="2" fill="#0d1117"/>
-<text x="388" y="309" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">A MODEL'S JOB</text>
+<rect x="359" y="300" width="56" height="12" rx="2" fill="#0d1117"/>
+<text x="387" y="309" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">TO SEARCH</text>
 <rect x="424" y="202" width="64" height="12" rx="2" fill="#0d1117"/>
 <text x="456" y="211" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">SAME SEARCH</text>
-<rect x="572" y="88" width="64" height="12" rx="2" fill="#0d1117"/>
-<text x="604" y="97" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">DATASETS</text>
-<rect x="824" y="202" width="56" height="12" rx="2" fill="#0d1117"/>
-<text x="852" y="211" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">ENDS WITH</text>
+<rect x="568" y="88" width="72" height="12" rx="2" fill="#0d1117"/>
+<text x="604" y="97" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">THEIR FINDS</text>
+<rect x="984" y="202" width="56" height="12" rx="2" fill="#0d1117"/>
+<text x="1012" y="211" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">ENDS WITH</text>
 <rect x="288" y="426" width="56" height="12" rx="2" fill="#0d1117"/>
 <text x="316" y="435" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">JUST CODE</text>
-<rect x="548" y="456" width="56" height="12" rx="2" fill="#0d1117"/>
-<text x="576" y="465" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">NO SEARCH</text>
-<text x="112" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Your model need</text>
-<text x="112" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what you want a</text>
-<text x="112" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">model to do</text>
+<rect x="628" y="456" width="56" height="12" rx="2" fill="#0d1117"/>
+<text x="656" y="465" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="8" fill="#8b949e" letter-spacing="0.14em" text-anchor="middle">NO SEARCH</text>
+<text x="112" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Your ML need</text>
+<text x="112" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">a model, a dataset,</text>
+<text x="112" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">or both</text>
 <text x="112" y="336" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">asked first:</text>
 <text x="112" y="356" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">compute · license</text>
 <text x="112" y="372" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">stack · data</text>
@@ -60,36 +64,45 @@
 <text x="280" y="324" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">and an output</text>
 <text x="496" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Find hug</text>
 <text x="496" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">searches Hugging</text>
-<text x="496" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">Face four ways:</text>
-<text x="496" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">most downloaded</text>
-<text x="496" y="348" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">trending</text>
-<text x="496" y="364" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">names</text>
-<text x="496" y="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">card text</text>
+<text x="496" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">Face for models</text>
+<text x="496" y="308" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">and datasets:</text>
+<text x="496" y="348" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">most downloaded</text>
+<text x="496" y="364" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">trending</text>
+<text x="496" y="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">names</text>
+<text x="496" y="396" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">card text</text>
 <text x="496" y="52" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Other hubs</text>
-<text x="496" y="72" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">for datasets:</text>
+<text x="496" y="72" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">models and datasets:</text>
 <text x="496" y="104" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">Kaggle</text>
 <text x="496" y="120" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">Zenodo</text>
 <text x="496" y="136" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">ModelScope</text>
 <text x="496" y="156" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">Roboflow</text>
 <text x="496" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">with your key</text>
-<text x="656" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Verdict</text>
-<text x="656" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">from what it found</text>
-<text x="656" y="308" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">USE</text>
-<text x="656" y="324" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">fits as it is</text>
-<text x="656" y="348" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">TUNE</text>
-<text x="656" y="364" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">fine-tune it</text>
-<text x="656" y="388" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">TRAIN</text>
-<text x="656" y="404" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">train your own</text>
-<text x="816" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Your report</text>
-<text x="816" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">every pick</text>
-<text x="816" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">checked live:</text>
-<text x="816" y="316" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">real, licensed,</text>
-<text x="816" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">sized for your</text>
-<text x="816" y="348" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">hardware</text>
-<text x="816" y="116" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Start here</text>
-<text x="816" y="140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what to try first</text>
-<text x="816" y="156" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">and why, and</text>
-<text x="816" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what to skip</text>
+<text x="656" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Consolidate</text>
+<text x="656" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">one model or</text>
+<text x="656" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">dataset on</text>
+<text x="656" y="308" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">several hubs</text>
+<text x="656" y="324" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">is one finding</text>
+<text x="656" y="364" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">every hub listed</text>
+<text x="656" y="384" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">so you pick</text>
+<text x="656" y="400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">the one you use</text>
+<text x="816" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Verdict</text>
+<text x="816" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">from what it found</text>
+<text x="816" y="308" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">USE</text>
+<text x="816" y="324" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">fits as it is</text>
+<text x="816" y="348" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">TUNE</text>
+<text x="816" y="364" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">fine-tune it</text>
+<text x="816" y="388" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#f0f6fc" text-anchor="middle">TRAIN</text>
+<text x="816" y="404" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">train your own</text>
+<text x="976" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Your report</text>
+<text x="976" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">every pick</text>
+<text x="976" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">checked live:</text>
+<text x="976" y="316" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">real, licensed,</text>
+<text x="976" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">sized for your</text>
+<text x="976" y="348" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">hardware</text>
+<text x="976" y="116" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">Start here</text>
+<text x="976" y="140" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what to try first</text>
+<text x="976" y="156" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">and why, and</text>
+<text x="976" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">what to skip</text>
 <text x="280" y="472" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#f0f6fc" text-anchor="middle">WRITE</text>
 <text x="280" y="490" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9da7b3" text-anchor="middle">no model needed</text>
 </svg>

@@ -1,13 +1,13 @@
 ---
 name: where-my-hug
-description: Find out what Hugging Face already has for a machine learning need before recommending any model or dataset. Use when the user wants a model for a task, asks which Hugging Face model or dataset to use, is looking for training data, or is planning something with ML parts. Splits the need into parts, searches Hugging Face live for each (and Kaggle, Zenodo, ModelScope and Roboflow Universe for datasets), decides from what it finds whether to use a model as is (USE), fine-tune one (TUNE), train one (TRAIN), or write plain code (WRITE), and checks every model and dataset picked, with licenses, gating, dataset sizes and memory sized against the user's hardware.
+description: Find out what Hugging Face already has for a machine learning need before recommending any model or dataset. Use when the user wants a model for a task, asks which Hugging Face model or dataset to use, is looking for training data, or is planning something with ML parts. Splits the need into parts, searches Hugging Face, Kaggle, Zenodo, ModelScope and Roboflow Universe live for models and datasets for each (one found on several hubs comes back once, naming them all), decides from what it finds whether to use a model as is (USE), fine-tune one (TUNE), train one (TRAIN), or write plain code (WRITE), and checks every model and dataset picked, with licenses, gating, dataset sizes and memory sized against the user's hardware.
 ---
 
 # Where my hug at?
 
 What you remember of Hugging Face is as old as your training and misses the
-long tail. So don't pick from memory: Where My Hug At searches Hugging Face
-for each part of the need, you pick from what it finds, and it checks every
+long tail. So don't pick from memory: Where My Hug At searches Hugging Face and
+the other hubs for each part of the need, you pick from what it finds, and it checks every
 pick live and writes the report the user sees. Three steps, always in order.
 
 ## With the MCP tools

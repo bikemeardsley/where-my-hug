@@ -10,11 +10,12 @@ and no server of its own, and nothing you do with it reaches the author.
 Only read-only searches and lookups, to **Hugging Face**
 (`huggingface.co/api`): searches built from what your agent writes for each
 part of an ML need (a task tag, keywords, a few words about the job), and one
-lookup for each model or dataset it picks. The same few words about each job
-also search for datasets on **Kaggle** (`www.kaggle.com/api`), **Zenodo**
-(`zenodo.org/api`), **ModelScope** (`www.modelscope.cn/api`, run by Alibaba
+lookup for each model or dataset it picks. The same search also looks for
+models and datasets on **Kaggle** (`www.kaggle.com/api`), **Zenodo**
+(`zenodo.org/api`), **ModelScope** (`www.modelscope.cn/openapi`, run by Alibaba
 Cloud in China) and, if you set a key, **Roboflow Universe**
-(`api.roboflow.com`), with one lookup for each dataset picked from them.
+(`api.roboflow.com`), with one lookup for each model or dataset picked from
+them.
 
 An `HF_TOKEN`, if you set one, goes only to `huggingface.co`, and a
 `ROBOFLOW_API_KEY` only to `api.roboflow.com`. Neither is ever written to a
