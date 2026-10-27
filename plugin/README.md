@@ -10,7 +10,7 @@ staleness, and sized against your hardware.
 
 This plugin adds two things to Claude Code:
 
-- **The `where-my-hug` MCP server**, run with `npx -y where-my-hug@0.3.0`
+- **The `where-my-hug` MCP server**, run with `npx -y where-my-hug@0.3.1`
   from the [npm package](https://www.npmjs.com/package/where-my-hug). It
   makes `GET` requests to `huggingface.co/api` (searches from what your agent
   writes for each part of the job, and the model and dataset ids it picks),

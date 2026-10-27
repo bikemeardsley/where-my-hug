@@ -1,6 +1,6 @@
 {
   "name": "where-my-hug",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Where my hug at? Tell your AI agent what you want a model to do. It finds what Hugging Face, Kaggle, Zenodo, ModelScope and Roboflow already have for it, models and data alike, what to fine-tune, and what's just code, with every pick checked live.",
   "license": "MIT",
   "mcpName": "io.github.bikemeardsley/where-my-hug",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.0",
-    "zod": "4.6.5"
+    "zod": "4.6.6"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
