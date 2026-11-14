@@ -232,9 +232,9 @@ test('sends the agent to search first, and a TRAIN verdict shows what the search
 test('searches every way in, takes the ways in turns, and says which failed', async () => {
   const wanted = [{ id: 'reader', name: 'Read signs', task: 'image-text-to-text', keywords: ['reader'], phrase: 'down' }];
   const found = await find(wanted);
-  assert.deepEqual([...found.matchAll(/^- (acme\/[\w-]+)/gm)].map((match) => match[1]), ['acme/reader', 'acme/new-hot', 'acme/popular']);
-  assert.match(found, /^- acme\/reader {2}· {2}image-text-to-text {2}· {2}license mit {2}· {2}52\.0k downloads a month {2}· {2}900 likes {2}· {2}also on modelscope:acme\/reader {2}· {2}found: most downloaded for image-text-to-text, name has reader, ModelScope name has reader$/m);
-  assert.match(found, /^- acme\/new-hot .*created 2026-10-10 {2}· {2}found: trending for image-text-to-text$/m);
+  assert.deepEqual([...found.matchAll(/^- \[(acme\/[\w-]+)\]/gm)].map((match) => match[1]), ['acme/reader', 'acme/new-hot', 'acme/popular']);
+  assert.match(found, /^- \[acme\/reader\]\(https:\/\/huggingface\.co\/acme\/reader\) {2}· {2}image-text-to-text {2}· {2}license mit {2}· {2}52\.0k downloads a month {2}· {2}900 likes {2}· {2}also on modelscope:acme\/reader {2}· {2}found: most downloaded for image-text-to-text, name has reader, ModelScope name has reader$/m);
+  assert.match(found, /^- \[acme\/new-hot\]\(\S+\) .*created 2026-10-10 {2}· {2}found: trending for image-text-to-text$/m);
   assert.match(found, /Datasets:\n- none\n/);
   assert.match(found, /Didn't answer: models: card text; datasets: card text\./);
 
@@ -254,15 +254,15 @@ test('searches every way in, takes the ways in turns, and says which failed', as
   assert.doesNotMatch(partial.markdown, /from memory:|, from memory\)|\(from memory\)/);
 
   const cards = await find([{ id: 'signs', name: 'Signs', phrase: 'signs' }]);
-  assert.match(cards, /^- acme\/card-only {2}· {2}3 likes {2}· {2}found: card text\n {2}> Reads street signs$/m);
+  assert.match(cards, /^- \[acme\/card-only\]\(\S+\) {2}· {2}3 likes {2}· {2}found: card text\n {2}> Reads street signs$/m);
   assert.doesNotMatch(cards, /acme\/demo/); // a Space is a demo, not a model
   const both = await find([{ id: 'r', name: 'R', keywords: ['reader'], phrase: 'signs' }]);
-  assert.deepEqual([...both.matchAll(/^- (acme\/reader) .*found: (.*)$/gim)].map((match) => [match[1], match[2]]), [['acme/reader', 'name has reader, ModelScope name has reader, card text']]); // Acme/Reader too
+  assert.deepEqual([...both.matchAll(/^- \[(acme\/reader)\]\(\S+\) .*found: (.*)$/gim)].map((match) => [match[1], match[2]]), [['acme/reader', 'name has reader, ModelScope name has reader, card text']]); // Acme/Reader too
   // Found on ModelScope first, it's still Hugging Face's id that leads: Hugging Face says the most about it.
-  assert.match(await find([{ id: 'l', name: 'L', keywords: ['lens'], phrase: 'signs' }]), /^- Acme\/Reader {2}· {2}900 likes {2}· {2}also on modelscope:acme\/reader {2}· {2}found: ModelScope name has lens, card text$/m);
-  assert.match(cards, /Datasets:\n- acme\/pages {2}· {2}1 likes {2}· {2}found: card text\n/);
+  assert.match(await find([{ id: 'l', name: 'L', keywords: ['lens'], phrase: 'signs' }]), /^- \[Acme\/Reader\]\(https:\/\/huggingface\.co\/Acme\/Reader\) {2}· {2}900 likes {2}· {2}also on modelscope:acme\/reader {2}· {2}found: ModelScope name has lens, card text$/m);
+  assert.match(cards, /Datasets:\n- \[acme\/pages\]\(\S+\) {2}· {2}1 likes {2}· {2}found: card text\n/);
   const listedData = await find([{ id: 'p', name: 'P', task: 'image-to-text' }]);
-  assert.match(listedData, /^- acme\/pages {2}· {2}image-to-text {2}· {2}under 1K rows {2}· {2}license cc-by-4\.0 /m);
+  assert.match(listedData, /^- \[acme\/pages\]\(https:\/\/huggingface\.co\/datasets\/acme\/pages\) {2}· {2}image-to-text {2}· {2}under 1K rows {2}· {2}license cc-by-4\.0 /m);
 });
 
 test('searches and checks the other hubs, each under its own prefix, one model on two hubs as one, and each key only to its hub', async () => {
@@ -282,12 +282,13 @@ test('searches and checks the other hubs, each under its own prefix, one model o
   delete process.env.ROBOFLOW_API_KEY;
 
   // Every hub's models and datasets, in turns, a way after another; ModelScope found nothing for these words.
-  assert.match(found, /Models:\n- acme\/card-only .*\n {2}> .*\n- kaggle:acme\/grader {2}· {2}"Card grader" {2}· {2}license Apache 2\.0 {2}· {2}3 likes {2}· {2}found: Kaggle search\n- Acme\/Reader /);
-  assert.match(found, /Datasets:\n- acme\/pages .*\n- kaggle:acme\/cards {2}· {2}"Acme cards" {2}· {2}2\.5 GB {2}· {2}license CC BY-NC-SA 4\.0 {2}· {2}5\.0k downloads in all {2}· {2}12 likes {2}· {2}found: Kaggle search\n- zenodo:42 {2}· {2}"Card scans" {2}· {2}600 kB {2}· {2}license cc-by-4\.0 {2}· {2}300 downloads in all {2}· {2}found: Zenodo search\n- roboflow:acme\/slabs {2}· {2}"Slabs" {2}· {2}object-detection {2}· {2}1\.2k images {2}· {2}license CC BY 4\.0 {2}· {2}found: Roboflow Universe search\n/);
+  assert.match(found, /Models:\n- \[acme\/card-only\]\(\S+\) .*\n {2}> .*\n- \[kaggle:acme\/grader\]\(https:\/\/www\.kaggle\.com\/models\/acme\/grader\) {2}· {2}"Card grader" {2}· {2}license Apache 2\.0 {2}· {2}3 likes {2}· {2}found: Kaggle search\n- \[Acme\/Reader\]\(\S+\) /);
+  assert.match(found, /Datasets:\n- \[acme\/pages\]\(\S+\) .*\n- \[kaggle:acme\/cards\]\(https:\/\/www\.kaggle\.com\/datasets\/acme\/cards\) {2}· {2}"Acme cards" {2}· {2}2\.5 GB {2}· {2}license CC BY-NC-SA 4\.0 {2}· {2}5\.0k downloads in all {2}· {2}12 likes {2}· {2}found: Kaggle search\n- \[zenodo:42\]\(https:\/\/zenodo\.org\/records\/42\) {2}· {2}"Card scans" {2}· {2}600 kB {2}· {2}license cc-by-4\.0 {2}· {2}300 downloads in all {2}· {2}found: Zenodo search\n- \[roboflow:acme\/slabs\]\(https:\/\/universe\.roboflow\.com\/acme\/slabs\) {2}· {2}"Slabs" {2}· {2}object-detection {2}· {2}1\.2k images {2}· {2}license CC BY 4\.0 {2}· {2}found: Roboflow Universe search\n/);
   assert.doesNotMatch(found, /Not searched/);
 
   const [grader, reader] = result.components;
   assert.deepEqual([grader.model?.id, grader.model?.license, grader.model?.found], ['kaggle:acme/grader', 'Apache 2.0', ['Kaggle search']]);
+  assert.equal(grader.model?.url, 'https://www.kaggle.com/models/acme/grader'); // in the JSON too, for an agent that writes its own summary
   assert.deepEqual([grader.dataset?.id, grader.dataset?.flags, grader.dataset?.found], ['kaggle:acme/cards', ['NON_COMMERCIAL'], ['Kaggle search']]);
   // zenodo:42 and roboflow:acme/slabs were named as models; Zenodo's record says it's a dataset, and the Roboflow
   // project has no trained version. Its date comes back in seconds.

@@ -13,7 +13,7 @@ export interface Component { id: string; name: string; role: string; verdict: Ve
 /** Against the compute: runs on it, fits only quantized (a stretch), or needs more hardware or a host (cloud). */
 type Tier = 'fits' | 'stretch' | 'cloud';
 // found: how the search turned it up, [] from memory only; also: the same owner/name on other hubs
-type Checked = Entry & { flags: string[]; tier?: Tier; found?: string[]; also?: string[] };
+type Checked = Entry & { url: string; flags: string[]; tier?: Tier; found?: string[]; also?: string[] };
 interface Part extends Component {
   model?: Checked; // the first model that runs on the compute (or the first, when the compute or the size isn't known)
   dataset?: Checked;
@@ -77,7 +77,7 @@ export async function verify({ need, components, compute, recommendation }: { ne
       const ids = [...(how.get(same(entry))?.ids ?? []), ...kept.filter((other) => same(other) === same(entry)).map((other) => other.id)];
       const also = [...new Map(ids.map((id) => [id.toLowerCase(), id])).values()].filter((id) => id.toLowerCase() !== entry.id.toLowerCase()); // a pick's spelling last, so it stands
       return {
-        ...entry, flags: flagsOf(entry), tier: tierOf(entry),
+        ...entry, url: pageOf(entry.id, entry.kind), flags: flagsOf(entry), tier: tierOf(entry),
         found: how.get(same(entry))?.found ?? (unanswered ? undefined : []), also: also.length ? also : undefined,
       };
     }).sort(memoryLast);
@@ -109,7 +109,7 @@ export async function verify({ need, components, compute, recommendation }: { ne
       ? `These parts were picked without searching: ${unsearched.join(', ')}. Call where_my_hug_search for them, pick their candidates from what it finds, then call where_my_hug_verify again with the whole slate and each part's search query.`
       : recall.length
         ? `These parts need new candidates: ${recall.join(', ')}. Pick them from where_my_hug_search's results (not the dropped ones again; search again with other words if those ran out), then call where_my_hug_verify again with the whole slate.`
-        : "Show the user the markdown report as it is. Its facts came from Hugging Face and the other hubs just now; don't restate them from memory.",
+        : "Show the user the markdown report as it is, links included: if you shorten it, keep each model's and dataset's link. Its facts came from Hugging Face and the other hubs just now; don't restate them from memory.",
   };
   return { markdown: report(need, parts, compute, unanswered, recommendation), result };
 }

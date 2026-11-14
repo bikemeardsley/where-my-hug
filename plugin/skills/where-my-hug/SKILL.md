@@ -36,8 +36,8 @@ JSON to a file and pass it on stdin:
    If its JSON says `SEARCH_FIRST` or `RECALL_REPLACEMENTS`, do what its
    instructions say and run it again.
 
-Show the user the markdown report as it comes back, without restating its
-facts from memory. Public models and datasets need no token. Private or gated
+Show the user the markdown report as it comes back, links included, without
+restating its facts from memory. Public models and datasets need no token. Private or gated
 ones need the user's Hugging Face token, and Roboflow Universe needs their
 Roboflow key, in the server's own configuration (a plugin's settings ask for
 both); never ask for either in the chat.

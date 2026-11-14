@@ -42,6 +42,7 @@ export interface Query { task?: string; keywords?: string[]; phrase?: string }
 export interface Hit extends Omit<Entry, 'exists' | 'status'> {
   found: string[]; // how: "most downloaded for image-to-text", "trending for image-to-text", "name has ocr", "card text", "Kaggle search"
   also?: string[]; // the same owner/name on other hubs, by its id there: "modelscope:Qwen/Qwen2.5-VL-7B-Instruct"
+  url: string; // its page on its hub
   created?: string;
   snippet?: string; // what the card says, when full text found it
 }
@@ -279,7 +280,7 @@ export async function search(kind: Kind, query: Query): Promise<{ hits: Hit[]; f
   const ways = HUBS.filter((hub) => !hub.needsKey || keyOf(hub)).flatMap((hub) => hub.search(kind, query).map(([how, url]) => ({ hub, how, url })));
   const answers = await Promise.all(ways.map(({ hub, how, url }) => get(url, (json): Hit[] => hub.list(json, kind)
     .map((item) => (hub.hit ?? hub.read)(item, kind)).filter(({ id }) => typeof id === 'string' && hub.id.test(id))
-    .map((facts) => ({ ...facts, id: hub.prefix + facts.id, kind, found: [how] })), headers(hub))));
+    .map((facts) => ({ ...facts, id: hub.prefix + facts.id, kind, url: hub.page(kind, facts.id!), found: [how] })), headers(hub))));
   return {
     hits: consolidate(inTurns(answers)),
     failed: ways.filter((_, i) => !answers[i]).map(({ how }) => how),

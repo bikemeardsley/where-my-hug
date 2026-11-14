@@ -8,7 +8,7 @@ export interface Wanted extends Query { id: string; name: string }
 const MOST = 20; // of each kind: a dozen ways in, so the first hit or two of each
 
 const line = (hit: Hit) => `- ${[
-  hit.id, hit.title && `"${hit.title}"`, hit.task, hit.size, hit.license && `license ${hit.license}`,
+  `[${hit.id}](${hit.url})`, hit.title && `"${hit.title}"`, hit.task, hit.size, hit.license && `license ${hit.license}`,
   hit.downloads !== undefined && `${count(hit.downloads)} downloads a month`,
   hit.downloadsEver !== undefined && `${count(hit.downloadsEver)} downloads in all`,
   hit.likes !== undefined && `${count(hit.likes)} likes`,
