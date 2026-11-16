@@ -22,16 +22,21 @@ picks the hub. Start with [README.md](../README.md).
   other MCP clients and the skill's shell fallback all run. It's written in
   `plugin/.claude-plugin/plugin.json`, `plugin/mcp.json` (Agent Plugins, for
   Copilot; beside it `plugin/plugin.json`), `mcp.json` (Cursor's), `gemini-extension.json`,
-  `skills/where-my-hug/SKILL.md` (copied to `plugin/skills/`, a test keeps them equal) and the README: change one, change them all. The Claude plugin lives in `plugin/` so its folder holds only what the plugin ships.
-  The manifests pin the version (`where-my-hug@0.3.2`), as Claude's
-  plugin directory requires; the README and skill don't.
+  `skills/where-my-hug/SKILL.md` (copied to `plugin/skills/` and `skill-plugin/skills/`, a test keeps them equal) and the README: change one, change them all. The Claude plugin lives in `plugin/` so its folder holds only what the plugin ships.
+  The manifests pin the version (`where-my-hug@0.3.2`); the README and skill don't.
+- **Anthropic's plugin directory lists `skill-plugin/`, the skill alone.**
+  Refused 2026-11-16: it takes no local MCP server, lockfile or
+  `package.json` from an unverified organization, and Anthropic picks who is
+  verified. The skill falls back to `npx` from the shell there. Thicken and
+  Git for Me! do the same. `plugin/` and the marketplace keep the server; if
+  the organization becomes verified, point the listing back at `plugin/`.
 - **A release** bumps the version in `package.json`, `server.json` (twice),
   `plugin/.claude-plugin/plugin.json` (`version` and the pin),
-  `plugin/plugin.json`, `plugin/mcp.json` (the pin), `plugin/mcp_config.json`
+  `skill-plugin/.claude-plugin/plugin.json`, `plugin/plugin.json`, `plugin/mcp.json` (the pin), `plugin/mcp_config.json`
   (the same servers, for Antigravity), `mcp.json`,
   `gemini-extension.json` and `plugin/package.json` (then
   `npm install --package-lock-only --ignore-scripts` in `plugin/` once
-  the new version is on npm, for the directory's launcher lock); then a
+  the new version is on npm, for the plugin's launcher lock); then a
   `vX.Y.Z` GitHub release on main, which publishes to npm and then the MCP
   Registry by itself (`.github/workflows/release.yml`, OIDC, no token; it
   stops if any manifest is at another version).

@@ -59,9 +59,13 @@ test('serves the same tools over HTTP, for clients that speak only that', async 
   }
 });
 
-test("the plugin's copy of the skill matches the repo's", () => {
+test("the plugins' copies of the skill match the repo's", () => {
   const read = (path: string) => readFileSync(fileURLToPath(new URL(path, import.meta.url)), 'utf8');
   assert.equal(read('../plugin/skills/where-my-hug/SKILL.md'), read('../skills/where-my-hug/SKILL.md'));
+  assert.equal(read('../skill-plugin/skills/where-my-hug/SKILL.md'), read('../skills/where-my-hug/SKILL.md'));
+  // skill-plugin/ is for Anthropic's directory, which takes no local MCP server from an unverified organization.
+  const listed = JSON.parse(read('../skill-plugin/.claude-plugin/plugin.json'));
+  assert.deepEqual([listed.version, listed.mcpServers, listed.userConfig], [JSON.parse(read('../package.json')).version, undefined, undefined]);
 });
 
 test('runs the same three steps from a shell, for an agent without MCP', () => {

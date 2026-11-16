@@ -40,4 +40,5 @@ Show the user the markdown report as it comes back, links included, without
 restating its facts from memory. Public models and datasets need no token. Private or gated
 ones need the user's Hugging Face token, and Roboflow Universe needs their
 Roboflow key, in the server's own configuration (a plugin's settings ask for
-both); never ask for either in the chat.
+both) or, from a shell, as `HF_TOKEN` and `ROBOFLOW_API_KEY` in the
+environment; never ask for either in the chat.

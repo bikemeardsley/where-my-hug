@@ -36,7 +36,8 @@ jobs:
           version="$(node -p 'require("./package.json").version')"
           test "$GITHUB_REF_NAME" = "v$version" || { echo "tag $GITHUB_REF_NAME is not v$version (package.json)"; exit 1; }
           for f in server.json plugin/.claude-plugin/plugin.json plugin/plugin.json plugin/mcp.json \
-                   plugin/mcp_config.json mcp.json gemini-extension.json plugin/package.json; do
+                   plugin/mcp_config.json mcp.json gemini-extension.json plugin/package.json \
+                   skill-plugin/.claude-plugin/plugin.json; do
             found="$(grep -oE '(where-my-hug@|"version": *"|"where-my-hug": *")[0-9]+\.[0-9]+\.[0-9]+' "$f" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+$')"
             test -n "$found" || { echo "$f has no version"; exit 1; }
             ! echo "$found" | grep -vxF "$version" || { echo "$f is not at $version"; exit 1; }

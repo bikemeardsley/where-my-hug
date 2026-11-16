@@ -1,0 +1,16 @@
+{
+  "name": "where-my-hug",
+  "displayName": "Where My Hug At?",
+  "version": "0.3.2",
+  "description": "Where my hug at? Tells your agent which parts of an ML need Hugging Face already covers, which to fine-tune, which to train, and which aren't a model at all, with every model and dataset checked live.",
+  "author": { "name": "Mike Beardsley" },
+  "homepage": "https://github.com/bikemeardsley/where-my-hug",
+  "repository": "https://github.com/bikemeardsley/where-my-hug",
+  "license": "MIT",
+  "keywords": ["hugging-face", "machine-learning", "models", "datasets", "mcp"],
+  "icon": "./.claude-plugin/icon.png",
+  "documentationUrl": "https://github.com/bikemeardsley/where-my-hug#readme",
+  "supportUrl": "https://github.com/bikemeardsley/where-my-hug/issues",
+  "privacyPolicyUrl": "https://github.com/bikemeardsley/where-my-hug/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/bikemeardsley/where-my-hug/blob/main/TERMS.md"
+}
