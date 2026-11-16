@@ -6,8 +6,16 @@ instead (`npx -y where-my-hug rubric`, `search`, `verify`). Two optional keys
 go in your environment: `HF_TOKEN` adds private and gated repos your account
 can see, `ROBOFLOW_API_KEY` adds Roboflow Universe.
 
-The full plugin, with the MCP server and a settings form for both keys, is in
-[`plugin/`](../plugin): `/plugin marketplace add bikemeardsley/where-my-hug`,
+For the same steps as MCP tools, with no shell commands to approve, add the
+server too (with either key as `-e HF_TOKEN=...` or `-e ROBOFLOW_API_KEY=...`
+before the `--`):
+
+```sh
+claude mcp add --scope user where-my-hug -- npx -y where-my-hug
+```
+
+Or install the full plugin, with the MCP server and a settings form for both
+keys, from [`plugin/`](../plugin): `/plugin marketplace add bikemeardsley/where-my-hug`,
 then `/plugin install where-my-hug@where-my-hug`.
 
 **What leaves your machine:** `GET` requests to `huggingface.co/api` and to

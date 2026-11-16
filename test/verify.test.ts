@@ -4,6 +4,10 @@ import type { Query } from '../src/hub.ts';
 import { find } from '../src/search.ts';
 import { verify } from '../src/verify.ts';
 
+// The tests set the keys they need; a real one from the shell would switch a hub on.
+delete process.env.HF_TOKEN;
+delete process.env.ROBOFLOW_API_KEY;
+
 const now = new Date().toISOString();
 // A small Hugging Face; anything not on it gets the real one's answer for a missing repo, a 401.
 const HUB: Record<string, object> = {
