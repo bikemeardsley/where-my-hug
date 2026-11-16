@@ -17,28 +17,21 @@ are connected, call `where_my_hug` with the need and follow what it returns.
 It says what to ask the user first, what to search, and when to call
 `where_my_hug_verify`.
 
-## Without them, from a shell
-
-The same three steps run from a shell. Node 22.18 or later is needed. Write the
-JSON to a file and pass it on stdin:
-
-1. `npx -y where-my-hug rubric < details.json`, where
-   the file holds `{"need": "...", "compute": "...", "license": "...", "stack": "...", "data": "..."}`.
-   Fill what the conversation or codebase already says and leave the rest
-   out. If it returns questions, ask the user, then run it again with the
-   answers ("unknown" is fine).
-2. Follow the method it returns. Where it says to call
-   `where_my_hug_search`, write `{"parts": [...]}` to a file and run
-   `npx -y where-my-hug search < parts.json`.
-3. Pick from what it found. Where the method says to call
-   `where_my_hug_verify`, write that JSON to a file and run
-   `npx -y where-my-hug verify < slate.json`.
-   If its JSON says `SEARCH_FIRST` or `RECALL_REPLACEMENTS`, do what its
-   instructions say and run it again.
-
 Show the user the markdown report as it comes back, links included, without
-restating its facts from memory. Public models and datasets need no token. Private or gated
-ones need the user's Hugging Face token, and Roboflow Universe needs their
-Roboflow key, in the server's own configuration (a plugin's settings ask for
-both) or, from a shell, as `HF_TOKEN` and `ROBOFLOW_API_KEY` in the
-environment; never ask for either in the chat.
+restating its facts from memory.
+
+## Without them
+
+Don't run Where My Hug At yourself, by `npx` or any other way. Tell the user
+it needs its MCP server, added once with:
+
+```sh
+claude mcp add --scope user where-my-hug -- npx -y where-my-hug
+```
+
+then a restart of Claude Code. Other clients, and the optional keys (an
+`HF_TOKEN` for private or gated repos, a `ROBOFLOW_API_KEY` for Roboflow
+Universe, each given as `-e NAME=...` before the `--`), are in
+https://github.com/bikemeardsley/where-my-hug/blob/main/USAGE.md. Never ask
+for either key in the chat. If the user wants an answer before then, say that
+anything you suggest is from memory, unchecked.

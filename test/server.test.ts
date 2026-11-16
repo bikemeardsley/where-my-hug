@@ -62,8 +62,14 @@ test('serves the same tools over HTTP, for clients that speak only that', async 
 test("the plugins' copies of the skill match the repo's", () => {
   const read = (path: string) => readFileSync(fileURLToPath(new URL(path, import.meta.url)), 'utf8');
   assert.equal(read('../plugin/skills/where-my-hug/SKILL.md'), read('../skills/where-my-hug/SKILL.md'));
-  assert.equal(read('../skill-plugin/skills/where-my-hug/SKILL.md'), read('../skills/where-my-hug/SKILL.md'));
-  // skill-plugin/ is for Anthropic's directory, which takes no local MCP server from an unverified organization.
+  // skill-plugin/ is for Anthropic's directory, which takes no local MCP server from an unverified organization
+  // and no code run outside a declared one: its skill uses the tools only, and tells the user how to add them.
+  const frontmatter = (text: string) => text.replace(/\r\n/g, '\n').split('\n---')[0]; // line endings as git checks them out
+  const directory = read('../skill-plugin/skills/where-my-hug/SKILL.md');
+  assert.equal(frontmatter(directory), frontmatter(read('../skills/where-my-hug/SKILL.md')));
+  assert.match(directory, /Don't run Where My Hug At yourself/);
+  assert.match(directory, /claude mcp add --scope user where-my-hug -- npx -y where-my-hug/);
+  assert.doesNotMatch(directory, /npx -y where-my-hug (rubric|search|verify)/);
   const listed = JSON.parse(read('../skill-plugin/.claude-plugin/plugin.json'));
   assert.deepEqual([listed.version, listed.mcpServers, listed.userConfig], [JSON.parse(read('../package.json')).version, undefined, undefined]);
 });

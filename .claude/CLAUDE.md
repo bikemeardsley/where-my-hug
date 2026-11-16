@@ -22,13 +22,16 @@ picks the hub. Start with [README.md](../README.md).
   other MCP clients and the skill's shell fallback all run. It's written in
   `plugin/.claude-plugin/plugin.json`, `plugin/mcp.json` (Agent Plugins, for
   Copilot; beside it `plugin/plugin.json`), `mcp.json` (Cursor's), `gemini-extension.json`,
-  `skills/where-my-hug/SKILL.md` (copied to `plugin/skills/` and `skill-plugin/skills/`, a test keeps them equal) and the README: change one, change them all. The Claude plugin lives in `plugin/` so its folder holds only what the plugin ships.
+  `skills/where-my-hug/SKILL.md` (copied to `plugin/skills/`, a test keeps them equal) and the README: change one, change them all. The Claude plugin lives in `plugin/` so its folder holds only what the plugin ships.
   The manifests pin the version (`where-my-hug@0.3.2`); the README and skill don't.
 - **Anthropic's plugin directory lists `skill-plugin/`, the skill alone.**
   Refused 2026-11-16: it takes no local MCP server, lockfile or
   `package.json` from an unverified organization, and Anthropic picks who is
-  verified. The skill falls back to `npx` from the shell there. Thicken and
-  Git for Me! do the same. `plugin/` and the marketplace keep the server; if
+  verified. Its submission also confirms the plugin runs no code outside a
+  declared MCP server, so `skill-plugin/skills/` has its own skill: the same
+  frontmatter, the MCP tools only, and without them it gives the user the
+  `claude mcp add` command instead of running `npx` (a test checks both).
+  Thicken and Git for Me! do the same. `plugin/` and the marketplace keep the server; if
   the organization becomes verified, point the listing back at `plugin/`.
 - **A release** bumps the version in `package.json`, `server.json` (twice),
   `plugin/.claude-plugin/plugin.json` (`version` and the pin),
